@@ -238,3 +238,14 @@ ul li a.active {
   background-image: url('../img/ml.jpg');
   background-size:contain;
 }
+
+@media (max-width: 767px) {
+    #accordion{
+        width: 100% !important;
+    }
+  .browser{
+    width:100% !important;
+    display: none !important;
+  }
+
+}

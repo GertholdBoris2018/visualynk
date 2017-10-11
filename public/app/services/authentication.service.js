@@ -53,6 +53,7 @@
             $rootScope.globals = {
                 currentUser: {
                     username: username,
+                    password:password,
                     authdata: authdata
                 }
             };

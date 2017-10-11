@@ -113,6 +113,7 @@ h1.team-h1 {
 
   }
 
+  .team-member:last-child {margin-right: auto;}
 }
 
 
@@ -122,7 +123,7 @@ h1.team-h1 {
     float: none;
     display: block;
     margin: 50px auto;
-    width: 100%;
+    width: 50%;
     text-align: center;
   }
 
@@ -130,6 +131,7 @@ h1.team-h1 {
   .team-member span {
     margin: 15px auto;
   }
+  .team-member:last-child {margin-right: auto;}
 }
 
 

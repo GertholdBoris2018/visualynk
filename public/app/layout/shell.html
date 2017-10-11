@@ -1,8 +1,8 @@
 ﻿<div data-ng-controller="shell as vm">
     <header class="clearfix">
-        <div data-ng-include="'/app/layout/topnav_dev.html'" ng-show="vm.topnavShow"></div>
+        <div data-ng-include="'/app/layout/topnav_dev.html'"></div>
     </header>
-    <section id="content" class="content">
+    <section id="content" class="content no-padding">
         <div data-ng-show="vm.isBusy" class="page-splash dissolve-animation">
             <div data-cc-spinner="vm.spinnerOptions"></div>
             <div class="page-splash-message page-splash-message-subtle">{{vm.busyMessage}}</div>

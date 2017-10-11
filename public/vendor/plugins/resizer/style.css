@@ -1,0 +1,69 @@
+
+#sidebar_resize {
+    background-color: #EEE;
+    position: absolute;
+    top: 35px;
+    bottom: 0;
+    left: 0;
+    width: 200px;
+    overflow: auto;
+}
+#content_resize {
+    position: absolute;
+    top: 35px;
+    bottom: 0;
+    left: 206px /* 200 + 6*/;
+    right: 0;
+    overflow: hidden;
+    color: #FFF;
+}
+#top-content {
+    position: absolute;
+    top: 0;
+    bottom: 136px; /* 130 + 6 */
+    left: 0;
+    right: 0;
+    background-color: #444;
+    overflow: auto;
+}
+#bottom-content {
+    position: absolute;
+    height: 130px;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    overflow: auto;
+    background-color: #777;
+}
+
+#panel-1-resizer {
+    background-color: transparent;
+    position: absolute;
+    top: 35px;
+    bottom: 0;
+    left: 800px;
+    width: 40px;
+    cursor: e-resize;
+}
+#panel-2-resizer{
+    background-color: transparent;
+    position: absolute;
+    top: 35px;
+    bottom: 0;
+    left: 1567px;
+    width: 40px;
+    cursor: e-resize;
+}
+#content-resizer {
+    position: absolute;
+    height: 6px;
+    bottom: 130px;
+    left: 0;
+    right: 0;
+    background-color: #666;
+    cursor: n-resize;
+}
+
+#panel-1-resizer:hover,#panel-2-resizer:hover, #preview-resizer:hover {
+    background-color: transparent;
+}

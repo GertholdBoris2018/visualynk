@@ -29,6 +29,7 @@
             }
 
             $rootScope.$on('$locationChangeStart', function (event, next, current) {
+
                 // redirect to login page if not logged in and trying to access a restricted page
                 var restrictedPage = $.inArray($location.path(), ['/login', '/register']) === -1;
                 var logOutState = $.inArray($location.path(), ['/login']) === -1;
@@ -39,13 +40,26 @@
                         AuthenticationService.ClearCredentials();
                     })();
                 }
+
+                //check the user exist
                 var loggedIn = $rootScope.globals.currentUser;
+
+
                 if (!loggedIn) {
                     if(restrictedPage)
                         $location.path('/');
                 }
                 else{
-                    $location.path("/main");
+                    var loggedIn_user = loggedIn.username;
+                    var loggedIn_pass = loggedIn.password;
+                    AuthenticationService.Login(loggedIn_user, loggedIn_pass, function (response) {
+                        if (response.responseData.msg == "success") {
+                            $location.path('/main');
+                        } else {
+                            AuthenticationService.ClearCredentials();
+                            $location.path('/');
+                        }
+                    });
                 }
             });
         }]);

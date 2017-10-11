@@ -7,20 +7,28 @@
     angular.module('app').controller('topnav_dev', ['$rootScope','$scope', '$modal', topnav_dev_proc]);
 
     function topnav_dev_proc($rootScope,$scope,$modal) {
+
+
         //this is used to parse the profile
         $rootScope.initFlash = true;
 
         // instantiate modal service
-        $scope.login = function() {
+        $rootScope.login = function() {
             console.log('opening pop up');
             $rootScope.initFlash = false;
-            modalInstance = $modal.open({
-                templateUrl: 'signin.html',
-                controller: 'PopupCont_login'
-            });
+            $scope.opts = {
+                backdrop: true,
+                backdropClick: true,
+                dialogFade: false,
+                keyboard: true,
+                templateUrl : 'signin.html',
+                controller : 'PopupCont_login',
+                resolve: {} // empty storage
+            };
+            modalInstance = $modal.open($scope.opts);
 
         }
-        $scope.register = function(){
+        $rootScope.register = function(){
             console.log('opening pop up');
             $rootScope.initFlash = false;
             modalInstance = $modal.open({
@@ -28,12 +36,15 @@
                 controller: 'PopupCont_register'
             });
         }
+        $scope.close = function(){
+            console.log("close");
+        }
         $scope.showContent = function(tt){
             var target = $(tt);
             target = target.length ? target : $('[name=' + this.hash.slice(1) +']');
             if (target.length) {
                 $('html, body').animate({
-                    scrollTop: target.offset().top
+                    scrollTop: target.offset().top - 50
                 }, 700);
                 return false;
             }
@@ -49,23 +60,7 @@
             $modalInstance.dismiss('cancel');
         };
     }]);
-    //this is used to parse the profile
-    function url_base64_decode(str) {
-        var output = str.replace('-', '+').replace('_', '/');
-        switch (output.length % 4) {
-            case 0:
-                break;
-            case 2:
-                output += '==';
-                break;
-            case 3:
-                output += '=';
-                break;
-            default:
-                throw 'Illegal base64url string!';
-        }
-        return window.atob(output); //polifyll https://github.com/davidchambers/Base64.js
-    }
+
 //this is used to parse the profile
     function url_base64_decode(str) {
         var output = str.replace('-', '+').replace('_', '/');

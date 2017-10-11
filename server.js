@@ -133,6 +133,28 @@ app.post('/api/updateNode', api.updateNode);
 app.post('/api/getNode', api.getNode);
 app.get('/api/getAllNodes', api.getAllNodes);
 app.post('/signin', api.login);
+app.post('/getPlanDan', api.getPlanDan);
+app.post('/systemfilter', api.systemfilter);
+app.post('/attributefilter', api.attributefilter);
+app.post('/companyfilter', api.companyfilter);
+app.post('/facilityfilter', api.facilityfilter);
+app.post('/floorfilter', api.floorfilter);
+app.post('/zonefilter', api.zonefilter);
+app.post('/spacefilter', api.spacefilter);
+app.post('/assetfilter', api.assetfilter);
+app.post('/componentfilter', api.componentfilter);
+app.post('/assemblyfilter', api.assemblyfilter);
+app.post('/connectionfilter', api.connectionfilter);
+app.post('/sparefilter', api.sparefilter);
+app.post('/resourcefilter', api.resourcefilter);
+app.post('/jobfilter', api.jobfilter);
+app.post('/sevicereqfilter', api.sevicereqfilter);
+app.post('/docfilter', api.docfilter);
+
+
+
+app.post('/personfilter', api.personfilter);
+
 
 // Simple route middleware to ensure user is authenticated.
 // Use this route middleware on any resource that needs to be protected. If

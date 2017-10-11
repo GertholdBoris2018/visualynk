@@ -1,0 +1,28 @@
+<div class="portlet box tabbable custom-green custom-border span height-700" data-ng-controller="model3d as m3">
+    <div class="portlet-title">
+        <div class="caption">
+            <!--<span class="hidden-480">General Layouts</span>-->
+            <ul class="nav nav-tabs view-toggle" >
+                <li ng-class="{'active' : activeTab == 1}"><a href="" ng-click="setActiveTab(1)"  data-toggle="tab">2D</a></li>
+                <li ng-class="{'active' : activeTab == 2}"><a href="" ng-click="setActiveTab(2)" data-toggle="tab">3D</a></li>
+            </ul>
+            <div class="clearfix"></div>
+        </div>
+    </div>
+    <div class="portlet-body full-height">
+        <div class="tabbable portlet-tabs">
+
+            <div class="tab-content height-700">
+                <div ng-class="{'tab-pane active': activeTab === 1, 'tab-pane' : activeTab !== 1}" class="full-height">
+                    <div id="secondary" class="full-height">
+                        <div id="daire_menu" class="3dboyutlu full-height">
+                            <object class="svg" id="svg_image" src="models/Granlund_ARK_MEP.svg"></object>
+                        </div>
+                    </div>
+                </div>
+                <div ng-class="{'tab-pane active': activeTab === 2, 'tab-pane' : activeTab !== 2}" class="full-height">Panel 2 Content</div>
+            </div>
+        </div>
+
+    </div>
+</div>

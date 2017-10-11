@@ -1,0 +1,47 @@
+<div class="portlet box custom-blue span"  data-ng-controller="model2d">
+    <div class="portlet-title">
+        <input id="plandan_sola" type="button" value="OnGraph"
+               style="height:28px; border: 1px solid !important; border-color:#fff; border-radius: 4px !important; float:right;
+          background-color: Transparent; font: 12px 'Raleway-Thin'; color:#fff; padding:3px 10px!important;" ng-mouseover="hoverIn()">
+    </div>
+    <div class="portlet-body">
+
+        <!--<div class="menu-show-toggle">
+            <a href="javascript:void(0)" onclick="showMenu(this);"> >> </a>
+        </div>-->
+        <div class="vslynk-container-graph" id="container_graph">
+            <div id="visualynk-graph" class="vslynk-div-graph">
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 2D MODEL Script -->
+<link rel="stylesheet" href="vendor/plugins/2d_model/css/visualynk.min.css">
+<script src="vendor/plugins/2d_model/js/analytics.js"></script>
+<script src="vendor/plugins/2d_model/js/d3.v3.min.js" charset="utf-8"></script>
+<script type="text/javascript" src="vendor/plugins/2d_model/js/xdutils.js"></script>
+<script type="text/javascript" src="vendor/plugins/2d_model/js/xdLocalStorage.min.js"></script>
+<script src="vendor/plugins/2d_model/js/visualynk.min.js" charset="utf-8"></script>
+<script src="vendor/plugins/2d_model/js/VisuaLynk_Graph.js" charset="utf-8"></script>
+<script type="text/javascript">
+    /*function showMenu(obj){
+        var show_menu_btn_left = parseInt(jQuery(".menu-show-toggle").css("left"));
+        console.log(show_menu_btn_left);
+
+        if(show_menu_btn_left == 0) {
+            jQuery(".vslynk-section-header").animate({
+                left: '0px'
+            })
+            jQuery(".menu-show-toggle").animate({
+                left: '250px'
+            }, function(){jQuery(".menu-show-toggle a").html("<<")})
+        } else {
+            jQuery(".vslynk-section-header").animate({
+                left: '-250px'
+            })
+            jQuery(".menu-show-toggle").animate({
+                left: '0px'
+            }, function(){jQuery(".menu-show-toggle a").html(">>")})
+        }
+    }*/
+</script>

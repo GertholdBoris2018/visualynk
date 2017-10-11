@@ -1,0 +1,313 @@
+@font-face{font-family:"Raleway";src:url("font/Raleway-Regular.ttf")}
+@font-face{font-family:"Raleway-Thin";src:url("font/Raleway-Thin.ttf")}
+@font-face{font-family:"Raleway-Light";src:url("font/Raleway-Light.ttf")}
+@font-face{font-family:"Raleway";src:url("font/Raleway-Bold.ttf");font-weight:bold}
+@font-face{font-family:"Raleway";src:url("font/Raleway-BlackItalic.ttf");font-style:italic}
+@font-face{font-family:"Raleway";src:url("font/Raleway-BoldItalic.ttf");font-weight:bold;font-style:italic}
+@font-face{font-family:"NotoSans";src:url("font/NotoSans-Regular.ttf")}
+
+.vslynk-body{background-color:#ffffff;
+    margin:0px;
+    font-family:"Raleway-Light",sans-serif;
+    color:#000000}
+
+.vslynk-container-graph{background-color:#ffffff;
+    height:600px;
+    padding:0;
+    border-bottom-right-radius:5px 5px;
+    border-bottom-left-radius:5px 5px;
+    overflow:hidden}
+
+.vslynk-taxo-nav{/*overflow: auto;*/
+    padding:0px 10px 0px 5px;
+    background-color:#ffffff;
+    height:100%;
+    float:left;
+	font-family:"Raleway-Light";
+    white-space:nowrap}
+
+.vslynk-taxo-nav.disabled{display:none}
+
+.vslynk-taxo-nav ul{list-style-type:none;
+    float:left;
+    width:100%;
+    display:block;
+    vertical-align:top;
+    padding:0px 0px 0px 0px;
+    margin:0;
+    text-align:left;
+}
+
+.vslynk-taxo-nav li img{vertical-align:middle;padding-left:0px !important;}
+
+.vslynk-div-graph{position:relative;
+	font-family:"Raleway-Light";
+    background-color:#ffffff;
+    height:100%;
+    padding:0;
+    border-bottom-right-radius:10px 10px;
+    overflow:hidden}
+
+.vslynk-div-graph:-webkit-full-screen,.vslynk-div-graph:fullscreen{width:100%;
+    height:100%}
+
+.vslynk-header{padding-left:16px;
+    padding-right:16px;
+    background-color:#81CFE0;
+    border-radius:5px 5px;
+    height:70px;
+    min-width:560px;
+    line-height:70px;
+    font-size:22px;
+    border-top-right-radius:8px 8px;
+    border-top-left-radius:8px 8px;}
+
+.vslynk-section-header{/*min-width:560px;*/
+    padding-left:0px;
+    padding-right:0px;
+    background-color:#ffffff;
+    height:40px;
+    line-height:40px;
+    margin-top: 0px;
+    border-top-right-radius:8px 8px;
+    border-top-left-radius:8px 8px;
+}
+
+.vslynk-section-tips{min-width:560px;
+    padding-left:18px;
+    padding-right:18px;
+    background-color:#525863;
+    margin-top:22px;
+    border-top-left-radius:5px;
+    border-top-right-radius:5px;
+    font-size:14px;
+    line-height:35px}
+
+.vslynk-section-tips a{color:#8bb71a}
+
+.vslynk-section-tips p{margin-bottom:0;
+    margin-top:0}
+
+.vslynk-toolbar{padding:12px;
+    position:absolute;
+    right:0}
+
+.vslynk-header-span{color:#FDE3A7}
+
+.vslynk-container-query,.vslynk-container-cypher{text-align:center;
+    margin-top:20px;
+    font-size: 13px;
+    font-weight: bold;
+    /*min-width:560px;*/
+/*    background-color:#89C4F4;*/
+    border-radius:8px 8px;
+    padding:10px}
+
+.vslynk-container-results{
+    width:100%;
+    font-size: 10pt;
+    float:left;
+    /*min-width:300px;*/
+/*    background-color:#90C695;*/
+    padding:0;
+    border-bottom-right-radius:5px 5px;
+    border-bottom-left-radius:5px 5px;
+    overflow:auto
+}
+
+.vslynk-footer{padding-left:16px;
+    padding-right:16px;
+    background-color:#525863;
+    border-radius:5px 5px;
+    height:70px;
+    min-width:560px;
+    line-height:70px;
+    font-weight:bold;
+    font-size:22px}
+
+.vslynk-menu{width:32px;
+    height:32px;
+    display:inline-block;
+    vertical-align:middle;
+    cursor:pointer;
+    margin-left:12px;
+    background:url("../img/tools.png") no-repeat 0 0}
+
+.vslynk-menu.taxonomy{background-position:0 0}
+
+.vslynk-menu.reset{background-position:-288px 0}
+
+.vslynk-menu.fullscreen{background-position:-256px 0}
+
+.vslynk-menu.center{background-position:-96px 0}
+
+.vslynk-menu.taxonomy:hover{background-position:0 -32px}
+
+.vslynk-menu.reset:hover{background-position:-288px -32px}
+
+.vslynk-menu.fullscreen:hover{background-position:-256px -32px}
+
+.vslynk-menu.center:hover{background-position:-96px -32px}
+
+.vslynk-count{cursor:pointer;
+    color:#2aa1d3;
+font: 10px "Raleway-Light";}
+
+.vslynk-label{cursor:pointer;
+  padding-left: 8px;
+font-size: 11px;
+font: 'Raleway-ExtraLight'}
+
+.vslynk-label:hover{
+    color:#ff6f00
+}
+
+.vslynk-result{
+    /*background-color:#C8F7C5;*/
+    padding:0px 18px;
+    margin:1px 0 0;
+    border-bottom:1px solid #e3e3e3;
+}
+
+.vslynk-result:hover{
+    /*background-color:#E26A6A*/
+}
+
+.vslynk-result-table th,td{text-align:left}
+
+.vslynk-span{color:#000000}
+
+.vslynk-span-link{
+    color:#F5AB35;
+}
+
+.vslynk-span-root{color:#F22613;
+    cursor:pointer}
+
+.vslynk-span-choose{color:#1E8BC3;
+    cursor:pointer}
+
+.vslynk-span-group{color:#8e8e8e;
+    cursor:pointer}
+
+.vslynk-span-value{color:#2ECC71;
+    font-weight: bold;
+    cursor:pointer}
+
+.vslynk-span-link.hover,.vslynk-span-root.hover,.vslynk-span-choose.hover,.vslynk-span-group.hover,.vslynk-span-value.hover{color:#ee4e10;
+    font-weight:bold}
+
+.vslynk-svg-graph{cursor:move;
+    min-height:100px;
+    width:100%;
+    height:100%;
+    pointer-events:all}
+
+.vslynk-node-ellipse{stroke:#fff;
+    stroke-width:4px}
+
+.vslynk-node-ellipse.root{fill:#2aa1d3}
+
+.vslynk-node-ellipse.root.disabled{fill:#2e3138;
+    stroke:#525863}
+
+.vslynk-node-ellipse.choose{fill:#8bb71a}
+
+.vslynk-node-ellipse.choose.disabled{fill:#2e3138;
+    stroke:#525863}
+
+.vslynk-node-ellipse.value{fill:#f0b017}
+
+.vslynk-node-ellipse.selected-value{fill:#ee4e10; color: #ffffff}
+
+.vslynk-node-ellipse.selected-root-value{fill:#8f5bcc}
+
+.vslynk-node-ellipse.group{fill:#525863}
+
+.vslynk-node-ellipse.disabled{fill:#2e3138;
+    stroke:#525863}
+
+.vslynk-g-node-background{cursor:pointer}
+
+.vslynk-node-background-circle{fill-opacity:0}
+
+.vslynk-node-background-circle.root{fill:#233e7e}
+
+.vslynk-node-background-circle.choose{fill:#628b1a}
+
+.vslynk-node-background-circle.value{fill:#c28a17}
+
+.vslynk-node-background-circle.selected-value{fill:#c24b30}
+
+.vslynk-node-background-circle.selected-root-value{fill:#765ab4}
+
+.vslynk-node-background-circle.group,.vslynk-node-background-circle.disabled{fill:#3f4450}
+
+.vslynk-g-node-middleground,.vslynk-g-node-foreground{cursor:pointer}
+
+.vslynk-count-box.value{font-size: 5px "Raleway-Light"; fill:#8bb71a;stroke:#fff;stroke-width:2px; color: #ffffff}
+
+.vslynk-count-box.root{font-size: 5px "Raleway-Light"; fill:#ee4e10;stroke:#fff;stroke-width:2px; color: #ffffff}
+
+.vslynk-count-box.root.disabled,.vslynk-count-box.value.disabled{fill:#2e3138;
+    stroke:#525863; color: #ffffff; font: 10px;}
+
+.vslynk-rel-plus-icon.disabled{display:none}
+
+.vslynk-rel-plus-background{fill:#f0b017;
+    fill-opacity:0}
+
+.vslynk-rel-plus-path{fill:#f00}
+
+.vslynk-rel-minus-icon.disabled{display:none}
+
+.vslynk-rel-minus-path{fill:#f00}
+
+.vslynk-rel-minus-background{fill:#f0b017;
+    fill-opacity:0}
+
+.vslynk-node-foreground-g-arrows{display:none}
+
+.vslynk-node-foreground-g-arrows.active{display:block}
+
+.vslynk-arrow{fill:#fff}
+
+.vslynk-larrow,.vslynk-rarrow{stroke:#fff;
+    stroke-width:4px;
+    fill:#525863}
+
+.vslynk-larrow.enabled,.vslynk-rarrow.enabled{fill:#2aa1d3}
+
+.vslynk-link-relation{stroke:#2aa1d3;
+    stroke-width:2px;
+    stroke-dasharray:9,5}
+
+.vslynk-link-relation.value,.vslynk-link-relation.value.vslynk-link-hover{stroke:#044F67}
+
+.vslynk-link-relation.disabled{stroke:#044F67;
+    stroke-width:2px;
+    stroke-dasharray:9,5}
+
+.vslynk-link-value{stroke:#044F67;
+    stroke-width:2px;
+    stroke-dasharray:9,5}
+
+.vslynk-link-hover{stroke:#F47983}
+
+.vslynk-link-text-relation,.vslynk-link-text-relation.value{fill:#F47983; font-size: 10px;}
+
+.vslynk-link-text-relation.disabled,.vslynk-link-text-value{fill:#F47983; font-size: 10px;}
+
+.vslynk-node-text-root{fill:#BF55EC;
+    font-size: 11px;
+    font-weight: normal;}
+
+.vslynk-node-text-root.disabled{fill:#26C281;font-size: 11px;}
+
+.vslynk-node-text-choose{fill:#BF55EC;
+font-weight: normal; font-size: 11px;}
+
+.vslynk-node-text-choose.disabled{fill:#26C281
+}
+
+.vslynk-node-text-value,.vslynk-node-text-group{fill:#000000; font-size: 12px;}

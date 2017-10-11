@@ -1,4 +1,95 @@
-<h1>Hi {{vm.user.username}}!</h1>
-<p>You're logged in!!</p>
-<p>&nbsp;</p>
-<p><a href="/#/login" class="btn btn-primary">Logout</a></p>
+<div class="page-container row-fluid" >
+    <!-- BEGIN EMPTY PAGE SIDEBAR -->
+    <div class="page-sidebar nav-collapse collapse visible-phone visible-tablet no-margin">
+        <ul class="page-sidebar-menu">
+            <li><a href="/#/login">Log out</a></li>
+        </ul>
+    </div>
+    <div class="page-sidebar nav-collapse collapse" style="height:100% !important;">
+
+        <!-- BEGIN SIDEBAR MENU -->
+
+        <ul class="page-sidebar-menu">
+            <li>
+                <!-- BEGIN SIDEBAR TOGGLER BUTTON -->
+                <div class="sidebar-toggler hidden-phone"></div>
+                <!-- BEGIN SIDEBAR TOGGLER BUTTON -->
+            </li>
+            <li>
+
+                <form id="filter-form" class="sidebar-search">
+
+                    <div class="input-box">
+
+                        <a href="javascript:;" class="remove"></a>
+
+                        <input type="text"  id="constraint" placeholder="VisuaLynk..." style="border:none !important;"/>
+
+                        <input id="filter-button" type="button" class="submit" value="" style="border:none !important;" data-ng-click="filter()"/>
+
+                    </div>
+
+                </form>
+
+                <!-- END RESPONSIVE QUICK SEARCH FORM -->
+            </li>
+            <li>
+                <div class="vslynk-section-header" >
+                    <nav id="visualynk-taxonomy" class="vslynk-taxo-nav">
+                    </nav>
+                </div>
+            </li>
+        </ul>
+        <!-- END SIDEBAR MENU -->
+    </div>
+    <div class="page-content margin-top-20 bg-white">
+    <div class="container-fluid">
+        <div class="row-fluid">
+            <div id="panel-1-resize" class="span5 margin-left-30">
+                <div class="panel-item  height-900">
+                    <div data-ng-include="'/app/layout/graph_model_2d.html'"></div>
+                </div>
+            </div>
+            <div id= "panel-2-resize" class="span5 margin-left-20">
+                <div class="panel-item  height-900">
+                    <div data-ng-include="'/app/layout/graph_model_3d.html'"></div>
+                </div>
+            </div>
+            <div id="panel-3-resize" class="span2 margin-left-20">
+                <div class="panel-item height-900">
+                    <div class="portlet box custom-purple">
+                        <div class="portlet-title">
+                            <div class="caption">
+                                <!--<span id="visualynk-query" class="vslynk-container-query">
+                                </span>-->
+                                <div class="hidden-480" id="visualynk-query" class="vslynk-container-query"></div>
+                            </div>
+                        </div>
+                        <div class="portlet-body" style="height:850px; overflow-y:auto;">
+                            <div id="visualynk-results" class="vslynk-container-results">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="panel-1-resizer"
+                 resizer="vertical"
+                 resizer-width="6"
+                 resizer-left="#panel-1-resize"
+                 resizer-right="#panel-2-resize"
+                 resizer-min="425"
+                 resizer-max="825"
+            >
+            </div>
+            <div id="panel-2-resizer"
+                 resizer="vertical"
+                 resizer-width="6"
+                 resizer-left="#panel-2-resize"
+                 resizer-right="#panel-3-resize"
+                 resizer-max="1576"
+                 resizer-min="850">
+            </div>
+        </div>
+    </div>
+</div>
+</div>

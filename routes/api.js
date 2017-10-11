@@ -84,7 +84,452 @@ exports.login = function(req, res, next) {
          });
      });
 };
+exports.getPlanDan = function(req,res,next){
+    var name = req.body.name;
+    console.log("getting the planDan according to " + name + "...");
 
+    var error = '';
+    var result = {'msg':'empty'};
+    neo4j.connect(neo4JUrl, function(err, graph) {
+        if (err) throw err;
+        var query;
+        query = ["MATCH (FM:Facility_Management {name:'" + name + "'})-[INCLUDES_DATESET]->(n) RETURN n, labels(n)"].join('\n');
+        graph.query(query, null, function(err, results) {
+            console.log("message : get the plandan sola status " + err);
+            console.log("message : get sola result as below ");
+            console.log(util.inspect(results, {showHidden: false, depth: null}));
+            if(results.length > 0){
+                if (err) {
+                    error = err;
+                }
+                else {
+                    error = null;
+                    result.msg = results;
+                }
+            }
+            res.json({
+                responseData: result,
+                error: error
+            });
+        });
+    });
+}
+    /* FILTERS*/
+    exports.systemfilter = function(req,res,next){
+        var error = '';
+        var result = {'msg':'empty'};
+        neo4j.connect(neo4JUrl, function(err, graph) {
+            if (err) throw err;
+            var query;
+            query = ["MATCH (n:SYSTEM) RETURN n"].join('\n');
+            graph.query(query, null, function(err, results) {
+                if(results.length > 0){
+                    if (err) {
+                        error = err;
+                    }
+                    else {
+                        error = null;
+                        result.msg = results;
+                    }
+                }
+                res.json({
+                    responseData: result,
+                    error: error
+                });
+            });
+        });
+    }
+
+    exports.attributefilter = function(req,res,next){
+        var error = '';
+        var result = {'msg':'empty'};
+        neo4j.connect(neo4JUrl, function(err, graph) {
+            if (err) throw err;
+            var query;
+            query = ["MATCH (n:ATTRIBUTE) RETURN n"].join('\n');
+            graph.query(query, null, function(err, results) {
+                if(results.length > 0){
+                    if (err) {
+                        error = err;
+                    }
+                    else {
+                        error = null;
+                        result.msg = results;
+                    }
+                }
+                res.json({
+                    responseData: result,
+                    error: error
+                });
+            });
+        });
+    }
+
+    exports.companyfilter = function(req,res,next){
+        var error = '';
+        var result = {'msg':'empty'};
+        neo4j.connect(neo4JUrl, function(err, graph) {
+            if (err) throw err;
+            var query;
+            query = ["MATCH (n:COMPANY) RETURN n"].join('\n');
+            graph.query(query, null, function(err, results) {
+                if(results.length > 0){
+                    if (err) {
+                        error = err;
+                    }
+                    else {
+                        error = null;
+                        result.msg = results;
+                    }
+                }
+                res.json({
+                    responseData: result,
+                    error: error
+                });
+            });
+        });
+    }
+    exports.facilityfilter = function(req,res,next){
+        var error = '';
+        var result = {'msg':'empty'};
+        neo4j.connect(neo4JUrl, function(err, graph) {
+            if (err) throw err;
+            var query;
+            query = ["MATCH (n:FACILITY) RETURN n"].join('\n');
+            graph.query(query, null, function(err, results) {
+                if(results.length > 0){
+                    if (err) {
+                        error = err;
+                    }
+                    else {
+                        error = null;
+                        result.msg = results;
+                    }
+                }
+                res.json({
+                    responseData: result,
+                    error: error
+                });
+            });
+        });
+    }
+    exports.floorfilter = function(req,res,next){
+        var error = '';
+        var result = {'msg':'empty'};
+        neo4j.connect(neo4JUrl, function(err, graph) {
+            if (err) throw err;
+            var query;
+            query = ["MATCH (n:FLOOR) RETURN n"].join('\n');
+            graph.query(query, null, function(err, results) {
+                if(results.length > 0){
+                    if (err) {
+                        error = err;
+                    }
+                    else {
+                        error = null;
+                        result.msg = results;
+                    }
+                }
+                res.json({
+                    responseData: result,
+                    error: error
+                });
+            });
+        });
+    }
+    exports.zonefilter = function(req,res,next){
+        var error = '';
+        var result = {'msg':'empty'};
+        neo4j.connect(neo4JUrl, function(err, graph) {
+            if (err) throw err;
+            var query;
+            query = ["MATCH (n:ZONE) RETURN n"].join('\n');
+            graph.query(query, null, function(err, results) {
+                if(results.length > 0){
+                    if (err) {
+                        error = err;
+                    }
+                    else {
+                        error = null;
+                        result.msg = results;
+                    }
+                }
+                res.json({
+                    responseData: result,
+                    error: error
+                });
+            });
+        });
+    }
+    exports.spacefilter = function(req,res,next){
+        var error = '';
+        var result = {'msg':'empty'};
+        neo4j.connect(neo4JUrl, function(err, graph) {
+            if (err) throw err;
+            var query;
+            query = ["MATCH (n:SPACE) RETURN n"].join('\n');
+            graph.query(query, null, function(err, results) {
+                if(results.length > 0){
+                    if (err) {
+                        error = err;
+                    }
+                    else {
+                        error = null;
+                        result.msg = results;
+                    }
+                }
+                res.json({
+                    responseData: result,
+                    error: error
+                });
+            });
+        });
+    }
+    exports.assetfilter = function(req,res,next){
+        var error = '';
+        var result = {'msg':'empty'};
+        neo4j.connect(neo4JUrl, function(err, graph) {
+            if (err) throw err;
+            var query;
+            query = ["MATCH (n:ASSET) RETURN n"].join('\n');
+            graph.query(query, null, function(err, results) {
+                if(results.length > 0){
+                    if (err) {
+                        error = err;
+                    }
+                    else {
+                        error = null;
+                        result.msg = results;
+                    }
+                }
+                res.json({
+                    responseData: result,
+                    error: error
+                });
+            });
+        });
+    }
+    exports.componentfilter = function(req,res,next){
+        var error = '';
+        var result = {'msg':'empty'};
+        neo4j.connect(neo4JUrl, function(err, graph) {
+            if (err) throw err;
+            var query;
+            query = ["MATCH (n:COMPONENT) RETURN n"].join('\n');
+            graph.query(query, null, function(err, results) {
+                if(results.length > 0){
+                    if (err) {
+                        error = err;
+                    }
+                    else {
+                        error = null;
+                        result.msg = results;
+                    }
+                }
+                res.json({
+                    responseData: result,
+                    error: error
+                });
+            });
+        });
+    }
+    exports.assemblyfilter = function(req,res,next){
+        var error = '';
+        var result = {'msg':'empty'};
+        neo4j.connect(neo4JUrl, function(err, graph) {
+            if (err) throw err;
+            var query;
+            query = ["MATCH (n:ASSEMBLY) RETURN n"].join('\n');
+            graph.query(query, null, function(err, results) {
+                if(results.length > 0){
+                    if (err) {
+                        error = err;
+                    }
+                    else {
+                        error = null;
+                        result.msg = results;
+                    }
+                }
+                res.json({
+                    responseData: result,
+                    error: error
+                });
+            });
+        });
+    }
+    exports.connectionfilter = function(req,res,next){
+        var error = '';
+        var result = {'msg':'empty'};
+        neo4j.connect(neo4JUrl, function(err, graph) {
+            if (err) throw err;
+            var query;
+            query = ["MATCH (n:CONNECTION) RETURN n"].join('\n');
+            graph.query(query, null, function(err, results) {
+                if(results.length > 0){
+                    if (err) {
+                        error = err;
+                    }
+                    else {
+                        error = null;
+                        result.msg = results;
+                    }
+                }
+                res.json({
+                    responseData: result,
+                    error: error
+                });
+            });
+        });
+    }
+    exports.sparefilter = function(req,res,next){
+        var error = '';
+        var result = {'msg':'empty'};
+        neo4j.connect(neo4JUrl, function(err, graph) {
+            if (err) throw err;
+            var query;
+            query = ["MATCH (n:SPARE) RETURN n"].join('\n');
+            graph.query(query, null, function(err, results) {
+                if(results.length > 0){
+                    if (err) {
+                        error = err;
+                    }
+                    else {
+                        error = null;
+                        result.msg = results;
+                    }
+                }
+                res.json({
+                    responseData: result,
+                    error: error
+                });
+            });
+        });
+    }
+    exports.resourcefilter = function(req,res,next){
+        var error = '';
+        var result = {'msg':'empty'};
+        neo4j.connect(neo4JUrl, function(err, graph) {
+            if (err) throw err;
+            var query;
+            query = ["MATCH (n:RESOURCE) RETURN n"].join('\n');
+            graph.query(query, null, function(err, results) {
+                if(results.length > 0){
+                    if (err) {
+                        error = err;
+                    }
+                    else {
+                        error = null;
+                        result.msg = results;
+                    }
+                }
+                res.json({
+                    responseData: result,
+                    error: error
+                });
+            });
+        });
+    }
+
+    exports.jobfilter = function(req,res,next){
+        var error = '';
+        var result = {'msg':'empty'};
+        neo4j.connect(neo4JUrl, function(err, graph) {
+            if (err) throw err;
+            var query;
+            query = ["MATCH (n:JOB) RETURN n"].join('\n');
+            graph.query(query, null, function(err, results) {
+                if(results.length > 0){
+                    if (err) {
+                        error = err;
+                    }
+                    else {
+                        error = null;
+                        result.msg = results;
+                    }
+                }
+                res.json({
+                    responseData: result,
+                    error: error
+                });
+            });
+        });
+    }
+    exports.sevicereqfilter = function(req,res,next){
+        var error = '';
+        var result = {'msg':'empty'};
+        neo4j.connect(neo4JUrl, function(err, graph) {
+            if (err) throw err;
+            var query;
+            query = ["MATCH (n:SERVICE_REQUEST) RETURN n"].join('\n');
+            graph.query(query, null, function(err, results) {
+                if(results.length > 0){
+                    if (err) {
+                        error = err;
+                    }
+                    else {
+                        error = null;
+                        result.msg = results;
+                    }
+                }
+                res.json({
+                    responseData: result,
+                    error: error
+                });
+            });
+        });
+    }
+    exports.docfilter = function(req,res,next){
+        var error = '';
+        var result = {'msg':'empty'};
+        neo4j.connect(neo4JUrl, function(err, graph) {
+            if (err) throw err;
+            var query;
+            query = ["MATCH (n:DOCUMENT) RETURN n"].join('\n');
+            graph.query(query, null, function(err, results) {
+                if(results.length > 0){
+                    if (err) {
+                        error = err;
+                    }
+                    else {
+                        error = null;
+                        result.msg = results;
+                    }
+                }
+                res.json({
+                    responseData: result,
+                    error: error
+                });
+            });
+        });
+    }
+
+
+
+    exports.personfilter = function(req,res,next){
+        var error = '';
+        var result = {'msg':'empty'};
+        neo4j.connect(neo4JUrl, function(err, graph) {
+            if (err) throw err;
+            var query;
+            query = ["MATCH (n:PERSON) RETURN n"].join('\n');
+            graph.query(query, null, function(err, results) {
+                if(results.length > 0){
+                    if (err) {
+                        error = err;
+                    }
+                    else {
+                        error = null;
+                        result.msg = results;
+                    }
+                }
+                res.json({
+                    responseData: result,
+                    error: error
+                });
+            });
+        });
+    }
+    /**/
 exports.createNode = function (req, res) {
     //JSON. stringify is only available in mordern browers.....
     var node = req.body;
