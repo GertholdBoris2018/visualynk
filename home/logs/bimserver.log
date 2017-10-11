@@ -1,0 +1,14 @@
+2017-10-11 11:42:05,691 INFO [main] o.b.BimServer [BimServer.java:230] Starting BIMserver
+2017-10-11 11:42:05,700 INFO [main] o.b.BimServer [BimServer.java:232] Using "/Volumes/DATA/Mac/WorkSpace/visualynk_new/home" as homedir
+2017-10-11 11:42:08,013 INFO [main] o.b.p.MavenPluginRepository [MavenPluginRepository.java:80] Adding ~/.m2 as repository
+2017-10-11 11:42:13,354 INFO [main] o.b.BimServer [BimServer.java:317] Version: 1.5.73
+2017-10-11 11:42:19,844 INFO [main] o.b.t.TemplateEngine [TemplateEngine.java:64] Using "Volumes/DATA/Mac/WorkSpace/VisualLynk/bimServer/bimserverjar-1.5.73/./emailtemplates/" as template dir
+2017-10-11 11:42:20,000 INFO [main] o.b.d.b.BerkeleyKeyValueStore [BerkeleyKeyValueStore.java:97] No database directory found, creating "/Volumes/DATA/Mac/WorkSpace/visualynk_new/home/database"
+2017-10-11 11:42:20,002 INFO [main] o.b.d.b.BerkeleyKeyValueStore [BerkeleyKeyValueStore.java:100] Successfully created database dir "/Volumes/DATA/Mac/WorkSpace/visualynk_new/home/database"
+2017-10-11 11:42:20,239 ERROR [main] o.b.BimServer [BimServer.java:780] 
+org.bimserver.database.berkeley.DatabaseInitException: Environment locked exception. Another process is using the same database, or the current user has no write access (database location: "/Volumes/DATA/Mac/WorkSpace/visualynk_new/home/database")
+	at org.bimserver.database.berkeley.BerkeleyKeyValueStore.<init>(BerkeleyKeyValueStore.java:118)
+	at org.bimserver.BimServer.start(BimServer.java:631)
+	at org.bimserver.JarBimServer.start(JarBimServer.java:84)
+	at org.bimserver.JarBimServer.main(JarBimServer.java:53)
+2017-10-11 11:42:20,268 INFO [main] o.b.JarBimServer [JarBimServer.java:85] Server started successfully
