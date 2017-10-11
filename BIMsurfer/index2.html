@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<title>VisuaLynk BIM Viewer</title>
+<head>
+	<link rel="stylesheet" href="css/demo.css"/>
+	<link rel="stylesheet" href="css/apiref.css"/>
+	<link rel="stylesheet" href="../css/tree.css"/>
+	<link rel="stylesheet" href="../css/metadata.css"/>
+	<script type="text/javascript" src="https://thisisanexperimentalserver.com/apps/bimserverjavascriptapi/js/bimserverapiwebsocket.js"></script>
+	<script type="text/javascript" src="https://thisisanexperimentalserver.com/apps/bimserverjavascriptapi/js/bimserverclient.js"></script>
+	<script type="text/javascript" src="https://thisisanexperimentalserver.com/apps/bimserverjavascriptapi/js/bimserverapipromise.js"></script>
+	<script type="text/javascript" src="https://thisisanexperimentalserver.com/apps/bimserverjavascriptapi/js/ifc2x3tc1.js"></script>
+	<script type="text/javascript" src="https://thisisanexperimentalserver.com/apps/bimserverjavascriptapi/js/ifc4.js"></script>
+	<script type="text/javascript" src="https://thisisanexperimentalserver.com/apps/bimserverjavascriptapi/js/model.js"></script>
+	<script type="text/javascript" src="https://thisisanexperimentalserver.com/apps/bimserverjavascriptapi/js/translations_en.js"></script>
+	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/core.js"></script>
+</head>
+<body>
+<h1 style="font-family:'Raleway'">VisuaLynk 3D Viewer</h1>
+<div id="expserver"></div>
+<div id="localhost8080"></div>
+<div id="localhost8082"></div>
+<!-- <h3>Other BIMserver</h3>
+<a id="loadFromOtherBimServer" style="cursor: pointer">Load from other server</a>
+<div id="other" style="display: none">
+<input id="address"/>
+<input id="username"/>
+<input id="password" type="password"/>
+<button id="loadProjectsBtn">Load projects</button>
+<div id="otherProjects"></div>
+</div>
+<h3>glTF</h3>
+<a href="viewer/example_glTF.html">glTF</a>
+<h3>Other</h3>
+<a href="viewer/example_testModel.html">Test Model</a> -->
+<script>
+
+
+document.addEventListener("DOMContentLoaded", function(event) {
+	function loadFromBimserver(address, username, password, target) {
+		target.innerHTML = "";
+		var client = new BimServerClient(address);
+		client.init(function(){
+			var bimServerDiv = document.getElementById("bimserverdiv");
+			var div = document.createElement("div");
+			var h3 = document.createElement("h3");
+			h3.textContent = address;
+
+			//Append the connection address and port
+			//div.appendChild(h3);
+
+			var status = document.createElement("div");
+			div.appendChild(status);
+			var ul = document.createElement("ul");
+			div.appendChild(ul);
+			target.appendChild(div);
+
+			status.textContent = "Logging in...";
+
+
+
+			// Connect to the BIMserver client
+			client.login(username, password, function(){
+
+				//Get the token of the connection client. Log the client to see other attributes
+				//console.log(client.token);
+				status.textContent = "Getting all projects...";
+
+				// Call relevant functions of the BIMsie API like the following.
+				client.call("ServiceInterface", "getAllProjects", {
+					onlyTopLevel: true,
+					onlyActive: true
+				}, function(projects){
+
+					//Log the projects param to see the attrs of it.
+					//console.log(projects);
+
+					var totalFound = 0;
+					projects.forEach(function(project){
+						if (project.lastRevisionId != -1) {
+							var li = document.createElement("li");
+							var a = document.createElement("a");
+							li.appendChild(a);
+							a.textContent = project.name;
+							a.setAttribute("href", "viewer/visualynk3D.html?address=" + encodeURIComponent(address) + "&token=" + client.token + "&poid=" + project.oid + "&roid=" + project.lastRevisionId);
+							ul.appendChild(li);
+							totalFound++;
+						}
+					});
+					if (totalFound == 0) {
+						status.textContent = "No projects found on VisuaLynk servers";
+					} else {
+						status.textContent = "";
+					}
+				});
+			}, function(error){
+				console.error(error);
+				status.textContent = error.message;
+			});
+		});
+	}
+
+	// loadFromBimserver("https://thisisanexperimentalserver.com", "bimsurfer@logic-labs.nl", "bimsurfer", document.getElementById("expserver"));
+	loadFromBimserver("http://localhost:8080", "admin@bimserver.org", "admin", document.getElementById("localhost8080"));
+	loadFromBimserver("http://localhost:8082", "admin@bimserver.org", "admin", document.getElementById("localhost8082"));
+
+	var loadLink = document.getElementById("loadFromOtherBimServer");
+	loadLink.onclick = function(){
+		document.getElementById("other").style.display = "block";
+		if (localStorage.getItem("address") != null) {
+			document.getElementById("address").value = localStorage.getItem("address");
+			document.getElementById("username").value = localStorage.getItem("username");
+			document.getElementById("password").value = localStorage.getItem("password");
+		}
+		document.getElementById("address").focus();
+	};
+
+	var loadProjectsBtn = document.getElementById("loadProjectsBtn");
+	loadProjectsBtn.onclick = function(){
+		var address = document.getElementById("address").value;
+		var username = document.getElementById("username").value;
+		var password = document.getElementById("password").value;
+		localStorage.setItem("address", address);
+		localStorage.setItem("username", username);
+		localStorage.setItem("password", password);
+		loadFromBimserver(address, username, password, document.getElementById("otherProjects"));
+	};
+});
+</script>
+</body>
+</html>

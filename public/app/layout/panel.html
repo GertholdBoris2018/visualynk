@@ -1,11 +1,11 @@
-<div class="page-container row-fluid" >
+<div class="row-fluid" id="panel-wrapper">
     <!-- BEGIN EMPTY PAGE SIDEBAR -->
     <div class="page-sidebar nav-collapse collapse visible-phone visible-tablet no-margin">
         <ul class="page-sidebar-menu">
             <li><a href="/#/login">Log out</a></li>
         </ul>
     </div>
-    <div class="page-sidebar nav-collapse collapse" style="height:100% !important;">
+    <div class="panel-sidebar page-sidebar nav-collapse collapse" style="height:100% !important;">
 
         <!-- BEGIN SIDEBAR MENU -->
 
@@ -23,7 +23,7 @@
 
                         <a href="javascript:;" class="remove"></a>
 
-                        <input type="text"  id="constraint" placeholder="VisuaLynk..." style="border:none !important;"/>
+                        <input type="text"  id="constraint" placeholder="Search..." style="border:none !important;"/>
 
                         <input id="filter-button" type="button" class="submit" value="" style="border:none !important;" data-ng-click="filter()"/>
 
@@ -33,63 +33,214 @@
 
                 <!-- END RESPONSIVE QUICK SEARCH FORM -->
             </li>
-            <li>
+            <li ng-if="user.crudpermissions.p_nr_r">
                 <div class="vslynk-section-header" >
                     <nav id="visualynk-taxonomy" class="vslynk-taxo-nav">
+                        <div ng-if="user.crudpermissions.p_nr_c">
+                            <button type="button" class="btn" ng-click="openNRCreate()" style="margin-left:40px;float:left;margin-bottom: 20px">Create Root</button>
+                        </div>
+                        <div ng-if="user.crudpermissions.p_ng_c">
+                            <button type="button" class="btn" ng-click="openNGCreate()" style="margin-bottom: 20px">Create Group</button>
+                        </div> 
                     </nav>
                 </div>
             </li>
+
         </ul>
         <!-- END SIDEBAR MENU -->
     </div>
     <div class="page-content margin-top-20 bg-white">
-    <div class="container-fluid">
-        <div class="row-fluid">
-            <div id="panel-1-resize" class="span5 margin-left-30">
-                <div class="panel-item  height-900">
+    <div class="container-fluid no-padding">
+        <div class="row-fluid padding-left-20">
+            <div id="panel-1-resize" class="span5">
+                <div class="panel-item">
                     <div data-ng-include="'/app/layout/graph_model_2d.html'"></div>
                 </div>
             </div>
-            <div id= "panel-2-resize" class="span5 margin-left-20">
-                <div class="panel-item  height-900">
+
+            <div id="panel-1-resizer"
+                 resizer="vertical"
+                 resizer-width="5"
+                 resizer-left="#panel-1-resize"
+                 resizer-right="#panel-2-resize"
+                 resizer-min="400"
+                 resizer-max="1300"
+            >
+            </div>
+            <div id= "panel-2-resize" class="span5 no-margin">
+                <div class="panel-item">
                     <div data-ng-include="'/app/layout/graph_model_3d.html'"></div>
                 </div>
             </div>
-            <div id="panel-3-resize" class="span2 margin-left-20">
-                <div class="panel-item height-900">
+            <div id="panel-2-resizer"
+                 resizer="vertical"
+                 resizer-width="5"
+                 resizer-left="#panel-2-resize"
+                 resizer-right="#panel-3-resize"
+                 resizer-max="1576"
+                 resizer-min="1360">
+            </div>
+            <div id="panel-3-resize" class="span2 no-margin">
+                <div class="panel-item" style="overflow:auto;">
                     <div class="portlet box custom-purple">
-                        <div class="portlet-title">
+                        <div class="portlet-title query-hidden">
                             <div class="caption">
                                 <!--<span id="visualynk-query" class="vslynk-container-query">
                                 </span>-->
-                                <div class="hidden-480" id="visualynk-query" class="vslynk-container-query"></div>
+                                <div id="visualynk-query" class="vslynk-container-query" ></div>
+                                <img id="query_loading" style="display: none;position:absolute; top:5px;" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA=="/>
+                                <i class="halflings-icon white query-toggle" ng-click="exdQueryArea()" style="display:none !important;"></i>
                             </div>
                         </div>
-                        <div class="portlet-body" style="height:850px; overflow-y:auto;">
-                            <div id="visualynk-results" class="vslynk-container-results">
+                        <div class="portlet-body" style="overflow: auto;">
+                            <input type="hidden" model="renderd3d"/>
+                            <div ng-show="is_nr_create || is_nr_update" class="node-mng">
+
+                                <!--<a slide-toggle="#create-node-group-wrapper">Create New Node Group</a>-->
+                                <div id="create-node-group-wrapper" class="slideable1" duration="0.3s" easing="linear">
+                                    <div style="margin-top:10px">
+                                        <label>Root Node Label</label>
+                                        <input class="form-control span12 m-wrap" type="text" placeholder="Enter the Node Label" ng-model="newNRLabel">
+
+                                        <label>Root Node Icon</label>
+                                        <div class="dropzone" options="dzOptions" callbacks="dzCallbacks" methods="dzMethods" ng-dropzone></div>
+
+                                        <button type="button" class="btn btn-warning pull-right" ng-click="cancelCreateRG()">Cancel </button>
+                                        <button type="button" class="btn btn-success pull-right" ng-click="createRG()" ng-if="is_nr_create">Create </button>
+                                        <button type="button" class="btn btn-success pull-right" ng-click="updateRG()" ng-if="is_nr_update">Update </button>
+
+                                    </div>
+
+                                </div>
+
+                                <!--<a slide-toggle="#define-node-group-relationship">Define Relationship</a>
+                                <div id="define-node-group-relationship" class="slideable" duration="0.3s" easing="linear">
+                                    define relationship
+                                </div>-->
+
+                            </div>
+
+                            <div ng-show="is_ng_create || is_ng_update" class="node-mng">
+
+                                <!--<a slide-toggle="#create-node-group-wrapper">Create New Node Group</a>-->
+                                <div id="create-node-group-wrapper" class="slideable1" duration="0.3s" easing="linear">
+                                    <div style="margin-top:10px">
+
+                                        <label>Select Root Node</label>
+                                        <select ng-model="selectedroot" style="width:100%;">
+                                            <option ng-repeat="item in rootGroups" value="{{item._fields[0].identity.low}}" >{{item._fields[0].properties.name}}</option>
+                                        </select>
+                                        <label>Node Label</label>
+                                        <input class="form-control span12 m-wrap" type="text" placeholder="Enter the Node Label" ng-model="newNGLabel">
+
+                                        <label>Node Icon</label>
+                                        <div class="dropzone" options="dzOptions" callbacks="dzCallbacks" methods="dzMethods" ng-dropzone></div>
+
+                                        <label>Property</label>
+                                        <input class="form-control span10 m-wrap" type="text" placeholder="Enter Property" ng-model="property">
+                                        <a href="javascript:void(0)" ng-click="addNGProperty()" style="display: inline-block; margin-top: 5px; margin-left:3px; "><i class="icon-plus"></i></a>
+
+                                        <div style="padding-bottom:10px; text-align:center;">
+                                            <div ng-repeat="property in ng_properties track by $index">
+                                                {{property}}
+                                                <a href="javascript:void(0)" ng-click="deleteNGProperty($index)" style="display: inline-block; margin-top: 5px; margin-left:3px; "><i class="icon-remove"></i></a>
+                                            </div>
+                                        </div>
+
+                                        <button type="button" class="btn btn-warning pull-right" ng-click="cancelCreateNG()">Cancel </button>
+                                        <button type="button" class="btn btn-success pull-right" ng-click="createNG()" ng-if="is_ng_create">Create </button>
+                                        <button type="button" class="btn btn-success pull-right" ng-click="updateNG()" ng-if="is_ng_update">Update </button>
+
+                                    </div>
+
+                                </div>
+
+                                <!--<a slide-toggle="#define-node-group-relationship">Define Relationship</a>
+                                <div id="define-node-group-relationship" class="slideable" duration="0.3s" easing="linear">
+                                    define relationship
+                                </div>-->
+
+                            </div>
+
+                            <div ng-show="is_ne_create || is_ne_update" class="node-mng">
+                                <div>
+                                    <label>Entity Label</label>
+                                    <input class="form-control span12 m-wrap" type="text" placeholder="Enter Entity Label" ng-model="ne_label">
+                                    
+                                    <label>Entiry GUID</label>
+                                    <input class="form-control span12 m-wrap" type="text" placeholder="Enter GUID" ng-model="ne_guid">
+
+                                    <div ng-repeat="(i, property) in ne_properties track by $index">
+                                        <div class="span3" style="line-height: 30px;" ng-if="property != 'need_ne_create_approval' && property != 'need_ne_update_approval' && property != 'need_ne_delete_approval' && property != 'companyId' && property != 'creatorGroup' && property != 'parentGroup' && property != 'is_full_show' && property != 'guid'">{{property}} : </div>
+                                        <input type="text" class="form-control span9 m-wrap" ng-model="ne_properties_val[i]" ng-if="property != 'need_ne_create_approval' && property != 'need_ne_update_approval' && property != 'need_ne_delete_approval' && property != 'companyId' && property != 'creatorGroup' && property != 'parentGroup' && property != 'is_full_show'  && property != 'guid'">
+                                    </div>
+
+                                    <button type="button" class="btn btn-warning pull-right" ng-click="cancelCreateNE()">Cancel </button>
+                                    <button type="button" class="btn btn-success pull-right" ng-click="createNE()" ng-if="is_ne_create">Create </button>
+                                    <button type="button" class="btn btn-success pull-right" ng-click="updateNE()" ng-if="is_ne_update">Update </button>
+                                </div>
+                            </div>
+
+                            <div ng-show="is_ne_relation" class="node-mng">
+                                <div ng-repeat="relation in neRelations">
+                                    {{relation.startNode}} {{relation.direction == "<-" ? relation.direction : "-"}} <b>{{relation.relationName}}</b> {{relation.direction == "->" ? relation.direction : "-"}} {{relation.endNode}}
+                                    <span class="halflings-icon remove" ng-click="removeNERelation($index)"></span>
+                                </div>
+
+                                <h4>New Relation</h4>
+                                <div class="margin-bottom-10">
+                                    <div class="span4">Start Node : </div>
+                                    <div class="span8">{{newRelationStarterLabel}}</div>
+                                </div>
+                                <div class="margin-bottom-10">
+                                    <div class="span4">Direction : </div>
+                                    <select class="form-control m-wrap span8" ng-model="newRelationDirection">
+                                        <option value="->"> -> </option>
+                                        <option value="<-"> <- </option>
+                                    </select>
+                                </div>
+
+                                <div class="margin-bottom-10">
+                                    <div class="span4">Relation Name : </div>
+                                    <input class="form-control m-wrap span8" ng-model="newRelationName"/>
+                                </div>
+
+                                <div  class="margin-bottom-10">
+                                    <div class="span4">End Node: </div>
+                                    <select class="form-control m-wrap span8" ng-model="newRelationEnder">
+                                        <option value="">---Please select---</option>
+                                        <option ng-repeat="ender in newRelationEnders" value="{{ender.id}}">{{ender.name}}</option>
+                                    </select>
+                                </div>
+
+                                <button type="button" class="btn btn-warning pull-right" ng-click="cancelCreateNERelation()">Cancel </button>
+                                <button type="button" class="btn btn-success pull-right" ng-click="createNERelation()" >Create </button>
+                            </div>
+
+                            
+                            <div ng-show="(!is_nr_create && !is_nr_update && !is_ng_create && !is_ng_update && !is_ne_create && !is_ne_update && !is_ne_relation && !is_ne_datacontainer) || is_with_entity" id="visualynk-results" class="vslynk-container-results">
+                                <img id="loading" src="/media/image/uploading.gif" style="position:absolute;left:45%;top:48%;width:30px;display:none;"/>
+                                <div id="loadingMask" style="display: none;"/>
+                            </div>
+
+                            <div ng-show="is_ne_datacontainer" class="bimsurfer-metadata" id="dataContainer">
+
+                            </div>
+                            <div ng-show="is_rs_datacontainer" id="dataRContainer">
+                                <div ng-repeat="relation in neListRelations">
+                                    {{relation.startNode}} {{relation.direction == "<-" ? relation.direction : "-"}} <b>{{relation.relationName}}</b> {{relation.direction == "->" ? relation.direction : "-"}} {{relation.endNode}}
+                                    
+                                </div>
+                                <span>{{limessage}}</span>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div id="panel-1-resizer"
-                 resizer="vertical"
-                 resizer-width="6"
-                 resizer-left="#panel-1-resize"
-                 resizer-right="#panel-2-resize"
-                 resizer-min="425"
-                 resizer-max="825"
-            >
-            </div>
-            <div id="panel-2-resizer"
-                 resizer="vertical"
-                 resizer-width="6"
-                 resizer-left="#panel-2-resize"
-                 resizer-right="#panel-3-resize"
-                 resizer-max="1576"
-                 resizer-min="850">
-            </div>
+
         </div>
     </div>
+        <!--<div class="dropzone" options="dzOptions" callbacks="" methods="dzMethods" ng-dropzone></div>-->
 </div>
 </div>
+

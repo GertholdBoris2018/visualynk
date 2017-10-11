@@ -22,7 +22,6 @@
         }
     }]);
 
-
     app.directive('ccSidebar', function () {
         // Opens and clsoes the sidebar menu.
         // Usage:
@@ -60,7 +59,6 @@
             }
         }
     });
-
 
     app.directive('ccWidgetClose', function () {
         // Usage:
@@ -201,102 +199,325 @@
     });
 
 
-
-
-   
-app.directive('checklistModel', ['$parse', '$compile', function($parse, $compile) {
-  // contains
-  function contains(arr, item) {
-    if (angular.isArray(arr)) {
-      for (var i = 0; i < arr.length; i++) {
-        if (angular.equals(arr[i], item)) {
-          return true;
+    app.directive('checklistModel', ['$parse', '$compile', function($parse, $compile) {
+      // contains
+      function contains(arr, item) {
+        if (angular.isArray(arr)) {
+          for (var i = 0; i < arr.length; i++) {
+            if (angular.equals(arr[i], item)) {
+              return true;
+            }
+          }
         }
+        return false;
       }
-    }
-    return false;
-  }
-
-  // add
-  function add(arr, item) {
-    arr = angular.isArray(arr) ? arr : [];
-    for (var i = 0; i < arr.length; i++) {
-      if (angular.equals(arr[i], item)) {
+    
+      // add
+      function add(arr, item) {
+        arr = angular.isArray(arr) ? arr : [];
+        for (var i = 0; i < arr.length; i++) {
+          if (angular.equals(arr[i], item)) {
+            return arr;
+          }
+        }
+        arr.push(item);
         return arr;
       }
-    }
-    arr.push(item);
-    return arr;
-  }
-
-  // remove
-  function remove(arr, item) {
-    if (angular.isArray(arr)) {
-      for (var i = 0; i < arr.length; i++) {
-        if (angular.equals(arr[i], item)) {
-          arr.splice(i, 1);
-          break;
+    
+      // remove
+      function remove(arr, item) {
+        if (angular.isArray(arr)) {
+          for (var i = 0; i < arr.length; i++) {
+            if (angular.equals(arr[i], item)) {
+              arr.splice(i, 1);
+              break;
+            }
+          }
         }
+        return arr;
       }
-    }
-    return arr;
-  }
-
-  // http://stackoverflow.com/a/19228302/1458162
-  function postLinkFn(scope, elem, attrs) {
-    // compile with `ng-model` pointing to `checked`
-    $compile(elem)(scope);
-
-    // getter / setter for original model
-    var getter = $parse(attrs.checklistModel);
-    var setter = getter.assign;
-
-    // value added to list
-    var value = $parse(attrs.checklistValue)(scope.$parent);
-
-    // watch UI checked change
-    scope.$watch('checked', function(newValue, oldValue) {
-      if (newValue === oldValue) {
-        return;
+    
+      // http://stackoverflow.com/a/19228302/1458162
+      function postLinkFn(scope, elem, attrs) {
+        // compile with `ng-model` pointing to `checked`
+        $compile(elem)(scope);
+    
+        // getter / setter for original model
+        var getter = $parse(attrs.checklistModel);
+        var setter = getter.assign;
+    
+        // value added to list
+        var value = $parse(attrs.checklistValue)(scope.$parent);
+    
+        // watch UI checked change
+        scope.$watch('checked', function(newValue, oldValue) {
+          if (newValue === oldValue) {
+            return;
+          }
+          var current = getter(scope.$parent);
+          if (newValue === true) {
+            setter(scope.$parent, add(current, value));
+          } else {
+            setter(scope.$parent, remove(current, value));
+          }
+        });
+    
+        // watch original model change
+        scope.$parent.$watch(attrs.checklistModel, function(newArr, oldArr) {
+          scope.checked = contains(newArr, value);
+        }, true);
       }
-      var current = getter(scope.$parent);
-      if (newValue === true) {
-        setter(scope.$parent, add(current, value));
-      } else {
-        setter(scope.$parent, remove(current, value));
-      }
-    });
+    
+      return {
+        restrict: 'A',
+        priority: 1000,
+        terminal: true,
+        scope: true,
+        compile: function(tElement, tAttrs) {
+          if (tElement[0].tagName !== 'INPUT' || !tElement.attr('type', 'checkbox')) {
+            throw 'checklist-model should be applied to `input[type="checkbox"]`.';
+          }
+    
+          if (!tAttrs.checklistValue) {
+            throw 'You should provide `checklist-value`.';
+          }
+    
+          // exclude recursion
+          tElement.removeAttr('checklist-model');
+          
+          // local scope var storing individual checkbox model
+          tElement.attr('ng-model', 'checked');
+    
+          return postLinkFn;
+        }
+      };
+    }]);
 
-    // watch original model change
-    scope.$parent.$watch(attrs.checklistModel, function(newArr, oldArr) {
-      scope.checked = contains(newArr, value);
-    }, true);
-  }
+    app.directive('elheightresize', ['$window', function($window) {
+        return {
+            link: function(scope, elem, attrs) {
+                scope.onResize = function() {
+                    var top_header_height = angular.element(".navbar-inner").height();
+                    var page_title_height = angular.element(".page-title").height();
+                    var margin_gaps = 60;
 
-  return {
-    restrict: 'A',
-    priority: 1000,
-    terminal: true,
-    scope: true,
-    compile: function(tElement, tAttrs) {
-      if (tElement[0].tagName !== 'INPUT' || !tElement.attr('type', 'checkbox')) {
-        throw 'checklist-model should be applied to `input[type="checkbox"]`.';
-      }
+                    elem.css('height', $window.innerHeight-top_header_height-margin_gaps-page_title_height);
+                }
+                scope.onResize();
 
-      if (!tAttrs.checklistValue) {
-        throw 'You should provide `checklist-value`.';
-      }
+                angular.element($window).bind('resize', function() {
+                    scope.onResize();
+                })
+            }
+        }
+    }]);
 
-      // exclude recursion
-      tElement.removeAttr('checklist-model');
-      
-      // local scope var storing individual checkbox model
-      tElement.attr('ng-model', 'checked');
+    app.directive('slimscroll', ['$timeout', '$window', function ($timeout, $window) {
+        'use strict';
 
-      return postLinkFn;
-    }
-  };
-}]);
+        return {
+            restrict: 'A',
+            link: function ($scope, $elem, $attr) {
+                var off = [];
+                var option = {};
 
+                var refresh = function () {
+                    $timeout(function () {
+                        if (angular.isDefined($attr.slimscroll)) {
+                            option = $scope.$eval($attr.slimscroll) || {};
+                        } else if ($attr.slimscrollOption) {
+                            option = $scope.$eval($attr.slimscrollOption) || {};
+                        }
+
+                        var top_header_height = angular.element(".navbar-inner").height();
+                        var page_title_height = angular.element(".page-title").height();
+                        var margin_gaps = 60;
+
+                        option.height = $window.innerHeight-top_header_height-margin_gaps-page_title_height;
+                        option.color = "#a1b2bd";
+                        option.disableFadeOut = true;
+                        option.size = 4;
+
+                        var el = angular.element($elem);
+                        el.slimScroll(option);
+
+                        var slimdivheight = angular.element(".span12 .slimScrollDiv").height();
+                        angular.element(".span12 .slimScrollDiv").css("height", slimdivheight+25);
+
+                    });
+                };
+
+                angular.element($window).bind('resize', function() {
+                    if ($attr.slimscroll) {
+                        option = $scope.$eval($attr.slimscroll);
+                    } else if ($attr.slimscrollOption) {
+                        option = $scope.$eval($attr.slimscrollOption);
+                    }
+
+                    $($elem).slimScroll({ destroy: true });
+
+                    var top_header_height = angular.element(".navbar-inner").height();
+                    var page_title_height = angular.element(".page-title").height();
+                    var margin_gaps = 60;
+
+                    option.height = $window.innerHeight-top_header_height-margin_gaps-page_title_height;
+                    option.color = "#a1b2bd";
+                    option.disableFadeOut = true;
+                    option.size = 4;
+                    $($elem).slimScroll(option);
+
+                    var slimdivheight = angular.element(".span12 .slimScrollDiv").height();
+                    angular.element(".span12 .slimScrollDiv").css("height", slimdivheight+25);
+                });
+
+                var registerWatch = function () {
+                    if (angular.isDefined($attr.slimscroll) && !option.noWatch) {
+                        off.push($scope.$watchCollection($attr.slimscroll, refresh));
+                    }
+
+                    if ($attr.slimscrollWatch) {
+                        off.push($scope.$watchCollection($attr.slimscrollWatch, refresh));
+                    }
+
+                    if ($attr.slimscrolllistento) {
+                        off.push($scope.$on($attr.slimscrolllistento, refresh));
+                    }
+                };
+
+                var destructor = function () {
+                    angular.element($elem).slimScroll({destroy: true});
+                    off.forEach(function (unbind) {
+                        unbind();
+                    });
+                    off = null;
+                };
+
+                off.push($scope.$on('$destroy', destructor));
+
+                registerWatch();
+            }
+        };
+    }]);
+
+    app.directive('slimscrollmdl', ['$timeout', '$window', function ($timeout, $window) {
+        'use strict';
+
+        return {
+            restrict: 'A',
+            link: function ($scope, $elem, $attr) {
+                var off = [];
+                var option = {};
+
+                var refresh = function () {
+                    $timeout(function () {
+                        if (angular.isDefined($attr.slimscrollmdl)) {
+                            option = $scope.$eval($attr.slimscrollmdl) || {};
+                        } else if ($attr.slimscrollOption) {
+                            option = $scope.$eval($attr.slimscrollOption) || {};
+                        }
+
+                        option.height = 500;
+                        option.color = "#a1b2bd";
+                        option.disableFadeOut = true;
+                        option.size = 4;
+
+                        var el = angular.element($elem);
+                        el.slimScroll(option);
+                    });
+                };
+
+                angular.element($window).bind('resize', function() {
+                    if ($attr.slimscrollmdl) {
+                        option = $scope.$eval($attr.slimscrollmdl);
+                    } else if ($attr.slimscrollOption) {
+                        option = $scope.$eval($attr.slimscrollOption);
+                    }
+
+                    $($elem).slimScroll({ destroy: true });
+
+                    option.height = 500;
+                    option.color = "#a1b2bd";
+                    option.disableFadeOut = true;
+                    option.size = 4;
+                    $($elem).slimScroll(option);
+                });
+
+                var registerWatch = function () {
+                    if (angular.isDefined($attr.slimscrollmdl) && !option.noWatch) {
+                        off.push($scope.$watchCollection($attr.slimscrollmdl, refresh));
+                    }
+
+                    if ($attr.slimscrollWatch) {
+                        off.push($scope.$watchCollection($attr.slimscrollWatch, refresh));
+                    }
+
+                    if ($attr.slimscrolllistento) {
+                        off.push($scope.$on($attr.slimscrolllistento, refresh));
+                    }
+                };
+
+                var destructor = function () {
+                    angular.element($elem).slimScroll({destroy: true});
+                    off.forEach(function (unbind) {
+                        unbind();
+                    });
+                    off = null;
+                };
+
+                off.push($scope.$on('$destroy', destructor));
+
+                registerWatch();
+            }
+        };
+    }]);
+
+    app.directive('slideable', function () {
+            return {
+                restrict:'C',
+                compile: function (element, attr) {
+                    // wrap tag
+                    var contents = element.html();
+                    element.html('<div class="slideable_content" style="margin:0 !important; padding:0 !important" >' + contents + '</div>');
+
+                    return function postLink(scope, element, attrs) {
+                        // default properties
+                        attrs.duration = (!attrs.duration) ? '1s' : attrs.duration;
+                        attrs.easing = (!attrs.easing) ? 'ease-in-out' : attrs.easing;
+                        element.css({
+                            'overflow': 'hidden',
+                            'height': '0px',
+                            'transitionProperty': 'height',
+                            'transitionDuration': attrs.duration,
+                            'transitionTimingFunction': attrs.easing
+                        });
+                    };
+                }
+            };
+        })
+        .directive('slideToggle', function() {
+            return {
+                restrict: 'A',
+                link: function(scope, element, attrs) {
+                    var target, content;
+
+                    attrs.expanded = false;
+
+                    element.bind('click', function() {
+                        if (!target) target = document.querySelector(attrs.slideToggle);
+                        if (!content) content = target.querySelector('.slideable_content');
+
+                        if(!attrs.expanded) {
+                            content.style.border = '1px solid rgba(0,0,0,0)';
+                            var y = content.clientHeight;
+                            content.style.border = 0;
+                            target.style.height = y + 'px';
+                        } else {
+                            target.style.height = '0px';
+                        }
+                        attrs.expanded = !attrs.expanded;
+                    });
+                }
+            }
+        });
 
 })();

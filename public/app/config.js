@@ -38,4 +38,5 @@
         cfg.config.spinnerToggleEvent = config.events.spinnerToggle;
     }]);
     //#endregion
+
 })();

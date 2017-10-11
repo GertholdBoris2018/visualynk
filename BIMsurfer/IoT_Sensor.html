@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html >
+   <head>
+      <meta charset="UTF-8">
+      <title>VisuaLynk IoT</title>
+      <link rel="stylesheet" href="IoT_Dashboard/css/style.css">
+      <link href="https://fonts.googleapis.com/css?family=Raleway:200" rel="stylesheet">
+   </head>
+   <body>
+      <section class="dashboard" id="main-column">
+         <div id="about">
+            <h1> <span style="color: #EF4836">Visua<span style="color: #19B5FE">Lynk</span></span><span> IoT Sensor Monitoring System</span></h1>
+            <p>Demo integration of <a href="https://www.visualynk.com" class="mkr-link"> < Visua<span style="color: #19B5FE">Lynk_></span></a> for <a href="https://github.com/AaltoAsia/O-MI" class="j5-link">YIT</a> Hack for IoT data transfer.</p>
+         </div>
+         <div id="sensorValues">
+            <div class="sensor-values">
+               <div class="volts">12.0</div>
+               <label>Temprature (C)</label>
+            </div>
+            <div class="sensor-values">
+               <div class="amps">0.7</div>
+               <label>Current (mW)</label>
+            </div>
+            <div class="sensor-values">
+               <div class="moisture">1</div>
+               <label>Humidity</label>
+            </div>
+         </div>
+         <div id="sensorData"></div>
+      </section>
+      <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0-alpha1/jquery.min.js'></script>
+      <script src='IoT_Dashboard/js/highcharts.js'></script>
+      <script src='IoT_Dashboard/js/darkThemeHighCharts.js'></script>
+      <script src="IoT_Dashboard/js/index.js"></script>
+   </body>
+</html>

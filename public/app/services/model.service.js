@@ -35,9 +35,7 @@
             return $http.post('/getPlanDan', e).success(function (response) {
                 // If successful we assign the response to the global user model
                 // And redirect to the index page
-                console.log(response);
             }).error(function (response) {
-                console.log(response);
             });
         }
 
@@ -46,9 +44,7 @@
             return $http.post('/systemfilter').success(function (response) {
                 // If successful we assign the response to the global user model
                 // And redirect to the index page
-                console.log(response);
             }).error(function (response) {
-                console.log(response);
             });
         }
         //ATTRIBUTE FILTER
@@ -56,9 +52,7 @@
             return $http.post('/attributefilter').success(function (response) {
                 // If successful we assign the response to the global user model
                 // And redirect to the index page
-                console.log(response);
             }).error(function (response) {
-                console.log(response);
             });
         }
         //COMPNAY FILTER
@@ -66,9 +60,7 @@
             return $http.post('/companyfilter').success(function (response) {
                 // If successful we assign the response to the global user model
                 // And redirect to the index page
-                console.log(response);
             }).error(function (response) {
-                console.log(response);
             });
         }
         //FACILITY FILTER
@@ -76,9 +68,7 @@
             return $http.post('/facilityfilter').success(function (response) {
                 // If successful we assign the response to the global user model
                 // And redirect to the index page
-                console.log(response);
             }).error(function (response) {
-                console.log(response);
             });
         }
         //FLOOR FILTER
@@ -86,9 +76,7 @@
             return $http.post('/floorfilter').success(function (response) {
                 // If successful we assign the response to the global user model
                 // And redirect to the index page
-                console.log(response);
             }).error(function (response) {
-                console.log(response);
             });
         }
 
@@ -97,9 +85,7 @@
             return $http.post('/personfilter').success(function (response) {
                 // If successful we assign the response to the global user model
                 // And redirect to the index page
-                console.log(response);
             }).error(function (response) {
-                console.log(response);
             });
         }
         //ZONE FILTER
@@ -107,9 +93,7 @@
             return $http.post('/zonefilter').success(function (response) {
                 // If successful we assign the response to the global user model
                 // And redirect to the index page
-                console.log(response);
             }).error(function (response) {
-                console.log(response);
             });
         }
         //SPACE FILTER
@@ -117,9 +101,7 @@
             return $http.post('/spacefilter').success(function (response) {
                 // If successful we assign the response to the global user model
                 // And redirect to the index page
-                console.log(response);
             }).error(function (response) {
-                console.log(response);
             });
         }
         //ASSET FILTER
@@ -127,9 +109,7 @@
             return $http.post('/assetfilter').success(function (response) {
                 // If successful we assign the response to the global user model
                 // And redirect to the index page
-                console.log(response);
             }).error(function (response) {
-                console.log(response);
             });
         }
         //COMPONENT FILTER
@@ -137,9 +117,7 @@
             return $http.post('/componentfilter').success(function (response) {
                 // If successful we assign the response to the global user model
                 // And redirect to the index page
-                console.log(response);
             }).error(function (response) {
-                console.log(response);
             });
         }
         //ASSEMBLY FILTER
@@ -147,9 +125,7 @@
             return $http.post('/assemblyfilter').success(function (response) {
                 // If successful we assign the response to the global user model
                 // And redirect to the index page
-                console.log(response);
             }).error(function (response) {
-                console.log(response);
             });
         }
         //CONNECTION FILTER
@@ -157,9 +133,7 @@
             return $http.post('/connectionfilter').success(function (response) {
                 // If successful we assign the response to the global user model
                 // And redirect to the index page
-                console.log(response);
             }).error(function (response) {
-                console.log(response);
             });
         }
         //SPARE FILTER spare_filter
@@ -167,9 +141,7 @@
             return $http.post('/sparefilter').success(function (response) {
                 // If successful we assign the response to the global user model
                 // And redirect to the index page
-                console.log(response);
             }).error(function (response) {
-                console.log(response);
             });
         }
         //RESOURCE FILTER
@@ -177,9 +149,7 @@
             return $http.post('/resourcefilter').success(function (response) {
                 // If successful we assign the response to the global user model
                 // And redirect to the index page
-                console.log(response);
             }).error(function (response) {
-                console.log(response);
             });
         }
         //JOB FILTER
@@ -187,9 +157,7 @@
             return $http.post('/jobfilter').success(function (response) {
                 // If successful we assign the response to the global user model
                 // And redirect to the index page
-                console.log(response);
             }).error(function (response) {
-                console.log(response);
             });
         }
         //sevicereq_filter
@@ -197,9 +165,7 @@
             return $http.post('/sevicereqfilter').success(function (response) {
                 // If successful we assign the response to the global user model
                 // And redirect to the index page
-                console.log(response);
             }).error(function (response) {
-                console.log(response);
             });
         }
         //document filter
@@ -207,9 +173,7 @@
             return $http.post('/docfilter').success(function (response) {
                 // If successful we assign the response to the global user model
                 // And redirect to the index page
-                console.log(response);
             }).error(function (response) {
-                console.log(response);
             });
         }
     }

@@ -1,0 +1,180 @@
+<div class="row-fluid admin-panel" >
+    <!-- BEGIN EMPTY PAGE SIDEBAR -->
+    <div class="page-sidebar nav-collapse collapse visible-phone visible-tablet no-margin">
+        <ul class="page-sidebar-menu">
+            <li><a href="/#/login">Log out</a></li>
+        </ul>
+    </div>
+    <div class="panel-sidebar page-sidebar " style="height:100% !important;">
+
+        <!-- BEGIN SIDEBAR MENU -->
+
+        <ul class="page-sidebar-menu admin-sidebar-menu">
+            <li ng-if="user.usertype == 'admin'"><a ng-href="/#/admin/company">Company</a></li>
+            <li ng-if="user.usertype == 'admin'"><a ng-href="/#/admin/users">Users</a></li>
+            <li ng-if="user.usertype == 'admin'"><a ng-href="/#/admin/projects">Projects</a></li>
+            <li class="active"><a ng-href="/#/admin/permissions">Permissions</a></li>
+            <li ><a ng-href="/#/admin/waitingapprovals">Pending Approvals</a></li>
+        </ul>
+        <!-- END SIDEBAR MENU -->
+    </div>
+    <div class="page-content bg-white" >
+        <h3 class="page-title pull-left">
+            Permissions
+        </h3>
+        <div class="clearfix"></div>
+
+        <div class="container-fluid no-padding">
+            <div class="row-fluid padding-left-20 padding-right-20">
+                <div id="" class="span12" >
+                    <div class="panel-item" elheightresize slimscroll>
+
+                        <div class="padding-20 tabs" style="padding-bottom:0">
+                            <ul class="nav nav-tabs nav-pills">
+                                <li ng-class="{ active: isSet(1) }">
+                                    <a href ng-click="setTab(1)">Permissions</a>
+                                </li>
+                                <li ng-if="user.usertype == 'admin'" ng-class="{ active: isSet(2) }">
+                                    <a href ng-click="setTab(2)">User Group Assigns</a>
+                                </li>
+                                <li ng-if="user.usertype == 'admin'" ng-class="{ active: isSet(3) }">
+                                    <a href ng-click="setTab(3)">Need Approval Assigns</a>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="padding-20" ng-show="isSet(1)">
+                            <table class="row-border hover dataTable">
+                                <thead>
+                                    <tr>
+                                        <th rowspan="2">User Name</th>
+                                        <th rowspan="2">User Group</th>
+                                        <th colspan="4">Node Groups</th>
+                                        <th colspan="4">Node Entities</th>
+                                        <th colspan="4">Node Root</th>
+                                    </tr>
+                                    <tr>
+                                        <th>C</th>
+                                        <th>R</th>
+                                        <th>U</th>
+                                        <th>D</th>
+                                        <th>C</th>
+                                        <th>R</th>
+                                        <th>U</th>
+                                        <th>D</th>
+                                        <th>C</th>
+                                        <th>R</th>
+                                        <th>U</th>
+                                        <th>D</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="u in users " ng-if="usergroupassigns[user.usergroup][u._fields[0].properties.userGroup] || user.usertype == 'admin' ">
+                                        <td>{{u._fields[0].properties.firstName}} {{u._fields[0].properties.lastName}} </td>
+                                        <td>{{u._fields[0].properties.userGroup}} </td>
+                                        <td><input type="checkbox" ng-model="u._fields[0].properties.p_ng_c" ng-change="saveUserPermissions('p_ng_c',$index)"></td>
+                                        <td><input type="checkbox" ng-model="u._fields[0].properties.p_ng_r" ng-change="saveUserPermissions('p_ng_r',$index)"></td>
+                                        <td><input type="checkbox" ng-model="u._fields[0].properties.p_ng_u" ng-change="saveUserPermissions('p_ng_u',$index)"></td>
+                                        <td><input type="checkbox" ng-model="u._fields[0].properties.p_ng_d" ng-change="saveUserPermissions('p_ng_d',$index)"></td>
+                                        <td><input type="checkbox" ng-model="u._fields[0].properties.p_ne_c" ng-change="saveUserPermissions('p_ne_c',$index)"></td>
+                                        <td><input type="checkbox" ng-model="u._fields[0].properties.p_ne_r" ng-change="saveUserPermissions('p_ne_r',$index)"></td>
+                                        <td><input type="checkbox" ng-model="u._fields[0].properties.p_ne_u" ng-change="saveUserPermissions('p_ne_u',$index)"></td>
+                                        <td><input type="checkbox" ng-model="u._fields[0].properties.p_ne_d" ng-change="saveUserPermissions('p_ne_d',$index)"></td>
+                                        <td><input type="checkbox" ng-model="u._fields[0].properties.p_nr_c" ng-change="saveUserPermissions('p_nr_c',$index)"></td>
+                                        <td><input type="checkbox" ng-model="u._fields[0].properties.p_nr_r" ng-change="saveUserPermissions('p_nr_r',$index)"></td>
+                                        <td><input type="checkbox" ng-model="u._fields[0].properties.p_nr_u" ng-change="saveUserPermissions('p_nr_u',$index)"></td>
+                                        <td><input type="checkbox" ng-model="u._fields[0].properties.p_nr_d" ng-change="saveUserPermissions('p_nr_d',$index)"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="padding-20" ng-show="isSet(2)">
+                            <table class="row-border dataTable">
+                                <tbody>
+                                    <tr ng-repeat="group in usergroups">
+                                        <td style="width:20%">{{group}}</td>
+                                        <td>
+                                            <table class="row-border dataTable" style="border:none;">
+                                                <tbody>
+                                                    <tr ng-repeat="subgroup in usergroups">
+                                                        <td ng-if="group != subgroup" style="border:1px solid #ffffff">{{subgroup}}</td>
+                                                        <td ng-if="group != subgroup" style="border:1px solid #ffffff">
+                                                            <input type="checkbox" ng-model="usergroupassigns[group][subgroup]" ng-change="saveAssigns()"/>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="padding-20" ng-show="isSet(3)">
+                            <table class="row-border dataTable">
+                                <tbody>
+                                <tr ng-repeat="group in usergroups">
+                                    <td style="width:20%">{{group}}</td>
+                                    <td>
+                                        <table class="row-border dataTable" style="border:none;">
+                                            <thead>
+                                                <tr>
+                                                    <th rowspan="2"></th>
+                                                    <th colspan="4">Node Groups</th>
+                                                    <th colspan="4">Node Entities</th>
+                                                </tr>
+                                                <tr>
+                                                    <th>C</th>
+                                                    <th>R</th>
+                                                    <th>U</th>
+                                                    <th>D</th>
+                                                    <th>C</th>
+                                                    <th>R</th>
+                                                    <th>U</th>
+                                                    <th>D</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr ng-repeat="subgroup in usergroups">
+                                                    <td ng-if="group != subgroup" style="border:1px solid #ffffff">{{subgroup}}</td>
+                                                    <td ng-if="group != subgroup" style="border:1px solid #ffffff">
+                                                        <input type="checkbox" ng-model="needapprovalassigns[group][subgroup].p_ng_c" ng-change="saveApprovalAssigns(group, subgroup, 'p_ng_c')"/>
+                                                    </td>
+                                                    <td ng-if="group != subgroup" style="border:1px solid #ffffff">
+                                                        <input type="checkbox" ng-model="needapprovalassigns[group][subgroup].p_ng_r" ng-change="saveApprovalAssigns(group, subgroup, 'p_ng_r')"/>
+                                                    </td>
+                                                    <td ng-if="group != subgroup" style="border:1px solid #ffffff">
+                                                        <input type="checkbox" ng-model="needapprovalassigns[group][subgroup].p_ng_u" ng-change="saveApprovalAssigns(group, subgroup, 'p_ng_u')"/>
+                                                    </td>
+                                                    <td ng-if="group != subgroup" style="border:1px solid #ffffff">
+                                                        <input type="checkbox" ng-model="needapprovalassigns[group][subgroup].p_ng_d" ng-change="saveApprovalAssigns(group, subgroup, 'p_ng_d')"/>
+                                                    </td>
+                                                    <td ng-if="group != subgroup" style="border:1px solid #ffffff">
+                                                        <input type="checkbox" ng-model="needapprovalassigns[group][subgroup].p_ne_c" ng-change="saveApprovalAssigns(group, subgroup, 'p_ne_c')"/>
+                                                    </td>
+                                                    <td ng-if="group != subgroup" style="border:1px solid #ffffff">
+                                                        <input type="checkbox" ng-model="needapprovalassigns[group][subgroup].p_ne_r" ng-change="saveApprovalAssigns(group, subgroup, 'p_ne_r')"/>
+                                                    </td>
+                                                    <td ng-if="group != subgroup" style="border:1px solid #ffffff">
+                                                        <input type="checkbox" ng-model="needapprovalassigns[group][subgroup].p_ne_u" ng-change="saveApprovalAssigns(group, subgroup, 'p_ne_u')"/>
+                                                    </td>
+                                                    <td ng-if="group != subgroup" style="border:1px solid #ffffff">
+                                                        <input type="checkbox" ng-model="needapprovalassigns[group][subgroup].p_ne_d" ng-change="saveApprovalAssigns(group, subgroup, 'p_ne_d')"/>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

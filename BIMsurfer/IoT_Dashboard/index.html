@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html >
+   <head>
+      <meta charset="UTF-8">
+      <title>VisuaLynk IoT</title>
+      <link rel="stylesheet" href="css/style.css">
+      <link href="https://fonts.googleapis.com/css?family=Raleway:200" rel="stylesheet">
+   </head>
+   <body>
+      <section class="dashboard" id="main-column">
+         <div id="about">
+            <h1> <span>VisuaLynk</span><span> IoT Sensor Monitoring System</span></h1>
+            <p>Demonstration for the integration of <a href="https://www.visualynk.com" class="mkr-link"> VisuaLynk</a> with open <a href="https://github.com/AaltoAsia/O-MI" class="j5-link">OMI-ODF</a> for IoT data transfer.</p>
+         </div>
+         <div id="sensorValues">
+            <div class="sensor-values">
+               <div class="volts">12.0</div>
+               <label>CO2</label>
+            </div>
+            <div class="sensor-values">
+               <div class="amps">0.7</div>
+               <label>Temprature</label>
+            </div>
+            <div class="sensor-values">
+               <div class="moisture">1</div>
+               <label>Humidity</label>
+            </div>
+         </div>
+         <div id="sensorData"></div>
+      </section>
+      <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0-alpha1/jquery.min.js'></script>
+      <script src='js/highcharts.js'></script>
+      <script src='js/darkThemeHighCharts.js'></script>
+      <script src="js/index.js"></script>
+   </body>
+</html>

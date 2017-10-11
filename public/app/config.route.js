@@ -28,33 +28,73 @@
                 }
             },
             {
+                url: '/resetpwd',
+                config: {
+                    controller: 'resetpwd',
+                    templateUrl: 'app/layout/resetpwd.html',
+                    title: 'main'
+                }
+            },
+            {
                 url: '/main',
                 config: {
                     controller: 'PanelController',
                     templateUrl: 'app/layout/panel.html',
                     controllerAs: 'vm'
                 }
-            },
+            }
+            ,
             {
-                url: '/admin/create',
+                url: '/admin',
                 config: {
-                    title: 'create',
-                    templateUrl: 'app/admin/create.html',
-                    settings: {
-                        nav: 2,
-                        content: '<i class="fa fa-tasks"></i> Manage Drugs'
-                    }
+                    controller: 'AdminController',
+                    templateUrl: 'app/layout/admin.html',
+                    controllerAs: 'vm'
                 }
-            },
+            }
+            ,
             {
-                url: '/admin/query',
+                url: '/admin/company',
                 config: {
-                    title: 'query',
-                    templateUrl: 'app/admin/query.html',
-                    settings: {
-                        nav: 5,
-                        content: '<i class="fa fa-crosshairs"></i> Run Ad-hoc queries'
-                    }
+                    controller: 'CompanyController',
+                    templateUrl: 'app/layout/company.html',
+                    controllerAs: 'vm'
+                }
+            }
+            ,
+            {
+                url: '/admin/users',
+                config: {
+                    controller: 'UserController',
+                    templateUrl: 'app/layout/users.html',
+                    controllerAs: 'vm'
+                }
+            }
+            ,
+            {
+                url: '/admin/projects',
+                config: {
+                    controller: 'ProjectController',
+                    templateUrl: 'app/layout/projects.html',
+                    controllerAs: 'vm'
+                }
+            }
+            ,
+            {
+                url: '/admin/permissions',
+                config: {
+                    controller: 'PermissionController',
+                    templateUrl: 'app/layout/permissions.html',
+                    controllerAs: 'vm'
+                }
+            }
+            ,
+            {
+                url: '/admin/waitingapprovals',
+                config: {
+                    controller: 'ApprovalsController',
+                    templateUrl: 'app/layout/approvals.html',
+                    controllerAs: 'vm'
                 }
             }
             ,

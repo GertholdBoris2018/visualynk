@@ -1,0 +1,251 @@
+<style>
+    .projectlist{
+        width:100%;
+        border-collapse: collapse;
+    }
+    .projectlist, th, td {
+        border: 1px solid #dddddd;
+        padding:5px;
+    }
+    .projectlist tbody tr{
+        height:50px;
+    }
+</style>
+<div class="row-fluid admin-panel" >
+    <!-- BEGIN EMPTY PAGE SIDEBAR -->
+    <div class="page-sidebar nav-collapse collapse visible-phone visible-tablet no-margin">
+        <ul class="page-sidebar-menu">
+            <li><a href="/#/login">Log out</a></li>
+        </ul>
+    </div>
+    <div class="panel-sidebar page-sidebar " style="height:100% !important;">
+
+        <!-- BEGIN SIDEBAR MENU -->
+
+        <ul class="page-sidebar-menu admin-sidebar-menu">
+            <li ng-if="user.usertype == 'admin'"><a ng-href="/#/admin/company">Company</a></li>
+            <li ng-if="user.usertype == 'admin'"><a ng-href="/#/admin/users">Users</a></li>
+            <li ng-if="user.usertype == 'admin'" class="active"><a ng-href="/#/admin/projects">Projects</a></li>
+            <li ><a ng-href="/#/admin/permissions">Permissions</a></li>
+            <li ><a ng-href="/#/admin/waitingapprovals">Pending Approvals</a></li>
+        </ul>
+        <!-- END SIDEBAR MENU -->
+    </div>
+    <div class="page-content bg-white" >
+        <h3 class="page-title pull-left">
+            Projects
+        </h3>
+        <div class="pull-right padding-right-20 margin-top-20">
+            <button class="btn green-stripe" ng-click="open_new_project_modal()">Add Project</button>
+        </div>
+        <div class="clearfix"></div>
+        <div class="container-fluid no-padding">
+            <div class="row-fluid padding-left-20 padding-right-20">
+                <div id="" class="span12" >
+                    <div class="panel-item" elheightresize slimscroll>
+                        <div class="padding-20 tabs" style="padding-bottom:0">
+                            <ul class="nav nav-tabs nav-pills">
+                                <li ng-class="{ active: isSet(1) }">
+                                    <a href ng-click="setTab(1)">Projects</a>
+                                </li>
+                                <li ng-if="user.usertype == 'admin'" ng-class="{ active: isSet(2) }">
+                                    <a href ng-click="setTab(2)">Project Assignment</a>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="padding-20" ng-show="isSet(1)">
+                            <div class="alert alert-danger" ng-show="conrefused">
+								<strong> Error! </strong> Please run the Bim Server.
+							</div>
+                            <div class="alert alert-danger" ng-show="confailed">
+								<strong> Error! </strong> Can not connect server because other problems happened.
+							</div>
+                            <div style="text-align: left;">{{ message }}</div>
+                            <table class="projectlist" ng-show="!conrefused && !confailed"  dt-options="dtOptions" dt-columns="dtColumns" dt-column-defs="dtColumnDefs" class="row-border hover">
+                                <thead>
+                                <tr>
+                                    <th style="text-align: left;">Name</th>
+                                    <th style="text-align: left;">Sub Projects</th>
+                                    <th style="text-align: left;">Revisions</th>
+                                    <th style="text-align: left;">Action</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="project in allprojects" ng-show="isShown(project)">
+                                        <td style="text-align: left;"><div ng-bind-html="project.name"></div></td>
+                                        <td style="text-align: left;">{{project.nrSubProjects}}</td>
+                                        <td style="text-align: left;">{{project.nrRevisions}}</td>
+                                        <td style="text-align: left;">
+                                            <a href="javascript:void(0)" class="admin-action-icons" ng-click="open_delete_project_confirm_modal(project.oid)" title="delete project"><i class="icon-remove-circle"></i></a>
+                                            <a href="javascript:void(0)" class="admin-action-icons" ng-click="open_new_subproject_modal(project.oid)" title="add sub project"><i class="icon-plus"></i></a>
+                                            <a href="javascript:void(0)" class="admin-action-icons" ng-click="open_new_ifc_upload(project.oid,project.name)" title="upload ifc file"><i class="icon-upload"></i></a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="padding-20" ng-show="isSet(2)">
+                            <div class="alert alert-danger" ng-show="conrefused">
+								<strong> Error! </strong> Please run the Bim Server.
+							</div>
+                            <div class="alert alert-danger" ng-show="confailed">
+								<strong> Error! </strong> Can not connect server because other problems happened.
+							</div>
+                            <div ng-show="projectAssignment" style="text-align: left;">
+                                <label>Add User to Project</label>
+                                <select ng-model="bimuser" ng-change=""
+                                    class="m-wrap" tabindex="2">
+                                    <option value="">select the User</option>
+                                    <option ng-repeat="ur in bimusers" value="{{ur.uoid}}">{{ur.name}}</option>
+                                </select>
+                                <select ng-model="project" ng-change=""
+                                    class="m-wrap" tabindex="1">
+                                    <option value="">select the project</option>
+                                    <option ng-repeat="pr in projects" value="{{pr.poid}}">{{pr.name}}</option>
+                                </select>
+                                
+                                
+                                <button class="btn green-stripe" ng-click="addUsertoProject()">Assign User</button>
+                                <div style="text-align: left;">{{ message }}</div>
+
+                                <table class="row-border dataTable">
+                                    <tbody>
+                                        <tr ng-repeat="pr in projects">
+                                            <td style="width:20%">{{pr.name}}</td>
+                                            <td>
+                                                <table class="row-border dataTable" style="border:none;">
+                                                    <tbody>
+                                                        <tr ng-repeat="ur in pr.users">
+                                                            <td style="border:1px solid #ffffff">{{ur.name}}</td>
+                                                            <td style="border:1px solid #ffffff">
+                                                                <button class="btn green-stripe" ng-click="removeUserFromProject(pr.poid,ur.id);">Revoke</button>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- Add Project model -->
+<script type="text/ng-template" id="add_new_project.html">
+    <div class="ng-modal">
+        <div class="col-md-6 col-xs-12"  ng-controller="AddProjectCtrl">
+            <button type="button" class="close" data-dismiss="modal" ng-click="close()"></button>
+            <h3>{{title_text}} Project</h3>
+            <form name="form" ng-submit="add_project_submit()" role="form" class="contact-form">
+                <div class="control-group padding-side-10">
+                    <div ng-show="initFlash" ng-class="{ 'alert': flash, 'alert-success': flash.type === 'success', 'alert-danger': flash.type === 'error' }" ng-if="flash" ng-bind="flash.message"></div>
+                </div>
+                <div class="control-group" ng-class="{ 'has-error': form.projectname.$dirty && form.projectname.$error.required }">
+                    <!--<label for="companyname">Company Name</label>-->
+                    <input type="text" name="projectname" id="projectname" class="form-control span4 m-wrap" ng-model="projectname" required placeholder="Project Name" />
+                    <span ng-show="form.projectname.$dirty && form.projectname.$error.required" class="help-block">Please input the Project Name</span>
+                </div>
+                
+
+                <div class="">
+                    <button type="submit" ng-disabled="form.$invalid || dataLoading" class="btn front">{{title_text}}</button>
+                    <img ng-if="dataLoading" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
+                </div>
+
+            </form>
+        </div>
+    </div>
+</script>
+
+<!-- Add SubProject model -->
+<script type="text/ng-template" id="add_new_subproject.html">
+    <div class="ng-modal">
+        <div class="col-md-6 col-xs-12"  ng-controller="AddProjectCtrl">
+            <button type="button" class="close" data-dismiss="modal" ng-click="close()"></button>
+            <h3>Add Sub Project</h3>
+            <form name="form" ng-submit="add_subproject_submit()" role="form" class="contact-form">
+                <div class="control-group padding-side-10">
+                    <div ng-show="initFlash" ng-class="{ 'alert': flash, 'alert-success': flash.type === 'success', 'alert-danger': flash.type === 'error' }" ng-if="flash" ng-bind="flash.message"></div>
+                </div>
+                <div class="control-group" ng-class="{ 'has-error': form.sprojectname.$dirty && form.sprojectname.$error.required }">
+                    <!--<label for="companyname">Company Name</label>-->
+                    <input type="text" name="sprojectname" id="sprojectname" class="form-control span4 m-wrap" ng-model="sprojectname" required placeholder="SubProject Name" />
+                    <span ng-show="form.sprojectname.$dirty && form.sprojectname.$error.required" class="help-block">Please input the SubProject Name</span>
+                </div>
+                
+
+                <div class="">
+                    <button type="submit" ng-disabled="form.$invalid || dataLoading" class="btn front">{{title_text}}</button>
+                    <img ng-if="dataLoading" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
+                </div>
+
+            </form>
+        </div>
+    </div>
+</script>
+<!-- Check in IFC file Modal -->
+<script type="text/ng-template" id="checkin_ifc.html">
+    <div class="ng-modal">
+        <div class="col-md-6 col-xs-12"  ng-controller="CheckInCtrl" id="ifcmodalCont">
+            <button type="button" class="close" data-dismiss="modal" ng-click="close()" ng-disabled="submitdisabled"></button>
+            <h3>{{projectTitle}} - CheckIn</h3>
+            <span>{{checkInmsg}}</span>
+            <form name="form" ng-submit="add_subproject_submit()" role="form" class="contact-form" style="padding:10px;" enctype="multipart/form-data" ng-disabled="submitdisabled">
+                <div id="dropzone2" class="dropzone sm" options="dzOptions" methods="dzMethods" callbacks="dzCallbacks" ng-dropzone ng-disabled="submitdisabled"></div>
+                <div class="control-group" ng-class="{ 'has-error': form.comment.$dirty && form.comment.$error.required }">
+                    <label for="comment" style="float:left;">Comment</label>
+                    <textarea type="text" name="comment" id="comment" class="form-control " ng-model="comment" required placeholder="Comment" ng-disabled="submitdisabled"></textarea>
+                    <span ng-show="form.comment.$dirty && form.comment.$error.required" class="help-block">Please input the comment</span>
+                </div>
+                <div class="control-group" ng-class="{ 'has-error': form.d_serialize.$dirty && form.d_serialize.$error.required }">
+                    <label for="d_serialize" style="float:left;">Deserializer</label>
+                    <select class="form-control" ng-model="d_serialize" name="d_serialize" id="d_serialize" required ng-disabled="submitdisabled" >
+                        <option value="">Select a deserializer</option>
+                        <option ng-repeat="deserialze in deserializes" value="{{deserialze.oid}}">{{deserialze.name}}</option>
+                    </select>
+                    <span ng-show="form.d_serialize.$dirty && form.d_serialize.$error.required" class="help-block">Please select one deserializer</span>
+                </div>
+                <div class="">
+                    <button type="submit" class="btn front" ng-disabled="submitdisabled" ng-show="showBtns" ng-click="dzMethods.processQueue();">CheckIn New revision</button>
+                    <button type="button" class="btn btn-default" ng-click="close()" ng-disabled="submitdisabled" >Cancel</button>
+                    <img ng-if="dataLoading" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
+                </div>
+
+            </form>
+        </div>
+    </div>
+</script>
+
+<!-- Delete company confirm modal-->
+<script type="text/ng-template" id="delete_project.html">
+    <div class="ng-modal">
+        <div class="col-md-6 col-xs-12"  ng-controller="DeleteProjectCtrl">
+            <button type="button" class="close" data-dismiss="modal" ng-click="close()"></button>
+            <h3>Confirm!</h3>
+            <form name="form" ng-submit="delete_project_submit()" role="form" class="contact-form">
+                <div class="control-group padding-side-10">
+                    <div ng-show="initFlash" ng-class="{ 'alert': flash, 'alert-success': flash.type === 'success', 'alert-danger': flash.type === 'error' }" ng-if="flash" ng-bind="flash.message"></div>
+                </div>
+                <p class="alert-warning">Do you really want to delete this project?</p>
+                <p class="alert-warning">Are you sure?</p>
+                <br/>
+                <div class="">
+                    <button type="submit" class="btn front">Yes</button>
+                    <button type="button" class="btn btn-default" ng-click="close()">No</button>
+                    <img ng-if="dataLoading" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
+                </div>
+
+            </form>
+        </div>
+    </div>
+</script>

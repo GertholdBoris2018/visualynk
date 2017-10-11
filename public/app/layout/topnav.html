@@ -1,40 +1,42 @@
-<nav class="navbar navbar-fixed-top navbar-inverse">
-    <div class="navbar-header">
-        <a href="/" class="navbar-brand"><span class="brand-title">ANNE - Angular JS, Node, Neo4J and Express Stack</span></a>
-        <a class="btn navbar-btn navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-        </a>
-    </div>
-    <div class="navbar-collapse collapse" data-ng-controller="topnav as vm">
-        <div class="pull-right navbar-logo">
+<!-- new header -->
+<!-- BEGIN HEADER -->
 
-            <ul class="nav navbar-nav pull-right">
-                <li>
-                    <a href="http://www.42id.com/" target="_blank">
-                        {{vm.username}}  42ID
-                    </a>
-                </li>
-               
-            </ul>
+<div ng-class="{'header':true, 'navbar':true, 'navbar-inverse':true, 'navbar-fixed-top':loggedIn}" ng-controller="topnav_dev as td">
+    <!-- BEGIN TOP NAVIGATION BAR -->
+    <div class="navbar-inner">
+        <div class="container-fluid">
+            <!-- BEGIN LOGO -->
+            <a class="brand logo" href="#/main" style="color:#EF4836">
+                <img src="/media/image/logo2.png" alt="logo"  /><!--<span>Visua<span style="color:#59ABE3">Lynk</span></span>-->
+            </a>
+            <!-- END LOGO -->
+            <!-- BEGIN HORIZANTAL MENU -->
+            <div class="navbar pull-right hidden-phone hidden-tablet no-margin">
+                <div class="navbar-inner">
+                    <ul class="nav">
+                        <li><a class="nav_button no-border-left" ng-click="showContent('#section2')" href="#section2" data-ng-show="loggedIn">About</a></li>
+                        <li><a class="nav_button no-border-left" ng-click="showContent('#section3')" href="#section3" data-ng-show="loggedIn">Features</a></li>
+                        <li><a class="nav_button no-border-left" ng-click="showContent('#section4')" href="#section4" data-ng-show="loggedIn">Team</a></li>
+                        <li><a class="nav_button no-border-left" ng-click="showContent('#section5')" href="#section5" data-ng-show="loggedIn">Partners</a></li>
+                        <li><a class="nav_button no-border-left" ng-click="showContent('#section6')" href="#section6" data-ng-show="loggedIn">Contact</a></li>
+                        <li><a class="nav_button no-border-left" ng-click="login()" data-ng-show="loggedIn">Login</a></li>
+                        <!--<li><a class="nav_button no-border-left" ng-click="register()" data-ng-show="loggedIn">SignUp</a></li>-->
+                        <li><a href="/#/admin/permissions" data-ng-show="!loggedIn" class="">Admin</a></li>
+                        <li><a href="/#/main" data-ng-show="!loggedIn" class="">Main</a></li>
+                        <li><a href="/#/login" data-ng-show="!loggedIn" class="">Log out</a></li>
+                        <li>
+                            <span class="hor-menu-search-form-toggler">&nbsp;</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <!-- END HORIZANTAL MENU -->
+            <!-- BEGIN RESPONSIVE MENU TOGGLER -->
+            <a href="javascript:;" class="btn-navbar collapsed" data-toggle="collapse" data-target=".nav-collapse">
+                <img src="media/image/menu-toggler.png" alt="" />
+            </a>
+            <!-- END RESPONSIVE MENU TOGGLER -->
         </div>
     </div>
-</nav>
-<script type="text/ng-template" id="myModalContent.html">
-    <div class="modal-header">
-        <h3 class="modal-title" id="modal-title">I'm a modal!</h3>
-    </div>
-    <div class="modal-body" id="modal-body">
-        <ul>
-            <li ng-repeat="item in $ctrl.items">
-                <a href="#" ng-click="$event.preventDefault(); $ctrl.selected.item = item">{{ item }}</a>
-            </li>
-        </ul>
-        Selected: <b>{{ $ctrl.selected.item }}</b>
-    </div>
-    <div class="modal-footer">
-        <button class="btn btn-primary" type="button" ng-click="$ctrl.ok()">OK</button>
-        <button class="btn btn-warning" type="button" ng-click="$ctrl.cancel()">Cancel</button>
-    </div>
-</script>
+    <!-- END TOP NAVIGATION BAR -->
+</div>

@@ -1,8 +1,6 @@
 <div class="portlet box custom-blue span"  data-ng-controller="model2d">
     <div class="portlet-title">
-        <input id="plandan_sola" type="button" value="OnGraph"
-               style="height:28px; border: 1px solid !important; border-color:#fff; border-radius: 4px !important; float:right;
-          background-color: Transparent; font: 12px 'Raleway-Thin'; color:#fff; padding:3px 10px!important;" ng-mouseover="hoverIn()">
+        <input id="plandan_sola" type="button" value="OnGraph" ng-mouseover="hoverInGraph()" disabled>
     </div>
     <div class="portlet-body">
 
@@ -10,7 +8,7 @@
             <a href="javascript:void(0)" onclick="showMenu(this);"> >> </a>
         </div>-->
         <div class="vslynk-container-graph" id="container_graph">
-            <div id="visualynk-graph" class="vslynk-div-graph">
+            <div id="visualynk-graph" ng-class="{'vslynk-div-graph':true, 'vhidden':isGraph}" class="">
             </div>
         </div>
     </div>

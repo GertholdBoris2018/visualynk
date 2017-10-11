@@ -2,7 +2,7 @@
 Default theme
 ***/
 /***
-Reset and overrides  
+Reset and overrides
 ***/
 body {
   /*background-color: #3d3d3d !important;*/
@@ -15,6 +15,79 @@ Page header
   background-image: none !important;
   background-color: #212121;
 }
+
+#plandan_sola {
+  height:28px;
+  border: 1px solid !important;
+  border-color:#E9D460;
+  float:right;
+  background-color: Transparent;
+  font: 12px 'Raleway-Regular';
+  color:#E9D460;
+  padding:3px 10px!important
+}
+
+#plandan_sola:hover {
+  height:28px;
+  border: 1px solid !important;
+  border-color:#36D7B7;
+  float:right;
+  background-color: transparent;
+  font: 12px 'Raleway-Regular';
+  color:#36D7B7;
+  padding:3px 10px!important
+}
+
+.viewbtn{
+    background: transparent;
+    color: #EF4836;
+    border: 1px solid #EF4836;
+    height:28px;
+    padding: 3px 10px!important;
+    font-family: 'Raleway-Regular'
+}
+
+.viewbtn:hover{
+    background: transparent;
+    color: #E9D460;
+    border: 1px solid #E9D460;
+    height:28px;
+    padding: 3px 10px!important;
+    font-family: 'Raleway-Regular'
+}
+
+.viewbtn.viewbtn-down{
+  background-color : transparent !important;
+  border:1px solid #36D7B7;
+  color: #36D7B7 !important;
+  height:28px;
+  font-family: 'Raleway-Regular'
+}
+
+.viewbtn.viewbtn-down:hover{
+    background: transparent;
+    color: #E9D460;
+    border: 1px solid #E9D460;
+    height:28px;
+    padding: 3px 10px!important;
+    font-family: 'Raleway-Regular'
+}
+.uploadmodelbtn.dropzone {
+  border:1px solid #E9D460 !important;
+  font-size: 13px;
+  background-color: transparent;
+  color: #E9D460;
+  font-family: 'Raleway-Thin'
+}
+
+.uploadmodelbtn.dropzone:hover {
+  border:1px solid #36D7B7 !important;
+  font-size: 13px;
+  background-color: transparent;
+  color: #36D7B7;
+  font-family: 'Raleway-Thin'
+}
+
 .header .btn-navbar {
   background-color: #212121 !important;
 }
@@ -29,7 +102,7 @@ Page header
 Page sidebar
 ***/
 .page-sidebar {
-  background-color: #3d3d3d;
+  background-color: #22313F;
 }
 ul.page-sidebar-menu > li > a {
   border-top: 1px solid #5c5c5c !important;
@@ -107,8 +180,8 @@ ul.page-sidebar-menu > li.active > a .arrow.open:before {
   color: #7d7d7d !important;
 }
 .page-sidebar .sidebar-search input {
-  background-color: #3d3d3d !important;
-  color: #bfbfbf !important;
+  background-color: transparent !important;
+  color: #FFF !important;
 }
 .page-sidebar .sidebar-search .input-box {
   border-bottom: 1px solid #7d7d7d !important;
@@ -172,7 +245,7 @@ Horizontal Menu(new in v1.2)
   color: #d6d6d6;
 }
 /***
-Footer 
+Footer
 ***/
 .footer .footer-inner {
   color: #999999;
@@ -205,7 +278,7 @@ Footer Layouts (new in v1.3)
 }
 /* end:fixed footer */
 /***
-Gritter Notifications 
+Gritter Notifications
 ***/
 .gritter-top {
   background: url(../image/gritter.png) no-repeat left -30px !important;
@@ -258,6 +331,9 @@ Gritter Notifications
   .page-boxed.page-sidebar-fixed.page-footer-fixed .footer {
     background-color: #2e2e2e !important;
   }
+}
+.overflow-hidden{
+  overflow:hidden;
 }
 /* end: boxed page */
 /***

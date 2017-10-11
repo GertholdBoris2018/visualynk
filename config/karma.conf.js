@@ -38,11 +38,10 @@ module.exports = function(config){
     'public/app/admin/assembly.js',
     'public/app/admin/parts.js',
     'public/app/admin/query.js',
-    'public/app/dashboard/dashboard.js',
     'public/app/layout/shell.js',
     'public/app/layout/sidebar.js',
       'public/app/layout/main.js',
-      'public/app/layout/topnav_dev.js',
+      'public/app/layout/topnav.js',
 
 
     //<!-- app Services -->

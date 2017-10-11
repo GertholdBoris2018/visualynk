@@ -38,21 +38,23 @@
 
 #panel-1-resizer {
     background-color: transparent;
-    position: absolute;
     top: 35px;
     bottom: 0;
-    left: 800px;
-    width: 40px;
+    height:800px;
+    width: 5px;
     cursor: e-resize;
+    float: left;
+    /*background-color:red;*/
 }
 #panel-2-resizer{
     background-color: transparent;
-    position: absolute;
     top: 35px;
     bottom: 0;
-    left: 1567px;
-    width: 40px;
+    height:800px;
+    width: 5px;
     cursor: e-resize;
+    float:left;
+    /*background-color:red;*/
 }
 #content-resizer {
     position: absolute;

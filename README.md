@@ -11,6 +11,17 @@ followed by
 
 $ node server.js
 
-Read more at http://www.42id.com/articles/anne-stack-angular-js-node-neo4j-and-express/
+MailServer account config file
+==========
+Make the json file named "mailconfig.json" like as below
 
-Live example at http://anne.azurewebsites.net/
+{
+  "username":"yourgmail",
+  "password":"yourgmailpassowrd"
+}
+
+replace the username and password with your gmail account.
+
+$ node server.js
+
+if the account need to be changed, update the json file with new account and restart the node server

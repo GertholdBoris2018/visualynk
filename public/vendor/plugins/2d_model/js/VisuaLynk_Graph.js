@@ -1,562 +1,287 @@
 function selectInstance(t, e) {
-    visualynk.graph.mainLabel = t, instanceData = {
+    visualynk.graph.mainLabel = t;
+    instanceData = {
         label: t,
         attributes: e
-    }, visualynk.tools.reset(), instanceData = null
+    };
+    visualynk.graph.addRootNode(t);
+    visualynk.tools.reset();
+    instanceData = null
+    visualynk.resel = true;
+    visualynk.preventeffect = true;
 }
-var aa, bb, cc, dd, ee, EmailData, FloorData, SpaceData, ZoneData, SystemData, AssetData, ComponentData, SpareData, ResourceData, JobData, DocumentData, AttributeData, GuidData, inputValueEmail,inputValueCompany,inputValueFacility, inputValueFloor, inputValueSpace, inputValueSystem, inputValueZone, inputValueAsset, inputValueComponent, inputValueSpare,inputValueConnection,inputValueAssembly, inputValueResource, inputValueJob, inputValueDocument, inputValueAttribute, inputValueGuid, inputValueServiceRequest, valueEmail, valueFloor, valueSpace, valueSystem, valueZone, valueAsset, valueComponent, valueSpare, valueResource, valueJob, valueDocument, valueAttribute, valueGuid, instanceData;
-visualynk.rest.CYPHER_URL = "http://localhost:7474/db/data/transaction/commit", visualynk.rest.AUTHORIZATION = "Basic " + btoa("neo4j:meh_nam");
+var aa, bb, cc, dd, ee, inputValueSystem,  inputValueGuid, companyId;
+var topRoot = "Visualynk";
+visualynk.rest.CYPHER_URL = "http://localhost:7474/db/data/transaction/commit", visualynk.rest.AUTHORIZATION = "Basic " + btoa("neo4j:qq");
 
 var instanceData, rootNodeListener = function(t) {
-    console.log("AAA");
-    instanceData && (t.value = {
-        type: visualynk.graph.node.NodeTypes.VALUE,
-        label: instanceData.label
-    }, t.value.attributes = instanceData.attributes, t.immutable = !1)
+    if(instanceData){
+        // Change root node type and label with instanceData
+        t.value = {
+            type: visualynk.graph.node.NodeTypes.VALUE,
+            label: instanceData.label
+        };
+
+        t.value.attributes = instanceData.attributes;
+
+        // Set node as immutable, in this state the value cannot be deselected.
+        //t.immutable = true;
+    }
 };
-visualynk.graph.on(visualynk.graph.Events.NODE_ROOT_ADD, rootNodeListener), visualynk.provider.nodeProviders = {
-    Facility_Management: {
-        children: ["PERSON", "COMPANY", "FACILITY", "FLOOR", "ZONE", "SPACE", "ASSET","COMPONENT","SYSTEM", "ASSEMBLY", "CONNECTION", "SPARE", "RESOURCE", "JOB", "SERVICE_REQUEST", "DOCUMENT", "ATTRIBUTE"],
-        returnAttributes: ["name"],
-        constraintAttribute: "name",
-        URLlinkAttribute: "link",
-        getDisplayType: function() {
-            return visualynk.provider.NodeDisplayTypes.IMAGE
-        },
-        getImagePath: function() {
-            return "vendor/plugins/2d_model/img/3DtoGraph.png"
-        },
-        getImageWidth: function() {
-            return 50
-        },
-        getImageHeight: function() {
-            return 50
-        },
-        getPredefinedConstraints: function() {
-            return inputValueSystem ? ["$identifier.name =~ '(?i).*" + inputValueSystem.replace("|","\\\\|").replace("(","\\\\(").replace(")","\\\\)") + ".*'"] : []
-        }
-    },
-    PERSON: {
-        parent: "Facility_Management",
-        returnAttributes: ["email", "first_name", "last_name","created_on"],
-        constraintAttribute: "email",
-        URLlinkAttribute: "email",
-        getDisplayType: function() {
-            return visualynk.provider.NodeDisplayTypes.IMAGE
-        },
-        getImagePath: function() {
-            return "vendor/plugins/2d_model/img/email.png"
-        },
-        displayResults: function(t) {
-            var e = t.append("div").attr("style", "display: flex;");
-            e.append("img").attr("style", "width:60px; height:60px; border-radius: 50% !important; margin:5px 5px 5px 0px;").attr("src", function(t) {
-                return "vendor/plugins/2d_model/img/" + t.attributes.last_name + ".jpg"
-            });
-            var n = e.append("div").attr("style", "font-size:12px;text-align:left;width:100%;");
-            n.append("p").append("i").attr("class","icon-user").attr("style","font-family:FontAwesome !important;").append("a").attr("href", function(t) {
-                var e = "mailto:%s",
-                    n = t.attributes.email,
-                    a = e.replace("%s", n);
-                return a
-            }).text(function(t) {
-                return " " + t.attributes.first_name + " " + t.attributes.last_name
-            });
-            n.append("p").append("i").attr("class","icon-envelope").attr("style","font-family:FontAwesome !important;").append("span").attr("style","display: inline-block;width: 135px;margin-left:3px;vertical-align: middle;cursor:default;overflow: hidden;text-overflow: ellipsis;")
-                .text(function(t) {
-                    return " " + t.attributes.email
+function clickMenu(e){
+    alert(e);
+}
+function download(e){
+    /*alert(e);*/
+    //download file
+    console.log(e);
+    /*$.ajax({
+            method: "POST",
+            url: "/download",
+            data: { fname: e }
+        })
+        .done(function( msg ) {
+
+        });*/
+    /*window.location='/download/' + e;*/
+    window.open('/files/' + e , '_blank');
+}
+
+function setNodeProviders() {
+    var sel = '#panel-wrapper';
+    $scope = angular.element(sel).scope();
+    var companyId = $scope.user.usercompany;
+    var userId = $scope.user.userId;
+
+    if(companyId == "undefined")
+        companyId = "";
+
+    var child_node_groups = [];
+    var child_node_groups_providers = [];
+
+    visualynk.provider.nodeProviders = {};
+
+    var reqInfo = {};
+    reqInfo.companyId = companyId;
+    reqInfo.userId = userId;
+
+    $.ajax({
+            method: "POST",
+            url: "/getNodeGroups",
+            data: {companyId: companyId, userId: userId},
+            async: false
+        })
+        .done(function (data) {
+            console.log(data.responseData.data);
+            console.log(data.responseData.children);
+            
+            data.responseData.data.forEach(function (ngind) {
+                var p = [];
+                var node_children = [];
+                var gtype = "";
+                var pId = "";
+                child_node_groups.push(ngind._fields[0].properties.name);
+                if(ngind._fields[0].properties.properties !== undefined )
+                    p = JSON.parse(ngind._fields[0].properties.properties);
+
+                    if(ngind._fields[0].properties.children != undefined ){
+                        node_children = ngind._fields[0].properties.children;
+                    }
+                    console.log(node_children);
+                    if(ngind._fields[0].properties.gType != undefined ){
+                        gtype = ngind._fields[0].properties.gType;
+                    }
+                    if(ngind._fields[0].properties.parentRoot != undefined){
+                        pId = ngind._fields[0].properties.parentRoot;
+                    }
+                child_node_groups_providers.push({
+                    name: ngind._fields[0].properties.name,
+                    id: ngind._fields[0].identity.low,
+                    icon: ngind._fields[0].properties.icon,
+                    properties: p,
+                    companyId: ngind._fields[0].properties.companyId,
+                    children: node_children,
+                    gtype: gtype,
+                    parentId : pId
+                })
+            })
+            console.log("child node groups");
+        });
+    
+    visualynk.provider.nodeProviders = {
+        Visualynk : {
+            children: child_node_groups,
+            returnAttributes: ["name", "link","guid","isEntity"],
+            constraintAttribute: "name",
+            resultOrderByAttribute: "name",
+            nodeId: -1,
+            companyId: -1,
+            gtype: "",
+            parentId : "",
+            displayResults: function (t) {
+                var ele = t[0][0];
+                var e = t.append("div").attr("style", "display: flex;");
+                var n = e.append("div").attr("style", "font-size:12px;text-align:left;width:100%;overflow: hidden;text-overflow: ellipsis;").text(function (t) {
+                    if (t.attributes.link != "") {
+                        $(ele).find("div>div").css("color", "blue").css("cursor", "pointer").css("text-decoration", "underline");
+                        $(ele).find("div>div").attr("onClick", "download('" + t.attributes.link + "')");
+                    }
+                    return t.attributes.name != "" ? t.attributes.name : " empty";
                 });
-            /* created on */
-            n.append("p").append("i").attr("class","icon-calendar").attr("style","font-family:FontAwesome !important;").append("span").attr("style","display: inline-block;width: 135px;margin-left:3px;vertical-align: middle;cursor:default;overflow: hidden;text-overflow: ellipsis;")
-                .text(function(t) {
-                    return " " + t.attributes.created_on.replace("T"," ");
-                });
-        },
-        getImageWidth: function() {
-            return 50
-        },
-        getImageHeight: function() {
-            return 50
-        },
-        getPredefinedConstraints: function() {
-            return inputValueSystem ? ["$identifier.email =~ '(?i).*" + inputValueSystem.replace("|","\\\\|").replace("(","\\\\(").replace(")","\\\\)") + ".*'"] : []
+                e.append("i").attr("class", "halflings-icon tasks").attr("onClick", "clickMenu('" + t[0][0].id + "')");
+            },
+            getDisplayType: function () {
+                return visualynk.provider.NodeDisplayTypes.IMAGE
+            },
+            getImagePath: function (t) {
+                return "vendor/plugins/2d_model/img/3DtoGraph.png"
+            },
+            getImageWidth: function () {
+                return 50
+            },
+            getImageHeight: function () {
+                return 50
+            },
+            getPredefinedConstraints: function () {
+                var ret_val = [];
+                ret_val.push('$identifier.is_full_show=true');
+
+                if (companyId !== undefined && companyId != "")
+                    ret_val.push('$identifier.companyId="' + companyId+'"');
+
+                if (inputValueSystem)
+                    ret_val.push("$identifier.name =~ '(?i).*" + inputValueSystem.replace("|", "\\\\|").replace("(", "\\\\(").replace(")", "\\\\)") + ".*'");
+
+                return ret_val;
+                //return inputValueSystem ? ["$identifier.name =~ '(?i).*" + inputValueSystem.replace("|","\\\\|").replace("(","\\\\(").replace(")","\\\\)") + ".*'"] : []
+            }
         }
-    },
-    COMPANY: {
-        parent: "Facility_Management",
-        returnAttributes: ["name", "department", "organization_code"],
-        constraintAttribute: "name",
-        URLlinkAttribute: "name",
-        getDisplayType: function() {
-            return visualynk.provider.NodeDisplayTypes.IMAGE
-        },
-        getImagePath: function() {
-            return "vendor/plugins/2d_model/img/company.png"
-        },
-        getImageWidth: function() {
-            return 50
-        },
-        getImageHeight: function() {
-            return 50
-        },
-        getPredefinedConstraints: function() {
-            return inputValueSystem ? ["$identifier.name =~ '(?i).*" + inputValueSystem.replace("|","\\\\|").replace("(","\\\\(").replace(")","\\\\)") + ".*'"] : []
+    }
+
+    child_node_groups_providers.forEach(function (group) {
+        group.properties.push('name');
+        visualynk.provider.nodeProviders[group.name] = {
+            parent: "Visualynk",
+            returnAttributes: group.properties,
+            constraintAttribute: "name",
+            resultOrderByAttribute: "name",
+            nodeId: group.id,
+            companyId: group.companyId,
+            gtype : group.gtype,
+            parentId : group.parentId,
+            getDisplayType: function () {
+                return visualynk.provider.NodeDisplayTypes.IMAGE
+            },
+            getImagePath: function () {
+                return "/files/"+group.icon
+            },
+            displayResults: function (t) {
+                if($scope.user.crudpermissions.p_ne_r) {
+                    var e = t.append("div").attr("style", "display: flex;");
+                    var n = e.append("div").attr("style", "font-size:12px;text-align:left;margin-left:0px;width:100%");
+
+                    var table_tbody = n.append("table").attr("class", "tree-2 table-condensed").attr("style", "width:100%").append("tbody");
+                    var table_tr = table_tbody.append("tr").attr("class", "treegrid-1");
+                    var table_td = table_tr.append("td");
+
+                    var ele = t[0][0];
+                    table_td.append("span").attr("class", "treegrid-expander halflings-icon plus");
+                    table_td.append("span").text(function (t) {
+                        if (t.attributes.link != "") {
+                            $(ele).find("div>div .treegrid-1 td span:nth-child(2)").css("color", "blue").css("cursor", "pointer").css("text-decoration", "underline");
+                            $(ele).find("div>div .treegrid-1 td span:nth-child(2)").attr("onClick", "download('" + t.attributes.link + "')");
+                        } else {
+                          $(ele).find("div>div .treegrid-1 td span:nth-child(2)").css("color", "#F62459").css("font-family", "Raleway-Medium").css('font-size','13px');
+                        }
+                        return t.attributes.name;
+                    });
+
+                    table_td.append("span").attr("class", "eye eyeopen pull-left entityeye").attr("ng-click", function(t){
+                                return "visible_element_entity($event, '"+t.attributes.guid+"')";
+                            }).attr('mode','0').attr('style','margin:0;cursor:pointer;').attr('guid',function(t){
+                                return t.attributes.guid;
+                            });
+
+                    if ($scope.user.crudpermissions.p_ne_d) {
+                        table_td.append("span").attr("class", "halflings-icon remove-circle pull-right").attr("ng-click", function (t) {
+                            return "deleteNE($event," + t.attributes.id + ", '"+t.label+"')";
+
+                        });
+                    }
+
+                    if ($scope.user.crudpermissions.p_ne_u) {
+                        table_td.append("span").attr("class", "halflings-icon edit pull-right").attr("ng-click", function (t) {
+                            return "openNEUpdate($event," + t.attributes.id + ")";
+                        });
+                    }
+
+                    if ($scope.user.crudpermissions.p_ne_u) {
+                        table_td.append("span").attr("class", "halflings-icon link pull-right").attr("ng-click", function (t) {
+                            var d = visualynk.provider.getProvider(t.label);
+                            var companyId = d.companyId;
+                            return "openNERelations($event," + t.attributes.id + ", '"+t.attributes.name+"', '"+companyId+"')";
+                        });
+                    }
+
+                    angular.element(document).injector().invoke(function ($compile, $rootScope) {
+                        var scope = angular.element("#panel-wrapper").scope();
+                        e.each(function (d, i) {
+                            $compile(this)(scope);
+                        });
+                    });
+
+                    group.properties.forEach(function (prop) {
+                        if (prop != "name") {
+                            var td1 = table_tbody.append("tr").attr("class", "treegrid-2 treegrid-parent-1").append("td");
+                            var row_fluid1 = td1.append("div").attr("class", "row-fluid").attr("style", "width:calc(100% - 16px);float:right;");
+                            row_fluid1.append("div").attr("class", "span5").attr("style", "text-align:left; font-family:Raleway-Medium").text(function (t) {
+                                return prop + ": ";
+                            });
+
+                            row_fluid1.append("div").attr("class", "span7").text(function (t) {
+                                return t.attributes[prop];
+                            });
+                        }
+
+                    })
+                }
+            },
+            getImageWidth: function () {
+                return 50
+            },
+            getImageHeight: function () {
+                return 50
+            },
+            getPredefinedConstraints: function () {
+                var ret_val = [];
+                ret_val.push('$identifier.is_full_show=true');
+
+                if (companyId !== undefined && companyId != "")
+                    ret_val.push('$identifier.companyId="' + companyId+'"');
+
+                if (inputValueSystem)
+                    ret_val.push("$identifier.name =~ '(?i).*" + inputValueSystem.replace("|", "\\\\|").replace("(", "\\\\(").replace(")", "\\\\)") + ".*'");
+
+                return ret_val;
+                //return inputValueSystem ? ["$identifier.email =~ '(?i).*" + inputValueSystem.replace("|", "\\\\|").replace("(", "\\\\(").replace(")", "\\\\)") + ".*'"] : []
+            }
         }
+    });
+}
+
+setNodeProviders();
+
+visualynk.graph.on(visualynk.graph.Events.NODE_ROOT_ADD, rootNodeListener), visualynk.provider.nodeProviders1 = {
 
 
-    },
-    FACILITY: {
-        parent: "Facility_Management",
-        returnAttributes: ["name", "link"],
-        constraintAttribute: "name",
-        URLlinkAttribute: "link",
-        displayResults: function(t) {
-            var e = t.append("table").attr("class", "result-table"),
-                n = e.append("tr").attr("id", "row1");
-            n.append("td").append("p").append("a").attr("href", function(t) {
-                return t.attributes.link ? t.attributes.link : "#"
-            }).text(function(t) {
-                return t.attributes.name
-            })
-        },
-        getDisplayType: function() {
-            return visualynk.provider.NodeDisplayTypes.IMAGE
-        },
-        getImagePath: function() {
-            return "vendor/plugins/2d_model/img/facility.png"
-        },
-        getImageWidth: function() {
-            return 50
-        },
-        getImageHeight: function() {
-            return 50
-        },
-        getPredefinedConstraints: function() {
-            return inputValueSystem ? ["$identifier.name =~ '(?i).*" + inputValueSystem.replace("|","\\\\|").replace("(","\\\\(").replace(")","\\\\)") + ".*'"] : []
-        }
-    },
-    FLOOR: {
-      parent: "Facility_Management",
-      returnAttributes: ["name", "link"],
-      constraintAttribute: "name",
-      URLlinkAttribute: "link",
-        displayResults: function(t) {
-            var e = t.append("table").attr("class", "result-table"),
-                n = e.append("tr").attr("id", "row1");
-            n.append("td").append("p").append("a").attr("href", function(t) {
-                return t.attributes.link ? t.attributes.link : "#"
-            }).text(function(t) {
-                return t.attributes.name
-            })
-        },
-        getDisplayType: function() {
-            return visualynk.provider.NodeDisplayTypes.IMAGE
-        },
-        getImagePath: function() {
-            return "vendor/plugins/2d_model/img/floor.png"
-        },
-        getImageWidth: function() {
-            return 50
-        },
-        getImageHeight: function() {
-            return 50
-        },
-        getPredefinedConstraints: function() {
-            return inputValueSystem ? ["$identifier.name =~ '(?i).*" + inputValueSystem.replace("|","\\\\|").replace("(","\\\\(").replace(")","\\\\)") + ".*'"] : []
-        }
-    },
-    ZONE: {
-      parent: "Facility_Management",
-        returnAttributes: ["name", "link"],
-        constraintAttribute: "name",
-        URLlinkAttribute: "link",
-        displayResults: function(t) {
-            var e = t.append("table").attr("class", "result-table"),
-                n = e.append("tr").attr("id", "row1");
-            n.append("td").append("p").append("a").attr("href", function(t) {
-                return t.attributes.link ? t.attributes.link : "#"
-            }).text(function(t) {
-                return t.attributes.name
-            })
-        },
-        getDisplayType: function() {
-            return visualynk.provider.NodeDisplayTypes.IMAGE
-        },
-        getImagePath: function() {
-            return "vendor/plugins/2d_model/img/zone.png"
-        },
-        getImageWidth: function() {
-            return 50
-        },
-        getImageHeight: function() {
-            return 50
-        },
-        getPredefinedConstraints: function() {
-            return inputValueSystem ? ["$identifier.name =~ '(?i).*" + inputValueSystem.replace("|","\\\\|").replace("(","\\\\(").replace(")","\\\\)") + ".*'"] : []
-        }
-    },
-    SPACE: {
-        parent: "Facility_Management",
-        returnAttributes: ["name", "link"],
-        constraintAttribute: "name",
-        URLlinkAttribute: "link",
-        displayResults: function(t) {
-            var e = t.append("table").attr("class", "result-table"),
-                n = e.append("tr").attr("id", "row1");
-            n.append("td").attr("height", "10px").append("p").append("a").attr("href", function(t) {
-                return t.attributes.link ? t.attributes.link : "#"
-            }).text(function(t) {
-                return t.attributes.name
-            })
-        },
-        getDisplayType: function() {
-            return visualynk.provider.NodeDisplayTypes.IMAGE
-        },
-        getImagePath: function() {
-            return "vendor/plugins/2d_model/img/space.png"
-        },
-        getImageWidth: function() {
-            return 50
-        },
-        getImageHeight: function() {
-            return 50
-        },
-        getPredefinedConstraints: function() {
-            return inputValueSystem ? ["$identifier.name =~ '(?i).*" + inputValueSystem.replace("|","\\\\|").replace("(","\\\\(").replace(")","\\\\)") + ".*'"] : []
-        }
-    },
-
-    ASSET: {
-        parent: "Facility_Management",
-        returnAttributes: ["name"],
-        constraintAttribute: "name",
-        URLlinkAttribute: "link",
-        displayResults: function(t) {
-            var e = t.append("table").attr("class", "result-table"),
-                n = e.append("tr").attr("id", "row1");
-            n.append("td").append("h4").append("a").attr("href", function(t) {
-                return t.attributes.link ? t.attributes.link : "#"
-            }).text(function(t) {
-                return t.attributes.name
-            })
-        },
-        getDisplayType: function() {
-            return visualynk.provider.NodeDisplayTypes.IMAGE
-        },
-        getImagePath: function() {
-            return "vendor/plugins/2d_model/img/asset.png"
-        },
-        getImageWidth: function() {
-            return 50
-        },
-        getImageHeight: function() {
-            return 50
-        },
-        getPredefinedConstraints: function() {
-            return inputValueSystem ? ["$identifier.name =~ '(?i).*" + inputValueSystem.replace("|","\\\\|").replace("(","\\\\(").replace(")","\\\\)") + ".*'"] : []
-        }
-    },
-    COMPONENT: {
-        parent: "Facility_Management",
-        returnAttributes: ["name", "link"],
-        constraintAttribute: "name",
-        URLlinkAttribute: "link",
-        displayResults: function(t) {
-            var e = t.append("table").attr("class", "result-table"),
-                n = e.append("tr").attr("id", "row1");
-            n.append("td").append("p").append("a").attr("href", function(t) {
-                return t.attributes.link ? t.attributes.link : "#"
-            }).text(function(t) {
-                return t.attributes.name
-            })
-        },
-        getDisplayType: function() {
-            return visualynk.provider.NodeDisplayTypes.IMAGE
-        },
-        getImagePath: function() {
-            return "vendor/plugins/2d_model/img/component.png"
-        },
-        getImageWidth: function() {
-            return 50
-        },
-        getImageHeight: function() {
-            return 50
-        },
-        getPredefinedConstraints: function() {
-            return inputValueSystem ? ["$identifier.name =~ '(?i).*" + inputValueSystem.replace("|","\\\\|").replace("(","\\\\(").replace(")","\\\\)") + ".*'"] : []
-        }
-    },
-    SYSTEM: {
-        parent: "Facility_Management",
-        returnAttributes: ["name", "link"],
-        constraintAttribute: "name",
-        URLlinkAttribute: "link",
-        displayResults: function(t) {
-            var e = t.append("table").attr("class", "result-table"),
-                n = e.append("tr").attr("id", "row1");
-            n.append("td").append("p").append("a").attr("href", function(t) {
-                return t.attributes.link ? t.attributes.link : "#"
-            }).text(function(t) {
-                return t.attributes.name
-            })
-        },
-        getDisplayType: function() {
-            return visualynk.provider.NodeDisplayTypes.IMAGE
-        },
-        getImagePath: function() {
-            return "vendor/plugins/2d_model/img/system.png"
-        },
-        getImageWidth: function() {
-            return 50
-        },
-        getImageHeight: function() {
-            return 50
-        },
-        getPredefinedConstraints: function() {
-            return inputValueSystem ? ["$identifier.name =~ '(?i).*" + inputValueSystem.replace("|","\\\\|").replace("(","\\\\(").replace(")","\\\\)") + ".*'"] : []
-        }
-    },
-    ASSEMBLY: {
-        parent: "Facility_Management",
-        returnAttributes: ["name", "link"],
-        constraintAttribute: "name",
-        URLlinkAttribute: "link",
-        displayResults: function(t) {
-            var e = t.append("table").attr("class", "result-table"),
-                n = e.append("tr").attr("id", "row1");
-            n.append("td").append("p").append("a").attr("href", function(t) {
-                return t.attributes.link ? t.attributes.link : "#"
-            }).text(function(t) {
-                return t.attributes.name
-            })
-        },
-        getDisplayType: function() {
-            return visualynk.provider.NodeDisplayTypes.IMAGE
-        },
-        getImagePath: function() {
-            return "vendor/plugins/2d_model/img/assembly.png"
-        },
-        getImageWidth: function() {
-            return 50
-        },
-        getImageHeight: function() {
-            return 50
-        },
-        getPredefinedConstraints: function() {
-            return inputValueSystem ? ["$identifier.name =~ '(?i).*" + inputValueSystem.replace("|","\\\\|").replace("(","\\\\(").replace(")","\\\\)") + ".*'"] : []
-        }
-    },
-    CONNECTION: {
-        parent: "Facility_Management",
-        returnAttributes: ["name", "link"],
-        constraintAttribute: "name",
-        URLlinkAttribute: "link",
-        displayResults: function(t) {
-            var e = t.append("table").attr("class", "result-table"),
-                n = e.append("tr").attr("id", "row1");
-            n.append("td").append("p").append("a").attr("href", function(t) {
-                return t.attributes.link ? t.attributes.link : "#"
-            }).text(function(t) {
-                return t.attributes.name
-            })
-        },
-        getDisplayType: function() {
-            return visualynk.provider.NodeDisplayTypes.IMAGE
-        },
-        getImagePath: function() {
-            return "vendor/plugins/2d_model/img/connection.png"
-        },
-        getImageWidth: function() {
-            return 50
-        },
-        getImageHeight: function() {
-            return 50
-        },
-        getPredefinedConstraints: function() {
-            return inputValueSystem ? ["$identifier.name =~ '(?i).*" + inputValueSystem.replace("|","\\\\|").replace("(","\\\\(").replace(")","\\\\)") + ".*'"] : []
-        }
-    },
-    SPARE: {
-        parent: "Facility_Management",
-        returnAttributes: ["name", "link"],
-        constraintAttribute: "name",
-        URLlinkAttribute: "link",
-        displayResults: function(t) {
-            var e = t.append("table").attr("class", "result-table"),
-                n = e.append("tr").attr("id", "row1");
-            n.append("td").append("p").append("a").attr("href", function(t) {
-                return t.attributes.link ? t.attributes.link : "#"
-            }).text(function(t) {
-                return t.attributes.name
-            })
-        },
-        getDisplayType: function() {
-            return visualynk.provider.NodeDisplayTypes.IMAGE
-        },
-        getImagePath: function() {
-            return "vendor/plugins/2d_model/img/spare.png"
-        },
-        getImageWidth: function() {
-            return 50
-        },
-        getImageHeight: function() {
-            return 50
-        },
-        getPredefinedConstraints: function() {
-            return inputValueSystem ? ["$identifier.name =~ '(?i).*" + inputValueSystem.replace("|","\\\\|").replace("(","\\\\(").replace(")","\\\\)") + ".*'"] : []
-        }
-    },
-    RESOURCE: {
-        parent: "Facility_Management",
-        returnAttributes: ["name", "link"],
-        constraintAttribute: "name",
-        URLlinkAttribute: "link",
-        displayResults: function(t) {
-            var e = t.append("table").attr("class", "result-table"),
-                n = e.append("tr").attr("id", "row1");
-            n.append("td").append("p").append("a").attr("href", function(t) {
-                return t.attributes.link ? t.attributes.link : "#"
-            }).text(function(t) {
-                return t.attributes.name
-            })
-        },
-        getDisplayType: function() {
-            return visualynk.provider.NodeDisplayTypes.IMAGE
-        },
-        getImagePath: function() {
-            return "vendor/plugins/2d_model/img/resource.png"
-        },
-        getImageWidth: function() {
-            return 50
-        },
-        getImageHeight: function() {
-            return 50
-        },
-        getPredefinedConstraints: function() {
-            return inputValueSystem ? ["$identifier.name =~ '(?i).*" + inputValueSystem.replace("|","\\\\|").replace("(","\\\\(").replace(")","\\\\)") + ".*'"] : []
-        }
-    },
-    JOB: {
-        parent: "Facility_Management",
-        returnAttributes: ["name", "link"],
-        constraintAttribute: "name",
-        URLlinkAttribute: "link",
-        displayResults: function(t) {
-            var e = t.append("table").attr("class", "result-table"),
-                n = e.append("tr").attr("id", "row1");
-            n.append("td").append("p").append("a").attr("href", function(t) {
-                return t.attributes.link ? t.attributes.link : "#"
-            }).text(function(t) {
-                return t.attributes.name
-            })
-        },
-        getDisplayType: function() {
-            return visualynk.provider.NodeDisplayTypes.IMAGE
-        },
-        getImagePath: function() {
-            return "vendor/plugins/2d_model/img/job.png"
-        },
-        getImageWidth: function() {
-            return 50
-        },
-        getImageHeight: function() {
-            return 50
-        },
-        getPredefinedConstraints: function() {
-            return inputValueSystem ? ["$identifier.name =~ '(?i).*" + inputValueSystem.replace("|","\\\\|").replace("(","\\\\(").replace(")","\\\\)") + ".*'"] : []
-        }
-    },
-    SERVICE_REQUEST: {
-        parent: "Facility_Management",
-        returnAttributes: ["message", "id", "link"],
-        constraintAttribute: "message",
-        URLlinkAttribute: "link",
-        displayResults: function(t) {
-            var e = t.append("table").attr("class", "result-table"),
-                n = e.append("tr").attr("message", "row1");
-            n.append("td").append("p").append("a").attr("href", function(t) {
-                return t.attributes.link ? t.attributes.link : "#"
-            }).text(function(t) {
-                return t.attributes.message
-            })
-        },
-        getDisplayType: function() {
-            return visualynk.provider.NodeDisplayTypes.IMAGE
-        },
-        getImagePath: function() {
-            return "vendor/plugins/2d_model/img/stage.png"
-        },
-        getImageWidth: function() {
-            return 50
-        },
-        getImageHeight: function() {
-            return 50
-        },
-        getPredefinedConstraints: function() {
-            return inputValueSystem ? ["$identifier.message =~ '(?i).*" + inputValueSystem.replace("|","\\\\|").replace("(","\\\\(").replace(")","\\\\)") + ".*'"] : []
-        }
-    },
-    DOCUMENT: {
-        parent: "Facility_Management",
-        returnAttributes: ["name", "link"],
-        constraintAttribute: "name",
-        URLlinkAttribute: "link",
-        getDisplayType: function() {
-            return visualynk.provider.NodeDisplayTypes.IMAGE
-        },
-        getImagePath: function() {
-            return "vendor/plugins/2d_model/img/document.png"
-        },
-        displayResults: function(t) {
-            var e = t.append("table").attr("class", "result-table"),
-                n = e.append("tr").attr("id", "row1");
-            n.append("td").append("p").append("a").attr("href", function(t) {
-                return t.attributes.link ? t.attributes.link : "#"
-            }).text(function(t) {
-                return t.attributes.name
-            })
-        },
-        getImageWidth: function() {
-            return 50
-        },
-        getImageHeight: function() {
-            return 50
-        },
-        getPredefinedConstraints: function() {
-            return inputValueSystem ? ["$identifier.name =~ '(?i).*" + inputValueSystem.replace("|","\\\\|").replace("(","\\\\(").replace(")","\\\\)") + ".*'"] : []
-        }
-    },
-    ATTRIBUTE: {
-        parent: "Facility_Management",
-        returnAttributes: ["name", "link"],
-        constraintAttribute: "name",
-        URLlinkAttribute: "link",
-        displayResults: function(t) {
-            var e = t.append("table").attr("class", "result-table"),
-                n = e.append("tr").attr("id", "row1");
-            n.append("td").append("p").append("a").attr("href", function(t) {
-                return t.attributes.link ? t.attributes.link : "#"
-            }).text(function(t) {
-                return t.attributes.name
-            })
-        },
-        getDisplayType: function() {
-            return visualynk.provider.NodeDisplayTypes.IMAGE
-        },
-        getImagePath: function() {
-            return "vendor/plugins/2d_model/img/attribute.png"
-        },
-        getImageWidth: function() {
-            return 50
-        },
-        getImageHeight: function() {
-            return 50
-        },
-        getPredefinedConstraints: function() {
-            return inputValueSystem ? ["$identifier.name =~ '(?i).*" + inputValueSystem.replace("|","\\\\|").replace("(","\\\\(").replace(")","\\\\)") + ".*'"] : []
-        }
-    },
-}, visualynk.graph.LINK_DISTANCE = 80, visualynk.graph.node.BACK_CIRCLE_R = 30, visualynk.graph.node.TEXT_Y = -30, visualynk.graph.node.NODE_MAX_CHARS = 60, visualynk.result.onTotalResultCount(function(t) {
+}, visualynk.graph.LINK_DISTANCE = 100, visualynk.graph.node.BACK_CIRCLE_R = 30, visualynk.graph.node.TEXT_Y = -30, visualynk.graph.node.NODE_MAX_CHARS = 60, visualynk.result.onTotalResultCount(function(t) {
     d3.select("#rescount").text(function() {
         return "(" + t + ")"
     })
-}), visualynk.query.RESULTS_PAGE_SIZE = 1e3, visualynk.logger.LEVEL = visualynk.logger.LogLevels.INFO, visualynk.start("Facility_Management");
+}),
+
+    visualynk.query.RESULTS_PAGE_SIZE = 1e3;
+    visualynk.logger.LEVEL = visualynk.logger.LogLevels.INFO;
+
+visualynk.start("");
+//visualynk.start("Facility_Management");

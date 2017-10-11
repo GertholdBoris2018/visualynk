@@ -1,28 +1,98 @@
-<div class="portlet box tabbable custom-green custom-border span height-700" data-ng-controller="model3d as m3">
+<style>
+    .btn{
+        background: transparent;
+        color: #36D7B7;
+        border: 1px solid #36D7B7;
+        height:28px;
+        padding: 3px 10px!important;
+    }
+    .portlet-title .btn:hover, .portlet-title .btn:focus, .portlet-title .btn:active, .portlet-title .btn.active, .portlet-title .btn[disabled], .portlet-title .btn.disabled, .portlet-title .btn.btn-down {
+        background-color : transparent !important;
+        border:1px solid #fff;
+          /*outline: none;*/
+        color: #fff !important;
+    }
+    .div-2d{
+        height:50%;
+        width:100%;
+        padding:10px;
+    }
+    .div-3d{
+        display:none;
+        height:50%;
+        width:100%;
+        line-height: 150%;
+        /*padding:10px;*/
+        /*border-top:1px solid #c8c8c8;*/
+    }
+    .caption{
+        text-align: left;
+    }
+    .query-hidden{
+        height:44px !important;
+        overflow:hidden;
+    }
+    .query-toggle{
+        display:none;position:absolute;top:0px;cursor: pointer
+    }
+    canvas{
+        width:100%;
+        height:100%;
+    }
+</style>
+
+<script src="media/js/bimsurfer/lib/require.js"></script>
+<div class="portlet box tabbable custom-green custom-border" data-ng-controller="model3d as m3">
     <div class="portlet-title">
-        <div class="caption">
+        <div class="caption" style="overflow:visible">
             <!--<span class="hidden-480">General Layouts</span>-->
-            <ul class="nav nav-tabs view-toggle" >
-                <li ng-class="{'active' : activeTab == 1}"><a href="" ng-click="setActiveTab(1)"  data-toggle="tab">2D</a></li>
-                <li ng-class="{'active' : activeTab == 2}"><a href="" ng-click="setActiveTab(2)" data-toggle="tab">3D</a></li>
-            </ul>
+            <div class="btn-group">
+                <button class="viewbtn viewbtn-down" id="btn-2d" ng-click="setActiveTab($event)">2D</button>
+                <button class="viewbtn" id="btn-3d" ng-click="setActiveTab($event)">3D</button>
+            </div>
+
+            <div class="pull-right" id="upload_2d_model_wrapper">
+                      <div class="uploadmodelbtn dropzone" options="dzOptions" callbacks="dzCallbacks" methods="dzMethods" ng-dropzone></div>
+                <div id="two_dimention_model_preview" class="dropzone dropzone-previews" style="position:absolute;right:0; padding: 0 !important; background-color:#26A69A" ng-show="is_new_2d_model"></div>
+            </div>
+
             <div class="clearfix"></div>
         </div>
     </div>
     <div class="portlet-body full-height">
         <div class="tabbable portlet-tabs">
-
-            <div class="tab-content height-700">
-                <div ng-class="{'tab-pane active': activeTab === 1, 'tab-pane' : activeTab !== 1}" class="full-height">
-                    <div id="secondary" class="full-height">
-                        <div id="daire_menu" class="3dboyutlu full-height">
-                            <object class="svg" id="svg_image" src="models/Granlund_ARK_MEP.svg"></object>
+            <div class="tab-content">
+                    <div class="div-2d">
+                        <div id="secondary" class="full-height">
+                            <div class="control-group">
+                                <div class="controls" style="position:absolute;">
+                                    <select ng-change="changeSVG()" ng-model="course"
+                                            class="m-wrap" ng-options="cr.course as cr.course for cr in courses" tabindex="1">
+                                    </select>
+                                </div>
+                            </div>
+                            <br>
+                            <div id="daire_menu" class="3dboyutlu full-height">
+                              <div style="position:relative; z-index:10" id="dataShow"></div>
+                              <br>
+                              <object style="position:absolute; z-index:-1" class="svg" id="svg_image" src="app/models/Granlund_ARK_MEP.svg"></object>
+                            </div>
                         </div>
                     </div>
+                    <div class="div-3d" style="position: relative">
+                        <select ng-model="project" ng-change="get3dModel($event)"
+                                class="m-wrap" tabindex="1" style="z-index:999999;">
+                                <option value="">select the project</option>
+                                <option ng-repeat="pr in projects" value="{{pr.poid}},{{pr.roid}}">{{pr.name}}</option>
+                        </select>
+                        <div style="text-align: left;">{{ message }}</div>
+                        <input id='rendered3d' type="hidden" value="{{ rendered3d }}"/>
+                        <div id="viewerContainer" style="width:100%;height:100%;"></div>    
+                    </div>
+                <!--<div ng-class="{'tab-pane active': activeTab === 1, 'tab-pane' : activeTab !== 1}" class="full-height">
                 </div>
-                <div ng-class="{'tab-pane active': activeTab === 2, 'tab-pane' : activeTab !== 2}" class="full-height">Panel 2 Content</div>
+                <div ng-class="{'tab-pane active': activeTab === 2, 'tab-pane' : activeTab !== 2}" class="full-height">Panel 2 Content</div>-->
             </div>
         </div>
-
     </div>
 </div>

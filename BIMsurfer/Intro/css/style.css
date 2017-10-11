@@ -1,0 +1,229 @@
+.absolute-center,
+.square-wrapper,
+.square-dark-wrapper,
+.sparks,
+.pango-logo-group,
+.pango-logo,
+.pango-words,
+.outer-logo-circle {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  margin: auto;
+}
+.section {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+}
+.section--intro {
+  overflow: hidden;
+}
+html,
+body {
+  width: 100%;
+  min-height: 100%;
+  background: #1e1e20;
+  overflow-x: hidden;
+}
+.wrapper {
+  width: 960px;
+  height: 100%;
+  margin: auto;
+  z-index: 14;
+  position: relative;
+}
+.square-wrapper {
+  width: 200px;
+  height: 200px;
+  border: 1px solid #000000
+  background: #ffffff;
+}
+.line {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  width: 100%;
+  height: 4px;
+  background: #36D7B7;
+}
+.line:nth-child(3) {
+  top: auto;
+  bottom: 0;
+}
+.line:nth-child(2),
+.line:nth-child(4) {
+  top: 50%;
+  left: -50%;
+  margin-top: -2px;
+  -webkit-transform: rotate(90deg);
+  transform: rotate(90deg);
+}
+.line:nth-child(2) {
+  left: 50%;
+}
+.square-dark-wrapper {
+  width: 0;
+  height: 0;
+  will-change: transform;
+  -webkit-transform: scale(0);
+  transform: scale(0);
+}
+.square-dark {
+  background: #ffffff;
+  border-radius: 50%;
+  -webkit-transform: translateX(-50%) translateY(-50%);
+  transform: translateX(-50%) translateY(-50%);
+}
+.sparks {
+  width: 100px;
+  height: 100px;
+}
+.spark {
+  -webkit-transform: rotate(45deg);
+  transform: rotate(45deg);
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  right: -200%;
+  will-change: stroke-dashoffset;
+  stroke-dasharray: 145;
+  stroke-dashoffset: -145;
+}
+.spark:last-child {
+  left: -200%;
+  right: auto;
+  -webkit-transform: rotate(-135deg);
+  transform: rotate(-135deg);
+}
+.pango-logo-group {
+  margin-top: -5rem;
+  z-index: 15;
+}
+.pango-logo {
+  width: 250px;
+  height: 250px;
+  z-index: 16;
+  opacity: 0;
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
+  filter: alpha(opacity=0);
+  -webkit-transform: scale(0.9);
+  transform: scale(0.9);
+}
+.pango-words {
+  width: 600px;
+  height: 120px;
+  font-family: 'Lato';
+  font-size: 2rem;
+  font-weight: 300;
+  color: #f0f0f0;
+  text-align: center;
+  top: auto;
+  bottom: 10%;
+  overflow: hidden;
+  will-change: opacity;
+}
+.pango-words .line-separator {
+  width: 110%;
+  height: 1px;
+  background: #000000;
+  will-change: transform;
+  margin: 0.2em auto;
+  padding-right: 10em
+}
+.pango-word {
+  text-align: center;
+  display: block;
+  overflow: hidden;
+  line-height: 1;
+}
+.pango-word span {
+  will-change: transform;
+  display: inline-block;
+}
+.pango-word:last-of-type {
+  letter-spacing: 0.11em;
+  font-size: 1.4rem;
+  font-weight: 100;
+}
+.outer-logo-circle {
+  width: 190px;
+  height: 190px;
+  z-index: 14;
+  -webkit-transform-origin: 50% 50%;
+  transform-origin: 50% 50%;
+  -webkit-transform: rotate(-90deg) scale(0.9);
+  transform: rotate(-90deg) scale(0.9);
+}
+.outer-logo-circle .circle {
+  -webkit-transform: translateZ(1px);
+  transform: translateZ(1px);
+  stroke: #1e1e20;
+  stroke-dasharray: 2072;
+  stroke-dashoffset: 2072;
+  stroke-width: 16px;
+}
+.bg-lines-wrapper {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 10;
+  will-change: transform;
+  -webkit-transform: perspective(1000px) rotateX(45deg);
+  transform: perspective(1000px) rotateX(45deg);
+  -webkit-transform-style: preserve-3d;
+  transform-style: preserve-3d;
+}
+.bg-lines-wrapper .line {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: rgba(255,255,255,0.2);
+  width: 2px;
+  height: 2px;
+  -webkit-transform: scaleX(0);
+  transform: scaleX(0);
+  -webkit-transform-origin: 0 50%;
+  transform-origin: 0 50%;
+}
+.mouse-tracker-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 18;
+}
+.top-nav {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 19;
+}
+.nav-list {
+  list-style: none;
+  padding: 1rem 2rem;
+}
+.nav-list--item {
+  display: inline-block;
+}
+.nav-list--item a {
+  color: #f0f0f0;
+  padding: 0.4rem;
+  margin: 0 0.4rem;
+  display: block;
+  text-transform: uppercase;
+  text-decoration: none;
+  -webkit-transition: all 0.2s ease;
+  transition: all 0.2s ease;
+  border: 1px solid transparent;
+}
+.nav-list--item a:hover {
+  border-color: currentColor;
+}

@@ -12,6 +12,9 @@
         service.Login = Login;
         service.SetCredentials = SetCredentials;
         service.ClearCredentials = ClearCredentials;
+        service.Forgotpassword = Forgotpassword;
+        service.CheckResetPwdToken = CheckResetPwdToken;
+        service.ResetPassword = ResetPassword;
 
         return service;
 
@@ -47,14 +50,41 @@
             });*/
         }
 
-        function SetCredentials(username, password) {
+        function Forgotpassword(username, callback){
+            $http.post('/forgotpassword', { username: username})
+                .success(function (response) {
+                    callback(response);
+                });
+        }
+
+        function CheckResetPwdToken(token, callback){
+            $http.post('/checkresetpwdtoken', { token: token})
+                .success(function (response) {
+                    callback(response);
+                });
+        }
+
+        function ResetPassword(new_pwd, token, callback){
+            $http.post('/resetpassword', {new_pwd: new_pwd, token: token})
+                .success(function (response) {
+                    callback(response);
+                });
+        }
+
+        function SetCredentials(username, password, userCompany, userType, userGroup, crudPermissions, userId) {
             var authdata = Base64.encode(username + ':' + password);
 
             $rootScope.globals = {
                 currentUser: {
                     username: username,
-                    password:password,
-                    authdata: authdata
+                    password: password,
+                    usercompany: userCompany,
+                    usertype: userType,
+                    usergroup: userGroup,
+                    crudpermissions: crudPermissions,
+                    userId: userId,
+                    authdata: authdata,
+                    bimToken : ''
                 }
             };
 

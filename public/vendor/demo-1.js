@@ -1,7 +1,7 @@
 (function() {
 
     var width, height, largeHeader, canvas, ctx, points, target, animateHeader = true;
-
+    var section2,section3,section4,section5,section6;
     // Main
     initHeader();
     initAnimation();
@@ -13,6 +13,12 @@
         target = {x: width/2, y: height/2};
 
         largeHeader = document.getElementById('large-header');
+        section2 = document.getElementById('section2');
+        section3 = document.getElementById('section3');
+        section4 = document.getElementById('section4');
+        section5 = document.getElementById('section5');
+        section6 = document.getElementById('section6');
+
         largeHeader.style.height = height+'px';
 
         canvas = document.getElementById('demo-canvas');
@@ -63,7 +69,7 @@
 
         // assign a circle to each point
         for(var i in points) {
-            var c = new Circle(points[i], 2+Math.random()*2, 'rgba(255, 2555, 255,1.0)');
+            var c = new Circle(points[i], 2+Math.random()*2, 'rgba(255, 2555, 255,1.5)');
             points[i].circle = c;
         }
     }
@@ -100,6 +106,19 @@
         width = window.innerWidth;
         height = window.innerHeight;
         largeHeader.style.height = height+'px';
+        section2.style.height = height + 'px';
+        section3.style.height = height + 'px';
+        section4.style.height = height + 'px';
+        section5.style.height = height + 'px';
+        section6.style.height = height + 'px';
+        if(height < 600){
+            section2.style.height = '600px';
+            section3.style.height = '600px';
+            section4.style.height = '600px';
+            section5.style.height = '600px';
+            section6.style.height = '600px';
+        }
+
         canvas.width = width;
         canvas.height = height;
     }

@@ -6,30 +6,61 @@
 </style>
 <!-- sign in modal -->
 <script type="text/ng-template" id="signin.html">
-    <div class="ng-modal">
-        <div class="col-md-6 col-xs-12"  ng-controller="signin as si">
-            <button type="button" class="close" data-dismiss="modal" ng-click="close()"></button>
-            <h3>Login</h3>
-            <form name="form" ng-submit="si.signin()" role="form" class="contact-form">
-                <div class="control-group padding-side-10">
-                    <div ng-show="initFlash" ng-class="{ 'alert': flash, 'alert-success': flash.type === 'success', 'alert-danger': flash.type === 'error' }" ng-if="flash" ng-bind="flash.message"></div>
+    <div class="ng-modal login-forgot-mdl" ng-controller="signin as si" >
+        <div class="cont-login-forgot" >
+            <div class="up" >
+                <div class="col-md-6 col-xs-12"  >
+                    <button type="button" class="close" data-dismiss="modal" ng-click="close()"></button>
+                    <h3>Login</h3>
+                    <form name="form" ng-submit="si.signin()" role="form" class="contact-form">
+                        <div class="control-group padding-side-10">
+                            <div ng-show="initFlash" ng-class="{ 'alert': flash, 'alert-success': flash.type === 'success', 'alert-danger': flash.type === 'error' }" ng-if="flash" ng-bind="flash.message"></div>
+                        </div>
+                        <div class="control-group" ng-class="{ 'has-error': form.username.$dirty && form.username.$error.required }">
+                            <!--<label for="username">Username or Email</label>-->
+                            <input type="text" name="username" class="form-control span4 m-wrap" ng-model="si.username" required placeholder="Username or Email" />
+                            <span ng-show="form.username.$dirty && form.username.$error.required" class="help-block">Please input the Username or email </span>
+                        </div>
+                        <div class="control-group" ng-class="{ 'has-error': form.password.$dirty && form.password.$error.required }">
+                            <!--<label for="password">Password</label>-->
+                            <input type="password" name="password" class="form-control span4 m-wrap" ng-model="si.password" required placeholder="Password"/>
+                            <span ng-show="form.password.$dirty && form.password.$error.required" class="help-block">Password is required</span>
+                        </div>
+                        <div class="">
+                            <button type="submit" ng-disabled="form.$invalid || si.dataLoading" class="btn front">Login</button>
+                            <a href="javascript:void(0)" ng-click="showForgotPwdForm();"><h4>Forgot Your Password?</h4></a>
+                            <img ng-if="si.dataLoading" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
+                            <!--<a href="#/register" class="btn btn-link">Register</a>-->
+                        </div>
+                    </form>
                 </div>
-                <div class="control-group" ng-class="{ 'has-error': form.username.$dirty && form.username.$error.required }">
-                    <!--<label for="username">Username or Email</label>-->
-                    <input type="text" name="username" class="form-control span4 m-wrap" ng-model="si.username" required placeholder="Username or Email" />
-                    <span ng-show="form.username.$dirty && form.username.$error.required" class="help-block">Please input the Username or email </span>
+            </div>
+
+            <div class="back">
+                <div class="col-md-6 col-xs-12"  >
+                    <button type="button" class="close" ng-click="showForgotPwdForm()"></button>
+                    <h3>Forgot Password</h3>
+                    <form name="form" ng-submit="si.forgotpwd()" role="form" class="contact-form">
+                        <div class="control-group padding-side-10">
+                            <div ng-show="initFlashFP" ng-class="{ 'alert': flash, 'alert-success': flash.type === 'success', 'alert-danger': flash.type === 'error' }" ng-if="flash" ng-bind="flash.message"></div>
+                        </div>
+                        <div class="control-group" ng-class="{ 'has-error': form.username.$dirty && form.username.$error.required }" >
+                            <!--<label for="username">Username or Email</label>-->
+                            <!--<div style="text-align: left; padding:0 20px; margin-bottom: 15px;">
+                                <p>We should send the email with the link what can reset the password for your account.</p>
+                                <p>Please input your Email.</p>
+                            </div>-->
+                            <input type="text" name="username" class="form-control span4 m-wrap" ng-model="si.username" required placeholder="Email" />
+                            <span ng-show="form.username.$dirty && form.username.$error.required" class="help-block">Please input your Email </span>
+                        </div>
+                        <!--<div class="" data-ng-show="flash.type === 'error' || !initFlash">-->
+                        <div class="" >
+                            <button type="submit" ng-disabled="form.$invalid || si.dataLoadingFP" class="btn front">Send Email</button>
+                            <img ng-if="si.dataLoadingFP" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
+                        </div>
+                    </form>
                 </div>
-                <div class="control-group" ng-class="{ 'has-error': form.password.$dirty && form.password.$error.required }">
-                    <!--<label for="password">Password</label>-->
-                    <input type="password" name="password" class="form-control span4 m-wrap" ng-model="si.password" required placeholder="Password"/>
-                    <span ng-show="form.password.$dirty && form.password.$error.required" class="help-block">Password is required</span>
-                </div>
-                <div class="">
-                    <button type="submit" ng-disabled="form.$invalid || si.dataLoading" class="btn front">Login</button>
-                    <img ng-if="si.dataLoading" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
-                    <!--<a href="#/register" class="btn btn-link">Register</a>-->
-                </div>
-            </form>
+            </div>
         </div>
     </div>
 </script>
@@ -79,6 +110,37 @@
                     <span ng-show="form.repassword.$error.passwordVerify"  class="help-block">Fields are not equal!</span>
                 </div>
 
+                <div class="control-group" ng-class="{ 'has-error': form.company.$dirty && form.company.$error.required}">
+                    <!--<label for="repassword">Company</label>-->
+                    <select name="company" id="company" class="form-control span4 " ng-model="su.userCompany" >
+                        <option value="">Please select one company</option>
+                        <option ng-repeat="company in companies" value="{{company._fields[1].low}}">{{company._fields[0].properties.companyname}}</option>
+                    </select>
+
+                    <span ng-show="form.company.$dirty && form.company.$error.required" class="help-block">Company is required</span>
+                </div>
+
+                <div class="control-group" ng-class="{ 'has-error': form.userGroup.$dirty && form.userGroup.$error.required }">
+                    <select class="form-control span4" ng-model="su.userGroup" name="userGroup" id="userGroup" required>
+                        <option value="">Please select one Group</option>
+                        <option value="PortfolioOwner">PortfolioOwner</option>
+                        <option value="ProjectAdmin">ProjectAdmin</option>
+                        <option value="CompanyAdmin">CompanyAdmin</option>
+                        <option value="ProjectTeamAdmin">ProjectTeamAdmin</option>
+                        <option value="CompanyTeamAdmin">CompanyTeamAdmin</option>
+                        <option value="User">User</option>
+                    </select>
+                </div>
+
+                <div class="control-group" ng-class="{ 'has-error': form.userBimType.$dirty && form.userBimType.$error.required }">
+                    <select class="form-control span4" ng-model="su.userBimType" name="userBimType" id="userBimType" required>
+                        <option value="">Please select user Bim Type</option>
+                        <option value="ADMIN">ADMIN</option>
+                        <option value="USER">USER</option>
+                        <option value="READ_ONLY">READ_ONLY</option>
+                    </select>
+                </div>
+
 
                 <div class="">
                     <button type="submit" ng-disabled="form.$invalid || su.dataLoading" class="btn front">Register</button>
@@ -91,7 +153,7 @@
 </script>
 <!-- end modal -->
 <div data-ng-controller="main as vm" class="content">
-    <div class="page-container row-fluid" >
+    <div class="row-fluid" >
         <!-- BEGIN EMPTY PAGE SIDEBAR -->
         <div class="page-sidebar nav-collapse collapse visible-phone visible-tablet no-margin">
             <ul class="page-sidebar-menu">
@@ -101,7 +163,7 @@
                 <li><a class="no-border-left" ng-click="showContent('#section5')" href="#section5">Partners</a></li>
                 <li><a class="no-border-left" ng-click="showContent('#section6')" href="#section6">Contact</a></li>
                 <li><a class="no-border-left" ng-click="login()">Login</a></li>
-                <li><a class="no-border-left" ng-click="register()">SignUp</a></li>
+                <!-- <li><a class="no-border-left" ng-click="register()">SignUp</a></li> -->
             </ul>
         </div>
     </div>
@@ -110,8 +172,8 @@
             <div class="row-fluid">
                 <div id="large-header" class="large-header col-md-12 col-sm-12 col-xs-12">
                     <canvas id="demo-canvas"></canvas>
-                    <h1 class="main-title" style="color:#EF4836; font-family: Raleway"><span><</span>Visua<span style="color:#59ABE3">Lynk</span><span class="blink" style="color:#ffffff">_</span><span style="color:#59ABE3">/></span>
-                        <br><span class="thin" style="color:white">the collective platform of your linked building data</span>
+                    <h1 class="main-title" style="color:#EF4836; font-family: Raleway-Thin"><span style="font-family: Raleway-Thin">< Visua</span><span style="color:#59ABE3; font-family: Raleway-Thin">Lynk</span><span class="blink" style="color:#293447; font-family: Raleway-Thin">_</span><span style="color:#59ABE3; font-family: Raleway-Thin">/></span>
+                        <br><span class="thin" style="color:#293447; font-family: Raleway-Thin; font-size: 26px">Linking Data, Generating Value</span>
                         <br>
                         <br>
                         <!--<input type="button" class="main_program_button" name="main_program" value="Start" onclick="window.open('visualynk/main.html','_parent','resizable=yes')">--></h1>
@@ -125,7 +187,7 @@
                         <h1 class="col-md-12 col-sm-12 col-xs-12">Visual, Collective and Linked Building Data <span>Buidling information is fragmented. VisuaLynk's state-of-the-art <b>Web of Building Data</b>, intelligent
 						<b>Data Analytics</b> and easy-to-use <b>Visual Management</b> modules combines your fragmented building information <b>visually</b> and <b>intelligently</b> !</span></h1>
                     </div>
-                    <iframe  class="col-md-12 col-sm-12 col-xs-12 framer" src="feature-slider/" width="100%" height="100%" style="border:0px solid"></iframe>
+                    <iframe  class="col-md-12 col-sm-12 col-xs-12 framer" src="app/layout/feature-slider/" width="100%" height="100%" style="border:0px solid"></iframe>
                     <div class="accordion in collapse" id="accordion1" style="height: auto;">
                         <div class="accordion-group">
                             <div class="accordion-heading">
@@ -187,9 +249,11 @@
             <div class="row-fluid padding-side-10">
                 <div id="section3"class="large-header3">
                     <div class="codrops-header col-md-12 col-sm-12 col-xs-12">
+                      <br>
+                      <br>
                         <h1 class="col-md-12 col-sm-12 col-xs-12">Benefit the Unique Features of VisuaLynk</h1>
                     </div>
-                    <iframe class="col-md-12 col-sm-12 col-xs-12 framer"src="features/" width="100%" height="100%" style="border:0px solid"></iframe>
+                    <iframe class="col-md-12 col-sm-12 col-xs-12 framer"src="app/layout/features/" width="100%" height="100%" style="border:0px solid"></iframe>
                     <div class="accordion in collapse" id="accordion2" style="height: auto;">
                         <div class="accordion-group">
                             <div class="accordion-heading">
@@ -203,7 +267,7 @@
                                     <p>The deep meaning of your fragmented building information is hidden behind the invisible dependencies. Instead of storing data in siloed manner,
                                         <span style="color:#EF4836">Visua</span><span style="color:#59ABE3">Lynk</span>  focuses on the relationships between each information entity.
                                         The explicitly represented relationships will allow you easily navigate in your data store and find the specific information that you are looking for.</p>
-                                    <img src="features/img/screenshot.png" style="width:90%; height:60%; margin-left:20px">
+                                    <img src="app/layout/features/img/screenshot.png" style="width:90%; height:60%; margin-left:20px">
                                 </div>
                             </div>
                         </div>
@@ -219,7 +283,7 @@
                                     <p>Your business, your way! <span style="color:#EF4836">Visua</span><span style="color:#59ABE3">Lynk</span>'s powerfull and easy-to-customize modules provides a flexible
                                         platform for the dynamic nature of your tasks, use-cases and business decisions. <span style="color:#EF4836">Visua</span><span style="color:#59ABE3">Lynk</span>
                                         does not force you to change your existing infrastructure and way of work. Instead, it integrates and expands them with each other.</p>
-                                    <img src="features/img/IoT.png" style="width:100%; height:110%; text-align:center">
+                                    <img src="app/layout/features/img/IoT.png" style="width:100%; height:110%; text-align:center">
                                 </div>
                             </div>
                         </div>
@@ -236,7 +300,7 @@
                                         your fragmented data a click away with interactive links on www.
                                         Based on your business domain, <span style="color:#EF4836">Visua</span><span style="color:#59ABE3">Lynk</span> offers semantic graphs to serve a baseline data model for further customization
                                         to cater your industry specific needs.</p>
-                                    <img src="features/img/semantic.jpg" style="width:85%; height:50%; text-align:center">
+                                    <img src="app/layout/features/img/semantic.jpg" style="width:85%; height:50%; text-align:center">
                                 </div>
                             </div>
                         </div>
@@ -253,7 +317,7 @@
                                     <p>Your building models are more intelligent with <span style="color:#EF4836">Visua</span><span style="color:#59ABE3">Lynk</span>'s built-in
                                         interactive model viewers. Dynamically integrated 2D and 3D models building models will be an easy path to access semantic building information and it's
                                         explicit relationships.</p>
-                                    <img src="features/img/3d.jpg" style="width:70%; height:70%; margin-left:20px">
+                                    <img src="app/layout/features/img/3d.jpg" style="width:70%; height:70%; margin-left:20px">
                                 </div>
                             </div>
                         </div>
@@ -271,7 +335,7 @@
                                         is represented with an easy-to-remember/recall visual icon. These icons are also linked with their explicit relationships. You don't need to shift between
                                         spreadsheets anymore. With <span style="color:#EF4836">Visua</span><span style="color:#59ABE3">Lynk</span>'s built-in visual query system, related information
                                         will be on your screen with one click.</p>
-                                    <img src="features/img/visual.jpg" style="width:75%; height:75%; margin-left:20px">
+                                    <img src="app/layout/features/img/visual.jpg" style="width:75%; height:75%; margin-left:20px">
                                 </div>
                             </div>
                         </div>
@@ -287,7 +351,7 @@
                                 <div class="accordion-inner">
                                     <p>Machine Learning assisted data capture, mapping and analytic techniques provides intelligent assistance for your decision making process. With the semantic mapping and linking of your
                                         fragmented data, <span style="color:#EF4836">Visua</span><span style="color:#59ABE3">Lynk</span> offers efficient business solutions for our customers.</p>
-                                    <img src="features/img/ai.png" style="width:80%; height:80%; margin-left:20px">
+                                    <img src="app/layout/features/img/ai.png" style="width:80%; height:80%; margin-left:20px">
                                 </div>
                             </div>
                         </div>
@@ -297,44 +361,46 @@
             <div class="row-fluid padding-side-10">
                 <div id="section4"class="large-header4">
                     <div class="codrops-header col-md-12 col-sm-12 col-xs-12">
+                      <br>
+                      <br>
                         <h1 class="col-md-12 col-sm-12 col-xs-12">Meet the Team Behind VisuaLynk <span>We believe small teams can carry a big punch.<br>We are talented, passionate, and dedicated
               team focused on delivering an innovative and easy-to-use platform for our clients.</span></h1>
                     </div>
-                    <iframe class="col-md-12 col-sm-12 col-xs-12 framer" src="team3/" width="100%" height="100%" style="border:0px solid"></iframe>
+                    <iframe class="col-md-12 col-sm-12 col-xs-12 framer" src="app/layout/team3/" width="100%" height="100%" style="border:0px solid"></iframe>
 
                     <div class="span12" id="accordion3">
                         <section class="cf team-container container-fluid">
                             <!-- member-->
                             <div class="team-member row-fluid">
-                                <img class="team-photo" src="team3/img/mehmet.png">
+                                <img class="team-photo" src="app/layout/team3/img/mehmet.png">
                                 <h3>Mehmet Yalcinkaya</h3>
                                 <span>Entrepreneur, Lead Developer</span>
                                 <!-- <a class="email" href="mailto:email@something.com"><span >email</span></a> -->
                             </div>
                             <!-- member-->
                             <div class="team-member row-fluid">
-                                <img class="team-photo" src="team3/img/vishal.jpg">
+                                <img class="team-photo" src="app/layout/team3/img/vishal.jpg">
                                 <h3>Vishal Singh</h3>
                                 <span>Research and Development Manager</span>
                                 <!-- <a class="email" href="mailto:email@something.com"><span >email</span></a> -->
                             </div>
                             <!-- member-->
                             <div class="team-member row-fluid">
-                                <img class="team-photo" src="team3/img/seppo.png">
+                                <img class="team-photo" src="app/layout/team3/img/seppo.png">
                                 <h3>Seppo Törmä</h3>
                                 <span>Technology Manager</span>
                                 <!-- <a class="email" href="mailto:email@something.com"><span >email</span></a> -->
                             </div>
                             <!-- member-->
                             <div class="team-member row-fluid">
-                                <img class="team-photo" src="team3/img/teemu.png">
+                                <img class="team-photo" src="app/layout/team3/img/teemu.png">
                                 <h3>Teemu Lehtinen</h3>
                                 <span>Business Developer</span>
                                 <!-- <a class="email" href="mailto:email@something.com"><span >email</span></a> -->
                             </div>
                             <!-- member-->
                             <div class="team-member row-fluid">
-                                <img class="team-photo" src="team3/img/nam.jpg">
+                                <img class="team-photo" src="app/layout/team3/img/nam.jpg">
                                 <h3>Nam Vu Hoang</h3>
                                 <span>Linked Data Expert, Developer</span>
                                 <!-- <a class="email" href="mailto:email@something.com"><span >email</span></a> -->
@@ -351,12 +417,18 @@
                         <h1 class="col-md-12 col-sm-12 col-xs-12">VisuaLynk is Proudly Partnering with <span>We believe small teams can carry a big punch.<br>We are talented, passionate, and dedicated
               team focused on delivering an innovative and easy-to-use platform for our clients.</span></h1>
                     </div>
-                    <iframe class="col-md-12 col-sm-12 col-xs-12 framer" src="partners/" width="100%" height="100%" style="border:0px solid"></iframe>
+                    <iframe class="col-md-12 col-sm-12 col-xs-12 framer" src="app/layout/partners/" width="100%" height="100%" style="border:0px solid"></iframe>
                     <div class="span12" id="accordation4">
                         <section class="cf team-container">
                             <!-- member-->
                             <div class="team-member">
-                                <a href="http://www.granlund.fi/en/" ><img class="team-photo" src="partners/img/granlund.png"></a>
+                                <a href="http://www.granlund.fi/en/" ><img class="team-photo" src="app/layout/partners/img/granlund.png"></a>
+                                <!-- <a href="http://www.granlund.fi/en/">Granlund Oy</a> -->
+                                <!-- <a class="email" href="mailto:email@something.com"><span >email</span></a> -->
+                            </div>
+
+                            <div class="team-member">
+                                <a href="https://www.ncc.fi/" ><img class="team-photo" src="app/layout/partners/img/ncc.jpeg"></a>
                                 <!-- <a href="http://www.granlund.fi/en/">Granlund Oy</a> -->
                                 <!-- <a class="email" href="mailto:email@something.com"><span >email</span></a> -->
                             </div>
@@ -372,23 +444,63 @@
                         <br>
                         <h1 class="col-md-12 col-sm-12 col-xs-12">{ cont@ct } us <span>Please write us for any inquiries. We are looking forward to hear from you.</span></h1>
                     </div>
-                    <iframe class="col-md-12 col-sm-12 col-xs-12 framer" src="contact/" width="100%" height="100%" style="border:0px solid"></iframe>
-                    <div class="span12" id="accordation5">
-                        <div class="cont-contactBtn">
-                            <div class="cont-flip">
-                                <div class="front">
-                                    <a href="#" class="btn1 btn-white flip">Send Message</a>
-                                </div>
-                                <div class="back">
-                                    <a href="#" class="flip close"></a>
-                                    <form class="contact-form" action="">
-                                        <input class="gutter" type="text" placeholder="Name">
-                                        <input type="text" placeholder="Company">
-                                        <input class="gutter" type="text" placeholder="Telephone">
-                                        <input type="text" placeholder="Email">
-                                        <textarea name="" id="" placeholder="Leave a message"></textarea>
-                                        <input type="submit" value="Send">
-                                    </form>
+                    <!--<iframe class="col-md-12 col-sm-12 col-xs-12 framer" src="contact/" width="100%" height="100%" style="border:0px solid">
+
+                    </iframe>-->
+                        <div class="col-md-12 col-sm-12 col-xs-12 framer" width="100%" height="100%" style="border:0px solid">
+                            <div class="cont-contactBtn">
+                                <div class="cont-flip">
+                                    <div class="front">
+                                        <a  class="btn-cont btn-white flip" data-ng-click="showContactForm()">Send Message</a>
+                                    </div>
+                                    <div class="back">
+                                        <a class="flip close" data-ng-click="showContactForm()"></a>
+                                        <form class="contact-form" name="contactForm" ng-submit="sendMail()">
+                                            <div ng-show="initMailSucessFlash" class="alert alert-success">
+                                                <strong>Success!</strong> The mail has been sent succesfully!.
+                                            </div>
+                                            <div ng-show="initMailerrorFlash" class="alert">
+                                                <strong>unfortunately,</strong> The mail has not been sent.
+                                            </div>
+                                            <div class="alert" ng-show="contactForm.contactName.$dirty && contactForm.contactName.$error.required">
+                                                <strong >please input your name</strong>
+                                            </div>
+                                            <div class="alert" ng-show="contactForm.contactCompany.$dirty && contactForm.contactCompany.$error.required">
+                                                <strong >please input your company</strong>
+                                            </div>
+                                            <div class="alert" ng-show="contactForm.contactPhone.$dirty && contactForm.contactPhone.$error.required">
+                                                <strong>please input your phone</strong>
+                                            </div>
+                                            <div class="alert" ng-show="contactForm.contactEmail.$dirty && contactForm.contactEmail.$error.required">
+                                                <strong>please input your email</strong>
+                                            </div>
+                                            <div class="alert" ng-show="contactForm.contactEmail.$error.email">
+                                                <strong>please enter a valid email.</strong>
+                                            </div>
+
+                                            <div class="control-group" ng-class="{ 'has-error': contactForm.contactName.$dirty && contactForm.contactName.$error.required }">
+                                                <input class="gutter" name="contactName" type="text" placeholder="Name" ng-model="vm.contactName" required>
+                                            </div>
+                                            <div class="control-group" ng-class="{ 'has-error': contactForm.contactCompany.$dirty && contactForm.contactCompany.$error.required }">
+                                                <input type="text" name="contactCompany" placeholder="Company" ng-model="vm.contactCompany" required>
+                                            </div>
+                                            <div class="control-group" ng-class="{ 'has-error': contactForm.contactPhone.$dirty && contactForm.contactPhone.$error.required }">
+                                                <input class="gutter" type="text" name="contactPhone"  placeholder="Telephone" ng-model="vm.contactPhone" required>
+                                            </div>
+                                            <div class="control-group" ng-class="{ 'has-error': contactForm.contactEmail.$dirty && contactForm.contactEmail.$error.required && contactForm.contactEmail.$error.email }">
+                                                <input type="text" placeholder="Email"  name="contactEmail" ng-model="vm.contactEmail" required>
+                                                <span style='color:#843534;' ng-show="contactForm.contactEmail.$error.email" class="help-block">Enter a valid email.</span>
+                                            </div>
+                                            <div class="control-group">
+                                                <textarea name="" id=""  name="contactMsg" placeholder="Leave a message" ng-model="vm.contactMsg" required></textarea>
+                                            </div>
+                                            <div class="">
+                                                <input type="submit" value="Send">
+                                                <img ng-if="vm.dataLoading" style="margin-top:15px;float:left;margin-left:10px;" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
+                                            </div>
+
+                                        </form>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -397,4 +509,3 @@
             </div>
         </div>
     </div>
-</div>

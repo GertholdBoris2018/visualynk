@@ -1,0 +1,39 @@
+<style>
+    #content{
+        padding:0;
+    }
+</style>
+
+<div data-ng-controller="resetpwd as vm" class="content">
+    <div class="row-fluid" >
+
+    </div>
+    <div class="page-content no-padding no-margin">
+        <div class="container-fluid no-padding">
+
+            <div class="row-fluid padding-side-10">
+                <h3>Reset Password</h3>
+                <form name="form" ng-submit="vm.resetPwd()" role="form" class="contact-form">
+                    <div class="control-group padding-side-10">
+                        <div ng-show="initFlash" ng-class="{ 'alert': flash, 'alert-success': flash.type === 'success', 'alert-danger': flash.type === 'error' }" ng-if="flash" ng-bind="flash.message"></div>
+                    </div>
+                    <div class="control-group" ng-class="{ 'has-error': form.username.$dirty && form.username.$error.required }" ng-show="vm.isTokenChecked && !vm.pwdChanged">
+                        <!--<label for="username">Username or Email</label>-->
+                        <input type="password" name="new_pwd" class="form-control span4 m-wrap" ng-model="vm.new_pwd" required placeholder="Please input the new password." />
+                        <span ng-show="form.new_pwd.$dirty && form.new_pwd.$error.required" class="help-block">Please input the Username or email </span>
+                    </div>
+                    <div class="control-group" ng-class="{ 'has-error': form.password.$dirty && form.password.$error.required }" ng-show="vm.isTokenChecked && !vm.pwdChanged">
+                        <!--<label for="password">Password</label>-->
+                        <input type="password" name="conf_pwd" class="form-control span4 m-wrap" ng-model="vm.conf_pwd" required placeholder="Password again"/>
+                        <span ng-show="form.conf_pwd.$dirty && form.conf_pwd.$error.required" class="help-block">Password is required</span>
+                        <span ng-show="vm.new_pwd != vm.conf_pwd" class="help-block">Confirmation password is not correct</span>
+                    </div>
+                    <div class="" ng-show="vm.isTokenChecked && !vm.pwdChanged">
+                        <button type="submit" ng-disabled="form.$invalid || vm.dataLoading" class="btn front">Reset Password</button>
+                        <img ng-if="vm.dataLoading" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

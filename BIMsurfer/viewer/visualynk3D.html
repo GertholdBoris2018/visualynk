@@ -1,0 +1,291 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title>VisuaLynk 3D Viewer</title>
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Raleway:200" rel="stylesheet">
+
+    <!-- CSS -->
+    <!-- <link rel="stylesheet" href="css/demo.css"/> -->
+    <link rel="stylesheet" href="css/demo2.css"/>
+    <link rel="stylesheet" href="css/apiref.css"/>
+    <link rel="stylesheet" href="../css/tree.css"/>
+    <link rel="stylesheet" href="../css/metadata.css"/>
+
+    <!-- JS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css"/>
+    <script type="text/javascript" src="js/utils.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+
+    <script>
+
+        var address = QueryString.address;
+        var token = QueryString.token;
+
+        /* Generating a new version based on the current time, this way resources are never cached
+         When building a version of BIMsurfer V2 this should be replaced by an actual version number in order
+         To facilitate proper caching
+        */
+        var version = new Date().getTime();
+
+        // This has been moved to bimserverapi, can be removed in a day
+        String.prototype.firstUpper = function () {
+            return this.charAt(0).toUpperCase() + this.slice(1);
+        }
+
+        // Because the demo is in a subfolder compared to the BIMsurfer API, we tell require JS to use the "../" baseUrl
+        var require = {
+            baseUrl: "../",
+            urlArgs: "bust=" + version
+        };
+    </script>
+
+    <script type="text/javascript" src="../bimsurfer/lib/require.js"></script>
+    <script type="text/javascript">
+
+        // Loads a model from BIMServer, builds an explorer tree UI.
+        // Clicking on a tree node fits the view to its scene object.
+
+        loadScripts(address + "/apps/bimserverjavascriptapi/js/", [
+             "bimserverclient.js",
+             "model.js",
+             "bimserverapiwebsocket.js",
+             "bimserverapipromise.js",
+             "geometry.js",
+             "ifc2x3tc1.js",
+             "ifc4.js",
+             "translations_en.js",
+        ], function(){
+            require(["bimsurfer/src/BimSurfer","bimsurfer/src/StaticTreeRenderer","bimsurfer/src/MetaDataRenderer","bimsurfer/lib/domReady!"],
+	            function (BimSurfer, StaticTreeRenderer, MetaDataRenderer) {
+
+	                var bimSurfer = new BimSurfer({
+	                    domNode: "viewerContainer"
+	                });
+                    
+	                bimSurfer.on("loading-finished", function(){
+	                	document.getElementById("status").innerHTML = "Loading finished";
+                        var domNode = document.getElementById("typeSelector");
+                        domNode.innerHTML = "";
+                        bimSurfer.getTypes().forEach(function(ifc_type) {
+                            var on = ifc_type.visible;
+                            var d = document.createElement("div");
+                            var t = document.createTextNode(ifc_type.name);
+
+                            // Logs the existing IFC entities in the BIM file
+                            //console.log([ifc_type.name]);
+
+                            var setClass = function() {
+                                d.className = "fa fa-eye " + ["inactive", "active"][on*1];
+                            };
+                            setClass();
+                            d.appendChild(t);
+                            domNode.appendChild(d);
+                            d.onclick = function() {
+                                on = !on;
+                                setClass();
+                                bimSurfer.setVisibility({types:[ifc_type.name], visible:on});
+                            };
+                        });
+	                });
+
+	                bimSurfer.on("loading-started", function(){
+	                	document.getElementById("status").innerHTML = "Loading...";
+	                });
+
+	                // Lets us play with the Surfer in the console
+	                window.bimSurfer = bimSurfer;
+
+                  // To see the existng functionalities of BIMSurfer
+                  //console.log(bimSurfer);
+
+	                // Load a model from BIMServer
+	                bimSurfer.load({
+	                    bimserver: address,
+	                    token: token,
+	                    poid: QueryString.poid,
+	                    roid: QueryString.roid,
+	                    schema: "ifc2x3tc1" // < TODO: Deduce automatically
+	                }).then(function (model) {
+	                    model.getTree().then(function (tree) {
+
+	                        // Build a tree view of the elements in the model. The fact that it
+	                        // is 'static' refers to the fact that all branches are loaded and
+	                        // rendered immediately.
+	                        var domtree = new StaticTreeRenderer({
+	                            domNode: 'treeContainer'
+	                        });
+	                        domtree.addModel({name: "", id:QueryString.roid, tree:tree});
+	                        domtree.build();
+
+                          // To get address, token, poid and roid of the project
+                          //console.log(QueryString);
+                          //console.log(tree);
+
+	                        // Add a widget that displays metadata (IfcPropertySet and instance
+	                        // attributes) of the selected element.
+	                        var metadata = new MetaDataRenderer({
+	                            domNode: 'dataContainer'
+	                        });
+	                        metadata.addModel({name: "", id:QueryString.roid, model:model});
+
+                          // Get all oid numbers of elements
+                          //var oids = model.model.objects;
+                          //console.log([oids]);
+
+	                        bimSurfer.on("selection-changed", function(selected) {
+	                            domtree.setSelected(selected, domtree.SELECT_EXCLUSIVE);
+	                            metadata.setSelected(selected);
+	                        });
+
+	                        domtree.on("click", function (oid, selected) {
+	                            // Clicking an explorer node fits the view to its object and selects
+                                if (selected.length) {
+                                    bimSurfer.viewFit({
+                                        ids: selected,
+                                        animate: true
+                                    });
+                                }
+                                bimSurfer.setSelection({
+                                    ids:selected,
+                                    clear:true,
+                                    selected:true
+                                });
+
+	                        });
+
+	                        // Write API ref
+
+	                        var flatten = function(n) {
+	                            var li = []
+	                            var f = function(n) {
+	                                li.push(n.id);
+	                                (n.children || []).forEach(f);
+	                            }
+	                            f(n);
+	                            return li;
+	                        };
+
+	                        var oids = flatten(tree);
+	                        _.shuffle(oids);
+	                        oids.splice(10);
+	                        var guids = bimSurfer.toGuid(oids);
+
+	                        oids = "["+oids.join(", ")+"]";
+	                        guids = "["+guids.map(function(s) {return '"'+s+'"';}).join(", ")+"]";
+
+	                        var METHODS = [
+	                            {name:'setVisibility',     args:[{name: "ids", value: oids}, {name: "visible", value:false}]},
+	                            {name:'setVisibility',     args:[{name: "types", value: '["IfcWallStandardCase"]'}, {name: "visible", value:false}]},
+	                            {name:'setSelectionState', args:[{name: "ids", value: oids}, {name: "selected", value:true}]},
+	                            {name:'getSelected', args:[], hasResult: true},
+	                            {name:'toId', args:[guids], hasResult: true},
+	                            {name:'toGuid', args:[oids], hasResult: true},
+	                            {name:'setColor', args:[{name: "ids", value: oids}, {name: "color", value:"{r:1, g:0, b:0, a:1}"}]},
+	                            {name:'viewFit', args:[{name: "ids", value: oids}, {name: "animate", value:500}]},
+	                            {name:'setCamera', args:[{name: "type", value: "'ortho'"}]},
+	                            {name:'getCamera', args:[], hasResult: true},
+	                            {name:'reset', args:[{name: "cameraPosition", value: true}]},
+	                        ];
+
+	                        var n = document.getElementById('apirefContainer');
+
+	                        METHODS.forEach(function(m, i) {
+	                            n.innerHTML += "<h2>"+m.name+"()</h2>";
+	                            var hasNamedArgs = false;
+	                            var args = m.args.map(function(a) {
+	                                if (a.name) {
+	                                    hasNamedArgs = true;
+	                                    return a.name + ":" + a.value;
+	                                } else {
+	                                    return a;
+	                                }
+	                            }).join(", ");
+
+	                            if (hasNamedArgs) {
+	                                args = "{"+args+"}";
+	                            }
+
+	                            var cmd = "bimSurfer."+m.name+"("+args+");";
+	                            n.innerHTML += "<textarea rows=3 id='code"+i+"' spellcheck=false>"+cmd+"\n</textarea>";
+	                            exec_statement = "eval(document.getElementById(\"code"+i+"\").value)"
+	                            if (m.hasResult) {
+	                                exec_statement = "document.getElementById(\"result"+i+"\").innerHTML = JSON.stringify(" + exec_statement + ").replace(/,/g, \", \")";
+	                            } else {
+	                                exec_statement += "; window.scrollTo(0,0)"
+	                            }
+	                            n.innerHTML += "<button onclick='"+exec_statement+"'>run</button>";
+	                            if (m.hasResult) {
+	                                n.innerHTML += "<pre id='result"+i+"' />";
+	                            }
+	                        });
+	                    });
+	                });
+
+	            });
+        });
+    </script>
+
+</head>
+<body>
+<div id="maincontainer">
+    <div id="topsection">
+      <!-- <button id="homebutton">Home</button> -->
+        <!-- <h1>VisuaLynk 3D Viewer</h1> -->
+        <div id="typeSelector">
+            <div>&nbsp;</div>
+        </div>
+    </div>
+    <div id="contentwrapper">
+        <div id="colmid">
+            <div id="colright">
+                <div id="col1wrap">
+                    <div id="col1pad">
+                        <div id="viewerContainer">
+                        </div>
+                    </div>
+                 </div>
+                <div id="treeContainer" class="bimsurfer-static-tree">
+                </div>
+                <div id="dataContainer" class="bimsurfer-metadata">
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- <div id="contentwrapper">
+        <div class="inner">
+            <div id="viewerContainer">
+            </div>
+        </div>
+        <div id="dataContainer" class="bimsurfer-metadata">
+        </div>
+    </div> -->
+
+</div>
+<div id="status"></div>
+
+<!-- <div id='apirefContainer'>
+    <h1>API Reference</h1>
+</div> -->
+<script src="http://code.jquery.com/jquery-2.1.3.min.js"></script>
+<script src="js/xdLocalStorage.min.js"></script>
+<script src="js/xdLocalStoragePostMessageApi.min.min.js"></script>
+<script type="text/javascript">
+xdLocalStorage.init(
+        {
+          /* required */
+          iframeUrl:'http://localhost:3000/#/main',
+          //an option function to be called right after the iframe was loaded and ready for action
+          initCallback: function () {
+            console.log('Got iframe ready');
+          }
+        }
+      );
+</script>
+</body>
+</html>

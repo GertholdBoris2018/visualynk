@@ -1,0 +1,241 @@
+<div class="row-fluid admin-panel" >
+    <!-- BEGIN EMPTY PAGE SIDEBAR -->
+    <div class="page-sidebar nav-collapse collapse visible-phone visible-tablet no-margin">
+        <ul class="page-sidebar-menu">
+            <li><a href="/#/login">Log out</a></li>
+        </ul>
+    </div>
+    <div class="panel-sidebar page-sidebar " style="height:100% !important;">
+
+        <!-- BEGIN SIDEBAR MENU -->
+
+        <ul class="page-sidebar-menu admin-sidebar-menu">
+            <li ng-if="user.usertype == 'admin'"><a ng-href="/#/admin/company">Company</a></li>
+            <li ng-if="user.usertype == 'admin'" class="active"><a ng-href="/#/admin/users">Users</a></li>
+            <li ng-if="user.usertype == 'admin'"><a ng-href="/#/admin/projects">Projects</a></li>
+            <li ><a ng-href="/#/admin/permissions">Permissions</a></li>
+            <li ><a ng-href="/#/admin/waitingapprovals">Pending Approvals</a></li>
+        </ul>
+        <!-- END SIDEBAR MENU -->
+    </div>
+    <div class="page-content bg-white" >
+        <h3 class="page-title pull-left">
+            Users
+        </h3>
+        <div class="pull-right padding-right-20 margin-top-20">
+            <button class="btn green-stripe" ng-click="open_new_user_modal()">Add User</button>
+        </div>
+        <div class="clearfix"></div>
+        <div class="container-fluid no-padding">
+            <div class="row-fluid padding-left-20 padding-right-20">
+                <div id="" class="span12" >
+                    <div class="panel-item" elheightresize slimscroll>
+                        <div class="padding-20 tabs" style="padding-bottom:0">
+                            <ul class="nav nav-tabs nav-pills">
+                                <li ng-class="{ active: isSet(1) }">
+                                    <a href ng-click="setTab(1)">Users</a>
+                                </li>
+                                <li ng-if="user.usertype == 'admin'" ng-class="{ active: isSet(2) }">
+                                    <a href ng-click="setTab(2)">User Visibility</a>
+                                </li>
+                                <!--<li ng-if="user.usertype == 'admin'" ng-class="{ active: isSet(3) }">
+                                    <a href ng-click="setTab(3)">Project Assignment</a>
+                                </li>-->
+                            </ul>
+                        </div>
+
+                        <div class="padding-20" ng-show="isSet(1)">
+                            <table datatable="ng" class="row-border hover">
+                                <thead>
+                                <tr>
+                                    <th>First Name</th>
+                                    <th>Last Name</th>
+                                    <th>Email</th>
+                                    <th>User Name</th>
+                                    <th>User Group</th>
+                                    <th style="width: 55px"></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                    <tr ng-repeat="user in users">
+                                        <td>{{user._fields[0].properties.firstName}}</td>
+                                        <td>{{user._fields[0].properties.lastName}}</td>
+                                        <td>{{user._fields[0].properties.emailaddress}}</td>
+                                        <td>{{user._fields[0].properties.username}}</td>
+                                        <td>{{user._fields[0].properties.userGroup}}</td>
+                                        <td>
+                                            <a href="javascript:void(0)" class="admin-action-icons" ng-click="open_edit_user_modal(user._fields[1].low)"><i class="icon-edit"></i></a>
+                                            <a href="javascript:void(0)" class="admin-action-icons" ng-click="open_delete_user_confirm_modal(user._fields[1].low)"><i class="icon-remove-circle"></i></a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="padding-20" ng-show="isSet(2)">
+                            <table datatable="ng" class="row-border hover">
+                                <thead>
+                                <tr>
+                                    <th>User Name</th>
+                                    <th ng-repeat="ng in nodegroups">{{ng._fields[0].properties.name}}</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr ng-repeat="(ui, user) in users">
+                                    <td>{{user._fields[0].properties.firstName}} {{user._fields[0].properties.lastName}}</td>
+                                    <td ng-repeat="ng in nodegroups">
+                                        <input type="checkbox" ng-model="uservisibilities[user._fields[0].identity.low][ng._fields[0].identity.low]" ng-change="saveUserVisibilities(user._fields[0].identity.low, ng._fields[0].identity.low)">
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <!--<div class="padding-20" ng-show="isSet(3)">
+                            <div class="alert alert-danger" ng-show="conrefused">
+								<strong> Error! </strong> Please run the Bim Server.
+							</div>
+                            <div class="alert alert-danger" ng-show="confailed">
+								<strong> Error! </strong> Can not connect server because other problems happened.
+							</div>
+                            <div ng-show="projectAssignment" style="text-align: left;">
+                                <label>Add User to Project</label>
+                                <select ng-model="bimuser" ng-change=""
+                                    class="m-wrap" tabindex="2">
+                                    <option value="">select the User</option>
+                                    <option ng-repeat="ur in bimusers" value="{{ur.uoid}}">{{ur.name}}</option>
+                                </select>
+                                <select ng-model="project" ng-change=""
+                                    class="m-wrap" tabindex="1">
+                                    <option value="">select the project</option>
+                                    <option ng-repeat="pr in projects" value="{{pr.poid}}">{{pr.name}}</option>
+                                </select>
+                                
+                                
+                                <button class="btn green-stripe" ng-click="addUsertoProject()">Assign User</button>
+                                <div style="text-align: left;">{{ message }}</div>
+
+                                <table class="row-border dataTable">
+                                    <tbody>
+                                        <tr ng-repeat="pr in projects">
+                                            <td style="width:20%">{{pr.name}}</td>
+                                            <td>
+                                                <table class="row-border dataTable" style="border:none;">
+                                                    <tbody>
+                                                        <tr ng-repeat="ur in pr.users">
+                                                            <td style="border:1px solid #ffffff">{{ur.name}}</td>
+                                                            <td style="border:1px solid #ffffff">
+                                                                <button class="btn green-stripe" ng-click="removeUserFromProject(pr.poid,ur.id);">Revoke</button>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            
+                        </div>-->
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- Add/Update company modal -->
+<script type="text/ng-template" id="add_new_user.html">
+    <div class="ng-modal" slimscrollmdl>
+        <div class="col-md-6 col-xs-12"  ng-controller="AddUserCtrl">
+            <button type="button" class="close" data-dismiss="modal" ng-click="close()"></button>
+            <h3>{{title_text}} User</h3>
+            <form name="form" ng-submit="add_user_submit()" role="form" class="contact-form">
+                <div class="control-group padding-side-10">
+                    <div ng-show="initFlash" ng-class="{ 'alert': flash, 'alert-success': flash.type === 'success', 'alert-danger': flash.type === 'error' }" ng-if="flash" ng-bind="flash.message"></div>
+                </div>
+                <div class="control-group" ng-class="{ 'has-error': form.firstname.$dirty && form.firstname.$error.required }">
+                    <!--<label for="companyname">Company Name</label>-->
+                    <input type="text" name="firstname" id="firstname" class="form-control span4 m-wrap" ng-model="firstName" required placeholder="First Name" />
+                    <span ng-show="form.firstname.$dirty && form.firstname.$error.required" class="help-block">Please input the First Name</span>
+                </div>
+                <div class="control-group" ng-class="{ 'has-error': form.lastname.$dirty && form.lastname.$error.required }">
+                    <!--<label for="description">Description</label>-->
+                    <input type="text" name="lastname" id="lastname" class="form-control span4 m-wrap" ng-model="lastName" required placeholder="Last Name"/>
+                    <span ng-show="form.lastname.$dirty && form.lastname.$error.required" class="help-block">Please input the Last Name</span>
+                </div>
+
+                <div class="control-group" ng-class="{ 'has-error': (form.email.$dirty && form.email.$error.required) || form.email.$error.email}">
+                    <!--<label for="description">Description</label>-->
+                    <input type="email" name="email" id="email" class="form-control span4 m-wrap" ng-model="userEmail" required placeholder="Email"/>
+                    <span ng-show="form.email.$dirty && form.email.$error.required" class="help-block">Please input the Email</span>
+                    <span class="help-block" ng-show="form.email.$error.email">Not valid email!</span>
+                </div>
+
+                <div class="control-group" ng-class="{ 'has-error': form.username.$dirty && form.username.$error.required }">
+                    <!--<label for="description">Description</label>-->
+                    <input type="text" name="username" id="username" class="form-control span4 m-wrap" ng-model="username" required placeholder="User ID"/>
+                    <span ng-show="form.username.$dirty && form.username.$error.required" class="help-block">Please input the User ID</span>
+                </div>
+
+                <div class="control-group" ng-class="{ 'has-error': form.password.$dirty && form.password.$error.required }">
+                    <!--<label for="description">Description</label>-->
+                    <input type="password" name="password" id="password" class="form-control span4 m-wrap" ng-model="password" required placeholder="Password"/>
+                    <span ng-show="form.password.$dirty && form.password.$error.required" class="help-block">Please input the Password</span>
+                </div>
+
+                <div class="control-group" ng-class="{ 'has-error': form.userGroup.$dirty && form.userGroup.$error.required }">
+                    <select class="form-control span4" ng-model="userGroup" name="userGroup" id="userGroup" required>
+                        <option value="">Please select one Group</option>
+                        <option value="PortfolioOwner">PortfolioOwner</option>
+                        <option value="ProjectAdmin">ProjectAdmin</option>
+                        <option value="CompanyAdmin">CompanyAdmin</option>
+                        <option value="ProjectTeamAdmin">ProjectTeamAdmin</option>
+                        <option value="CompanyTeamAdmin">CompanyTeamAdmin</option>
+                        <option value="User">User</option>
+                    </select>
+                    <!--<span ng-show="form.userCompany.$dirty && form.userCompany.$error.required" class="help-block">Please select one company</span>-->
+                </div>
+
+                <div class="control-group" ng-class="{ 'has-error': form.userCompany.$dirty && form.userCompany.$error.required }">
+                    <select class="form-control span4" ng-model="userCompany" name="userCompany" id="userCompany" required>
+                        <option value="">Please select one company</option>
+                        <option ng-repeat="company in companies" value="{{company._fields[1].low}}">{{company._fields[0].properties.companyname}}</option>
+                    </select>
+                    <!--<span ng-show="form.userCompany.$dirty && form.userCompany.$error.required" class="help-block">Please select one company</span>-->
+                </div>
+
+                <div class="">
+                    <button type="submit" ng-disabled="form.$invalid || dataLoading" class="btn front">{{title_text}}</button>
+                    <img ng-if="dataLoading" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
+                </div>
+
+            </form>
+        </div>
+    </div>
+</script>
+
+<!-- Delete company confirm modal-->
+<script type="text/ng-template" id="delete_user.html">
+    <div class="ng-modal">
+        <div class="col-md-6 col-xs-12"  ng-controller="DeleteUserCtrl">
+            <button type="button" class="close" data-dismiss="modal" ng-click="close()"></button>
+            <h3>Confirm!</h3>
+            <form name="form" ng-submit="delete_user_submit()" role="form" class="contact-form">
+                <div class="control-group padding-side-10">
+                    <div ng-show="initFlash" ng-class="{ 'alert': flash, 'alert-success': flash.type === 'success', 'alert-danger': flash.type === 'error' }" ng-if="flash" ng-bind="flash.message"></div>
+                </div>
+                <p class="alert-warning">Do you really want to delete this user?</p>
+                <p class="alert-warning">Are you sure?</p>
+                <br/>
+                <div class="">
+                    <button type="submit" class="btn front">Yes</button>
+                    <button type="button" class="btn btn-default" ng-click="close()">No</button>
+                    <img ng-if="dataLoading" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
+                </div>
+
+            </form>
+        </div>
+    </div>
+</script>

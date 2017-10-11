@@ -1,0 +1,145 @@
+<div class="row-fluid admin-panel" >
+    <!-- BEGIN EMPTY PAGE SIDEBAR -->
+    <div class="page-sidebar nav-collapse collapse visible-phone visible-tablet no-margin">
+        <ul class="page-sidebar-menu">
+            <li><a href="/#/login">Log out</a></li>
+        </ul>
+    </div>
+    <div class="panel-sidebar page-sidebar " style="height:100% !important;">
+
+        <!-- BEGIN SIDEBAR MENU -->
+
+        <ul class="page-sidebar-menu admin-sidebar-menu">
+            <li ng-if="user.usertype == 'admin'"><a ng-href="/#/admin/company">Company</a></li>
+            <li ng-if="user.usertype == 'admin'"><a ng-href="/#/admin/users">Users</a></li>
+            <li ng-if="user.usertype == 'admin'"><a ng-href="/#/admin/projects">Projects</a></li>
+            <li ><a ng-href="/#/admin/permissions">Permissions</a></li>
+            <li class="active"><a ng-href="/#/admin/waitingapprovals">Pending Approvals</a></li>
+        </ul>
+        <!-- END SIDEBAR MENU -->
+    </div>
+    <div class="page-content bg-white" >
+        <h3 class="page-title pull-left">
+            Pending Approvals
+        </h3>
+        <div class="clearfix"></div>
+
+        <div class="container-fluid no-padding">
+            <div class="row-fluid padding-left-20 padding-right-20">
+                <div id="" class="span12" >
+                    <div class="panel-item" elheightresize slimscroll>
+
+                        <div class="padding-20 tabs" style="padding-bottom:0">
+                            <ul class="nav nav-tabs nav-pills">
+                                <li ng-class="{ active: isSet(1) }">
+                                    <a href ng-click="setTab(1)">Node Group Create </a>
+                                </li>
+                                <li ng-class="{ active: isSet(2) }">
+                                    <a href ng-click="setTab(2)">Node Group Update </a>
+                                </li>
+                                <li ng-class="{ active: isSet(3) }">
+                                    <a href ng-click="setTab(3)">Node Group Delete </a>
+                                </li>
+                                <li ng-class="{ active: isSet(4) }">
+                                    <a href ng-click="setTab(4)">Node Entity Create</a>
+                                </li>
+                                <li ng-class="{ active: isSet(5) }">
+                                    <a href ng-click="setTab(5)">Node Entity Update</a>
+                                </li>
+                                <li ng-class="{ active: isSet(6) }">
+                                    <a href ng-click="setTab(6)">Node Entity Delete</a>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="padding-20" ng-show="isSet(1)">
+                            <table class="row-border dataTable">
+                                <tbody>
+                                    <tr ng-repeat="ngc in userngcreateapprovals">
+                                        <td width="60%">{{ngc._fields[0].properties.name}}</td>
+                                        <td>
+                                            <button type="button" class="btn btn-warning" ng-click="UpdateNGApproval(ngc._fields[0].identity.low, ngc._fields[0].properties.parentGroup, 'ng_create', ngc._fields[0].properties.name)">Approve</button>
+                                            <button type="button" class="btn btn-danger" ng-click="CancelNGApproval(ngc._fields[0].identity.low, ngc._fields[0].properties.parentGroup, 'ng_create', ngc._fields[0].properties.name)">Cancel</button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="padding-20" ng-show="isSet(2)">
+                            <table class="row-border dataTable">
+                                <tbody>
+                                    <tr ng-repeat="ngu in userngupdateapprovals">
+                                        <td width="60%">{{ngu._fields[0].properties.name}}</td>
+                                        <td>
+                                            <button type="button" class="btn btn-warning" ng-click="UpdateNGApproval(ngu._fields[0].identity.low, ngu._fields[0].properties.parentGroup, 'ng_update', ngu._fields[0].properties.name)">Approve</button>
+                                            <button type="button" class="btn btn-danger" ng-click="CancelNGApproval(ngu._fields[0].identity.low, ngu._fields[0].properties.parentGroup, 'ng_update', ngu._fields[0].properties.name)">Cancel</button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="padding-20" ng-show="isSet(3)">
+                            <table class="row-border dataTable">
+                                <tbody>
+                                <tr ng-repeat="ngd in userngdeleteapprovals">
+                                    <td width="60%">{{ngd._fields[0].properties.name}}</td>
+                                    <td>
+                                        <button type="button" class="btn btn-warning" ng-click="UpdateNGApproval(ngd._fields[0].identity.low, ngd._fields[0].properties.parentGroup, 'ng_delete', ngd._fields[0].properties.name)">Approve</button>
+                                        <button type="button" class="btn btn-danger" ng-click="CancelNGApproval(ngd._fields[0].identity.low, ngd._fields[0].properties.parentGroup, 'ng_delete', ngd._fields[0].properties.name)">Cancel</button>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="padding-20" ng-show="isSet(4)">
+                            <table class="row-border dataTable">
+                                <tbody>
+                                <tr ng-repeat="nec in usernecreateapprovals">
+                                    <td width="60%">{{nec._fields[0].properties.name}}</td>
+                                    <td>
+                                        <button type="button" class="btn btn-warning" ng-click="UpdateNGApproval(nec._fields[0].identity.low, nec._fields[0].properties.parentGroup, 'ne_create', nec._fields[0].properties.name)">Approve</button>
+                                        <button type="button" class="btn btn-danger" ng-click="CancelNGApproval(nec._fields[0].identity.low, nec._fields[0].properties.parentGroup, 'ne_create', nec._fields[0].properties.name)">Cancel</button>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="padding-20" ng-show="isSet(5)">
+                            <table class="row-border dataTable">
+                                <tbody>
+                                <tr ng-repeat="neu in userneupdateapprovals">
+                                    <td width="60%">{{neu._fields[0].properties.name}}</td>
+                                    <td>
+                                        <button type="button" class="btn btn-warning" ng-click="UpdateNGApproval(neu._fields[0].identity.low, neu._fields[0].properties.parentGroup, 'ne_update', neu._fields[0].properties.name)">Approve</button>
+                                        <button type="button" class="btn btn-danger" ng-click="CancelNGApproval(neu._fields[0].identity.low, neu._fields[0].properties.parentGroup, 'ne_update', neu._fields[0].properties.name)">Cancel</button>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="padding-20" ng-show="isSet(6)">
+                            <table class="row-border dataTable">
+                                <tbody>
+                                <tr ng-repeat="ned in usernedeleteapprovals">
+                                    <td width="60%">{{ned._fields[0].properties.name}}</td>
+                                    <td>
+                                        <button type="button" class="btn btn-warning" ng-click="UpdateNGApproval(ned._fields[0].identity.low, ned._fields[0].properties.parentGroup, 'ne_delete', ned._fields[0].properties.name)">Approve</button>
+                                        <button type="button" class="btn btn-danger" ng-click="CancelNGApproval(ned._fields[0].identity.low, ned._fields[0].properties.parentGroup, 'ne_delete', ned._fields[0].properties.name)">Cancel</button>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

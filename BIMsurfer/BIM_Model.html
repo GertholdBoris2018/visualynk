@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html>
+<title>VisuaLynk BIM Viewer</title>
+
+<head>
+
+    <link href="https://fonts.googleapis.com/css?family=Raleway:200" rel="stylesheet">
+
+    <link rel="stylesheet" href="css/demo.css" />
+    <link rel="stylesheet" href="css/apiref.css" />
+    <link rel="stylesheet" href="css/acc.css" />
+    <link rel="stylesheet" href="../css/tree.css" />
+    <link rel="stylesheet" href="../css/metadata.css" />
+
+    <script src="bimsurfer/src/bimserverapiwebsocket.js" charset="utf-8"></script>
+    <script src="bimsurfer/src/bimserverclient.js" charset="utf-8"></script>
+    <script src="bimsurfer/src/bimserverapipromise.js" charset="utf-8"></script>
+    <script src="bimsurfer/src/ifc2x3tc1.js" charset="utf-8"></script>
+    <script src="bimsurfer/src/ifc4.js" charset="utf-8"></script>
+    <script src="bimsurfer/src/model.js" charset="utf-8"></script>
+    <script src="bimsurfer/src/translations_en.js" charset="utf-8"></script>
+</head>
+
+<body>
+
+    <!-- <h1 id="mainTitle" style="font-family:'Raleway'">VisuaLynk 3D Viewer</h1> -->
+
+    <button class="accordion">Create New Project</button>
+    <div class="panel">
+        <div class="addproject">
+            <form class="form-horizontal" role="form">
+                <div class="form-group">
+                    <label class="col-lg-3 control-label" for="inputName">Name</label>
+                    <div class="col-lg-5">
+                        <input type="text" id="inputName" class="form-control inputName" placeholder="Name">
+                    </div>
+                </div>
+                <div class="form-group schemaGroup">
+                    <label id="IFCSchema" class="col-lg-3 control-label" for="schema">Schema</label>
+                    <div class="col-lg-5">
+                        <select class="schemaInput form-control span6" id="schema">
+                            <option value="ifc2x3tc1">ifc2x3tc1</option>
+                            <option value="ifc4">ifc4</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="well well-small buttonBar">
+                    <button id="addNewProjects" type="button" class="btn btn-primary addButton">Create Project</button>
+                </div>
+            </form>
+        </div>
+
+        <button class="accordion">Upload New IFC File</button>
+        <div class="panel">
+            <div class="upload">
+                <div class="uploadarea well">
+                    <input id="ifcFile" type="file" class="btn btn-primary chooseFileButton"></input>
+                </div>
+
+                <div class="form-group">
+                    <label for="comment">Comments for File (optional)</label>
+                    <textarea id="comment" class="comment form-control" name="comment" rows="4"></textarea>
+                </div>
+                <div class="checkbox mergeDiv ih">
+                    <button id="ifcUpload" type="button" name="button">Upload IFC</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <button class="accordion">See Building Models</button>
+    <div class="panel">
+        <div id="expserver"></div>
+        <div id="localhost8080"></div>
+        <div id="localhost8082"></div>
+        <div id="otherProjects"></div>
+    </div>
+    </div>
+
+    <script>
+        var client;
+        document.addEventListener("DOMContentLoaded", function(event) {
+            function loadFromBimserver(address, username, password, target) {
+                target.innerHTML = "";
+                client = new BimServerClient(address);
+
+                // Variables to Create a New Project and Upload IFC file
+                var schemaOid, proOID, proName, fileSize, fileName, IFCbase64;
+                var addProjectBtn = document.getElementById('addNewProjects');
+                var ifcUploadBtn = document.getElementById('ifcUpload');
+
+                // Add New Project
+                addProjectBtn.onclick = function() {
+                    var projectName = document.getElementById("inputName").value;
+                    var schema = document.getElementById("schema").value;
+                    if (schema = 'ifc2x3tc1') {
+                        schemaOid = '589865'
+                    } else if (schema = 'ifc4') {
+                        schemaOid = '524329'
+                    }
+                    // BIMsie API call for adding new project
+                    client.call('ServiceInterface', 'addProject', {
+                        projectName: projectName,
+                        schema: schema
+                    }, function(data) {
+                        console.log(data);
+                        proName = data.name;
+                        proOID = data.oid;
+                    })
+                };
+
+                document.getElementById('ifcFile').addEventListener('change', function() {
+                    fileSize = this.files[0].size;
+                    fileName = this.files[0].name;
+
+                    // variable to keep the btoa64 string of the uploaded file
+                    var IFCbase64;
+                })
+
+                // Get the btoa64 string of the uploaded file.
+                // http://jsfiddle.net/eliseosoto/JHQnk/
+                var handleFileSelect = function(evt) {
+                    var files = evt.target.files;
+                    var file = files[0];
+
+                    if (files && file) {
+                        var reader = new FileReader();
+                        reader.onload = function(readerEvt) {
+                            var binaryString = readerEvt.target.result;
+                            IFCbase64 = btoa(binaryString);
+                        };
+                        reader.readAsBinaryString(file);
+                    }
+                };
+
+                if (window.File && window.FileReader && window.FileList && window.Blob) {
+                    document.getElementById('ifcFile').addEventListener('change', handleFileSelect, false);
+                } else {
+                    console.log('The file APIs are not fully supported in this browser');
+                }
+
+                // Upload new IFC file to the newly created project
+                ifcUploadBtn.onclick = function() {
+                    var comment = document.getElementById('comment').value;
+
+                    // BIMsie API call for uploading IFC file
+                    client.call('ServiceInterface', 'checkin', {
+                        poid: proOID,
+                        comment: comment,
+                        deserializerOid: schemaOid,
+                        fileSize: fileSize,
+                        fileName: fileName,
+                        data: IFCbase64,
+                        merge: false,
+                        sync: false
+                    }, function(data) {
+                        console.log(data);
+                    })
+                };
+
+                client.init(function() {
+                    var bimServerDiv = document.getElementById("bimserverdiv");
+                    var div = document.createElement("div");
+                    var h3 = document.createElement("h3");
+                    h3.textContent = address;
+
+                    //Append the connection address and port
+                    //div.appendChild(h3);
+
+                    var status = document.createElement("div");
+                    div.appendChild(status);
+                    var ul = document.createElement("ul");
+                    div.appendChild(ul);
+                    target.appendChild(div);
+                    status.textContent = "Logging in...";
+
+                    // Connect to the BIMserver client
+                    client.login(username, password, function() {
+
+                        //Get the token of the connection client. Log the client to see other attributes
+                        console.log(client);
+                        status.textContent = "Getting all projects...";
+                        var userOid;
+                        client.call('ServiceInterface', 'getUserByUserName', {
+                            username: username
+                        }, function(results) {
+                            userOid = results.oid;
+
+														// #### This is the previous code
+                            // client.call("ServiceInterface", "getAllProjects", {
+                            // 	onlyTopLevel: true,
+                            // 	onlyActive: true
+                            // }, function(projects){
+                            // #####
+
+                            // Call relevant functions of the BIMsie API like the following.
+                            client.call("ServiceInterface", "getUsersProjects", {
+                                uoid: userOid
+                            }, function(projects) {
+
+                                //Log the projects param to see the attrs of it.
+                                //console.log(projects);
+
+                                var totalFound = 0;
+                                projects.forEach(function(project) {
+                                    if (project.lastRevisionId != -1) {
+                                        var li = document.createElement("li");
+                                        var a = document.createElement("a");
+                                        li.appendChild(a);
+                                        a.textContent = project.name;
+                                        a.setAttribute("href", "viewer/visualynk3D.html?address=" + encodeURIComponent(address) + "&token=" + client.token + "&poid=" + project.oid + "&roid=" + project.lastRevisionId);
+                                        ul.appendChild(li);
+                                        totalFound++;
+                                    }
+                                });
+                                if (totalFound == 0) {
+                                    status.textContent = "No projects found on VisuaLynk servers";
+                                } else {
+                                    status.textContent = "";
+                                }
+                            });
+                        });
+                    }, function(error) {
+                        console.error(error);
+                        status.textContent = error.message;
+
+                    });
+                });
+            }
+
+						// get the cookie by name
+						function getCook(cookiename) {
+								// Get name followed by anything except a semicolon
+								var cookiestring=RegExp(""+cookiename+"[^;]+").exec(document.cookie);
+								// Return everything after the equal sign, or an empty string if the cookie name not found
+								return unescape(!!cookiestring ? cookiestring.toString().replace(/^[^=]+./,"") : "");
+							}
+
+						//Sample usage
+						var c79c1bef_15a4_4bbc_abc1_b8c80d4c8b8f = getCook('09f63176-3bc6-4653-9771-92bcde2e2cb9');
+						var a646028e_db51_4ef7_ad66_77b5ecad307c = getCook('8e01b003-ac65-44b3-9ee6-6ccbd344d837');
+
+            loadFromBimserver("http://localhost:8080", c79c1bef_15a4_4bbc_abc1_b8c80d4c8b8f, a646028e_db51_4ef7_ad66_77b5ecad307c, document.getElementById("localhost8080"));
+            loadFromBimserver("http://localhost:8082", c79c1bef_15a4_4bbc_abc1_b8c80d4c8b8f, a646028e_db51_4ef7_ad66_77b5ecad307c, document.getElementById("localhost8082"));
+
+						function removeItem(sKey, sPath, sDomain) {
+						    document.cookie = encodeURIComponent(sKey) +
+						                  "=; expires=Thu, 01 Jan 1970 00:00:00 GMT" +
+						                  (sDomain ? "; domain=" + sDomain : "") +
+						                  (sPath ? "; path=" + sPath : "");
+						}
+						removeItem("09f63176-3bc6-4653-9771-92bcde2e2cb9");
+						removeItem("8e01b003-ac65-44b3-9ee6-6ccbd344d837");
+
+            var loadLink = document.getElementById("loadFromOtherBimServer");
+            loadLink.onclick = function() {
+                document.getElementById("other").style.display = "block";
+                if (localStorage.getItem("address") != null) {
+                    document.getElementById("address").value = localStorage.getItem("address");
+                    document.getElementById("username").value = localStorage.getItem("username");
+                    document.getElementById("password").value = localStorage.getItem("password");
+                }
+                document.getElementById("address").focus();
+            };
+
+            var loadProjectsBtn = document.getElementById("loadProjectsBtn");
+            loadProjectsBtn.onclick = function() {
+                var address = document.getElementById("address").value;
+                var username = document.getElementById("username").value;
+                var password = document.getElementById("password").value;
+                localStorage.setItem("address", address);
+                localStorage.setItem("username", username);
+                localStorage.setItem("password", password);
+                loadFromBimserver(address, username, password, document.getElementById("otherProjects"));
+            };
+        })
+
+        // Code for accordeon menu sections
+        var acc = document.getElementsByClassName("accordion");
+        var i;
+
+        for (i = 0; i < acc.length; i++) {
+            acc[i].onclick = function() {
+                this.classList.toggle("active");
+                this.nextElementSibling.classList.toggle("show");
+            }
+        }
+    </script>
+</body>
+
+</html>

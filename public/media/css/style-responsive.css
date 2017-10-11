@@ -12,7 +12,7 @@
  	***/
  	.page-sidebar {
 		position: absolute;
- 		width: 225px;
+ 		width: 300px;
   	}
 
 	.page-sidebar-fixed .page-sidebar {
@@ -68,13 +68,13 @@
   	Page content
   	***/
   	.page-content { 
-  		margin-left: 225px; 
+  		margin-left: 300px; 
 		margin-top: 0px;
-		min-height: 760px; 
+		/*min-height: 760px; */
 	}
 
 	.page-sidebar-fixed .page-content {
-		min-height: 600px; 
+		/*min-height: 600px; */
 	}
 
 	.page-content.no-min-height {
@@ -175,8 +175,16 @@ For tablets and phones
   	.page-content {
   		margin: 0px !important;
   		padding: 0px !important;  		
-		min-height: 280px; 
+		min-height: 280px;
+		height:auto !important;
   	}
+	#panel-1-resize,#panel-2-resize,#panel-3-resize{
+		width:100% !important;
+		margin-left: 0 !important;
+	}
+	#panel-1-resizer,#panel-2-resizer{
+		display:none;
+	}
 
 	/***
 	Page sidebar
@@ -205,7 +213,7 @@ For tablets and phones
 	}
 
 	.page-sidebar .sidebar-search {
-	  width: 220px;
+	  width: calc(100% - 40px);
 	  margin-top: 20px;
 	  margin-bottom:20px;
 	}
@@ -335,6 +343,7 @@ For tablets and phones
 	.page-content {
 		/*padding: 10px !important;*/
 		padding:0px !important;
+		height:auto !important;
 	}
 
 	/***
@@ -425,8 +434,11 @@ For tablets and phones
 	#tabs{
 		width:100%;
 	}
-	#section2 iframe,#section3 iframe,#section4 iframe,#section5 iframe,#section6 iframe{
+	#section2 iframe,#section3 iframe,#section4 iframe,#section5 iframe{
 		display:none;
+	}
+	.cont-contactBtn{
+		width : 100%;
 	}
 	#accordion1,#accordion2,#accordion3,#accordation4,#accordation5{
 		display:block;
@@ -442,7 +454,8 @@ For tablets and phones
 		height:auto !important;
 	}
 	.vslynk-container-results{
-		padding:20px !important;
+		padding:0px 20px 20px 20px !important;
+		height:300px !important;
 	}
 }
 

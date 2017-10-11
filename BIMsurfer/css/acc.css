@@ -1,0 +1,40 @@
+button.accordion {
+    background-color: #58D3F7;
+    color: #444;
+    cursor: pointer;
+    padding: 18px;
+    width: 100%;
+    border: none;
+    text-align: left;
+    outline: none;
+    font-size: 20px;
+    font-family: 'Raleway';
+    transition: 0.4s;
+    text-align: center;
+}
+
+button.accordion.active, button.accordion:hover {
+    background-color: #81F781;
+    font-family: 'Raleway';
+    text-align: center;
+}
+
+div.panel {
+    padding: 0 18px;
+    display: none;
+    background-color: white;
+    font-family: 'Raleway';
+    text-align: center;
+}
+
+div.panel.show {
+    display: block;
+    font-family: 'Raleway';
+    text-align: center;
+}
+
+#mainTitle {
+  font: 'Raleway';
+  text-align: center;
+  font-size: 30px;
+}

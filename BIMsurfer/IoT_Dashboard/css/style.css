@@ -1,0 +1,193 @@
+@import url(https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,300,200,600,900,700);
+html, body {
+  height: 100%;
+  padding: 0;
+  margin: 0;
+  font-family: 'Raleway', sans-serif;
+}
+
+#main-column {
+  min-height: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -ms-flex-wrap: nowrap;
+      flex-wrap: nowrap;
+  color: #cdcfce;
+}
+#main-column > div {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
+  -webkit-box-flex: 1;
+      -ms-flex: 1 1 auto;
+          flex: 1 1 auto;
+}
+#main-column > #about {
+  -webkit-box-flex: 1;
+      -ms-flex: 1 1 0;
+          flex: 1 1 0;
+}
+#main-column > div#sensorValues {
+  -webkit-box-flex: 1;
+      -ms-flex: 1 1 0;
+          flex: 1 1 0;
+}
+#main-column > div#sensorData {
+  -webkit-box-flex: 2;
+      -ms-flex: 2 1 0;
+          flex: 2 1 0;
+  padding: 0;
+  margin: 0;
+}
+
+.dashboard > div {
+  padding: 1rem;
+}
+.dashboard > div:nth-child(1) {
+  background: #333333;
+}
+.dashboard > div:nth-child(2) {
+  background: #383838;
+}
+.dashboard > div:nth-child(3) {
+  background: #3d3d3d;
+}
+.dashboard > div:nth-child(4) {
+  background: #ffffff;
+}
+.dashboard > div h1, .dashboard > div h2 {
+  margin: 0 0 0.2rem 0;
+}
+.dashboard > div a {
+  text-decoration: none;
+}
+.dashboard > div a.mkr-link {
+  color: #EF4836;
+}
+.dashboard > div a.j5-link {
+  color: #19B5FE;
+  font-weight: bold;
+}
+.dashboard > div p {
+  margin: 0;
+}
+
+div#about h1 span:nth-of-type(1) {
+  color: #2b908f;
+  font-weight: 400;
+}
+div#about h1 span:nth-of-type(2) {
+  color: #90ee7e;
+}
+
+div#sensorValues {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -ms-flex-wrap: nowrap;
+      flex-wrap: nowrap;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+}
+div#sensorValues div.sensor-values {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -ms-flex-wrap: nowrap;
+      flex-wrap: nowrap;
+  text-align: center;
+}
+div#sensorValues div.sensor-values > div {
+  font-size: 4em;
+  font-weight: 200;
+}
+div#sensorValues div.sensor-values > label {
+  font-size: 1.5em;
+}
+div#sensorValues div.sensor-values div.volts {
+  color: #2b908f;
+}
+div#sensorValues div.sensor-values div.amps {
+  color: #90ee7e;
+}
+div#sensorValues div.sensor-values div.moisture {
+  color: #f45b5b;
+}
+div#sensorValues div.sensor-values div.moisture span {
+  margin-left: 10px;
+  font-size: .4em;
+}
+
+@media screen and (max-width: 500px) {
+  div#about {
+    display: none;
+  }
+
+  div#sensorValues {
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+    font-size: .8em;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
+  }
+  div#sensorValues div.sensor-values {
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: row;
+            flex-direction: row;
+    -webkit-box-align: end;
+        -ms-flex-align: end;
+            align-items: flex-end;
+  }
+  div#sensorValues div.sensor-values label {
+    margin-left: 10px;
+    margin-bottom: 10px;
+  }
+}
+@media screen and (max-height: 430px) {
+  div#about {
+    display: none;
+  }
+
+  div#sensorValues {
+    -webkit-box-orient: horizontal;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: row;
+            flex-direction: row;
+    font-size: .5em;
+  }
+  div#sensorValues div.sensor-values > label {
+    font-size: 1em;
+  }
+}
