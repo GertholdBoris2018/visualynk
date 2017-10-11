@@ -25,3 +25,12 @@ replace the username and password with your gmail account.
 $ node server.js
 
 if the account need to be changed, update the json file with new account and restart the node server
+
+==========
+Run the Neo4j database
+Download the Neo4j latest version and run.
+
+==========
+Bim server
+Run the terminal, and "java -jar bimserverjar-1.5.73.jar"
+You can see it in the bimserver directory
