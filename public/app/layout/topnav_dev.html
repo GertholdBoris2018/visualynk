@@ -1,0 +1,338 @@
+<style>
+    *{
+        font-family: 'Raleway', sans-serif !important;
+    }
+    h1, p {
+        font-weight: 200;
+    }
+
+    .center {
+        text-align: center;
+    }
+    /*--- Modal Factory Styles ---*/
+
+    body {
+        position: relative; // to enable the centering of the modal relative to the document's body
+    }
+
+    .ng-modal-overlay {
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        background-color: #273a47;
+        opacity: .5;
+        -ms-filter: "alpha(opacity = 50)";
+    }
+
+    .ng-modal-container {
+        width: 100%;
+        height: 100%;
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 999;
+    }
+    .modal-dialog{
+        margin-top:20%;
+    }
+    .ng-modal-container .ng-modal {
+        width: 400px;
+        margin: auto;
+        position: absolute;
+        top: 50%; left: 50%;
+        -webkit-transform: translate(-50%,-50%);
+        -ms-transform: translate(-50%,-50%);
+        transform: translate(-50%,-50%);
+        padding: 10px;
+        background: #ffffff;
+        border-radius: 5px;
+        border: 1px solid #2f2f2f;
+        text-align: center;
+    }
+
+
+    .ng-modal-container .ng-modal .ng-modal-close {
+        color: grey;
+        top: 0;
+        right: 10px;
+        float: right;
+        text-align: right;
+        text-decoration: none;
+        font-size:20px;
+    }
+
+    .ng-modal-container .ng-modal .ng-modal-close:hover {
+        color: grey;
+    }
+    div.DialogMask
+    {
+        padding: 10px;
+        position: fixed;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+        z-index: 50;
+        background-color: #000;
+        filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=50);
+        -moz-opacity: .5;
+        opacity: .5;
+    }
+
+    .card-container.card {
+        max-width: 350px;
+        padding: 40px 40px;
+    }
+
+    .btn {
+        font-weight: 700;
+        height: 36px;
+        -moz-user-select: none;
+        -webkit-user-select: none;
+        user-select: none;
+        cursor: default;
+    }
+
+    /*
+     * Card component
+     */
+    .card {
+        background-color: #F7F7F7;
+        /* just in case there no content*/
+        padding: 20px 25px 30px;
+        margin: 0 auto 25px;
+        margin-top: 50px;
+        /* shadows and rounded borders */
+        -moz-border-radius: 2px;
+        -webkit-border-radius: 2px;
+        border-radius: 2px;
+        -moz-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+        -webkit-box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+        box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.3);
+    }
+
+    .profile-img-card {
+        width: 96px;
+        height: 96px;
+        margin: 0 auto 10px;
+        display: block;
+        -moz-border-radius: 50%;
+        -webkit-border-radius: 50%;
+        border-radius: 50%;
+    }
+
+    /*
+     * Form styles
+     */
+    .profile-name-card {
+        font-size: 16px;
+        font-weight: bold;
+        text-align: center;
+        margin: 10px 0 0;
+        min-height: 1em;
+    }
+
+    .reauth-email {
+        display: block;
+        color: #404040;
+        line-height: 2;
+        margin-bottom: 10px;
+        font-size: 14px;
+        text-align: center;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        -moz-box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+    }
+
+    .form-signin #inputEmail,
+    .form-signin #inputPassword {
+        direction: ltr;
+        height: 44px;
+        font-size: 16px;
+    }
+
+    .form-signin input[type=email],
+    .form-signin input[type=password],
+    .form-signin input[type=text],
+    .form-signin button {
+        width: 100%;
+        display: block;
+        margin-bottom: 10px;
+        z-index: 1;
+        position: relative;
+        -moz-box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+    }
+
+    .form-signin .form-control:focus {
+        border-color: rgb(104, 145, 162);
+        outline: 0;
+        -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgb(104, 145, 162);
+        box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgb(104, 145, 162);
+    }
+
+    .btn.btn-signin {
+        /*background-color: #4d90fe; */
+        background-color: rgb(104, 145, 162);
+        /* background-color: linear-gradient(rgb(104, 145, 162), rgb(12, 97, 33));*/
+        padding: 0px;
+        font-weight: 700;
+        font-size: 14px;
+        height: 36px;
+        -moz-border-radius: 3px;
+        -webkit-border-radius: 3px;
+        border-radius: 3px;
+        border: none;
+        -o-transition: all 0.218s;
+        -moz-transition: all 0.218s;
+        -webkit-transition: all 0.218s;
+        transition: all 0.218s;
+    }
+
+    .btn.btn-signin:hover,
+    .btn.btn-signin:active,
+    .btn.btn-signin:focus {
+        background-color: rgb(12, 97, 33);
+    }
+
+    .forgot-password {
+        color: rgb(104, 145, 162);
+    }
+
+    .forgot-password:hover,
+    .forgot-password:active,
+    .forgot-password:focus{
+        color: rgb(12, 97, 33);
+    }
+    .form-group{
+        text-align:left;
+    }
+    .modal-content{
+        box-shadow: none;
+        border: none;
+    }
+
+    .cont-contactBtn .contact-form {
+        padding: 0;
+        margin: 0;
+        width: 100%;
+    }
+
+    .cont-contactBtn .contact-form input[type="text"]{
+        float: none;
+        width: 100%;
+    }
+
+    .cont-contactBtn{
+        height: initial;
+    }
+
+    .cont-contactBtn .contact-form input, .cont-contactBtn .contact-form textarea{
+        text-transform: none;
+    }
+</style>
+<div class="DialogMask" ng-show='reasonToShow'></div>
+<nav class="codrops-demos" ng-controller="topnav_dev as td">
+    <!-- sign in modal -->
+    <script type="text/ng-template" id="signin.html">
+        <div class="ng-modal-container">
+            <div class="ng-modal cont-contactBtn">
+                <div class="col-md-12"  ng-controller="signin as si">
+                    <h2>Login</h2>
+                    <form name="form" ng-submit="si.signin()" role="form" class="contact-form">
+                        <div ng-show="initFlash" ng-class="{ 'alert': flash, 'alert-success': flash.type === 'success', 'alert-danger': flash.type === 'error' }" ng-if="flash" ng-bind="flash.message"></div>
+                        <div class="form-group" ng-class="{ 'has-error': form.username.$dirty && form.username.$error.required }">
+                            <!--<label for="username">Username or Email</label>-->
+                            <input type="text" name="username" class="form-control" ng-model="si.username" required placeholder="Username or Email" />
+                            <span ng-show="form.username.$dirty && form.username.$error.required" class="help-block">Please input the Username or email </span>
+                        </div>
+                        <div class="form-group" ng-class="{ 'has-error': form.password.$dirty && form.password.$error.required }">
+                            <!--<label for="password">Password</label>-->
+                            <input type="password" name="password" class="form-control" ng-model="si.password" required placeholder="Password"/>
+                            <span ng-show="form.password.$dirty && form.password.$error.required" class="help-block">Password is required</span>
+                        </div>
+                        <div class="form-actions">
+                            <input type="submit" ng-disabled="form.$invalid || si.dataLoading" class="" value="Login" />
+                            <img ng-if="si.dataLoading" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
+                            <!--<a href="#/register" class="btn btn-link">Register</a>-->
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </script>
+    <!-- end modal -->
+
+    <!-- sign up modal -->
+    <script type="text/ng-template" id="signup.html">
+        <div class="ng-modal-container">
+            <div class="ng-modal cont-contactBtn">
+                <div class="col-md-12"  ng-controller="signup as su">
+                    <h2>Register</h2>
+                    <form name="form" ng-submit="su.register()" role="form" class="contact-form">
+                        <div ng-show="initFlash" ng-class="{ 'alert': flash, 'alert-success': flash.type === 'success', 'alert-danger': flash.type === 'error' }" ng-if="flash" ng-bind="flash.message"></div>
+                        <div class="form-group" ng-class="{ 'has-error': form.firstName.$dirty && form.firstName.$error.required }">
+                            <!--<label for="username">First name</label>-->
+                            <input type="text" name="firstName" id="firstName" class="form-control" ng-model="su.firstName" required placeholder="First name"/>
+                            <span ng-show="form.firstName.$dirty && form.firstName.$error.required" class="help-block">First name is required</span>
+                        </div>
+                        <div class="form-group" ng-class="{ 'has-error': form.lastName.$dirty && form.lastName.$error.required }">
+                            <!--<label for="username">Last name</label>-->
+                            <input type="text" name="lastName" id="Text1" class="form-control" ng-model="su.lastName" required placeholder="Last name"/>
+                            <span ng-show="form.lastName.$dirty && form.lastName.$error.required" class="help-block">Last name is required</span>
+                        </div>
+
+                        <div class="form-group" ng-class="{ 'has-error': form.userEmail.$dirty && form.userEmail.$error.required && form.userEmail.$error.email }">
+                            <!--<label for="username">Email</label>-->
+                            <input type="email" name="userEmail" id="userEmail" class="form-control" ng-model="su.userEmail" required placeholder="Email"/>
+                            <span style='color:#843534;' ng-show="form.userEmail.$dirty && form.userEmail.$error.required" class="help-block">Enter is required.</span>
+                            <span style='color:#843534;' ng-show="form.userEmail.$error.email" class="help-block">Enter a valid email.</span>
+                        </div>
+
+                        <div class="form-group" ng-class="{ 'has-error': form.username.$dirty && form.username.$error.required }">
+                            <!--<label for="username">Username</label>-->
+                            <input type="text" name="username" id="username" class="form-control" ng-model="su.username" required placeholder="Username"/>
+                            <span ng-show="form.username.$dirty && form.username.$error.required" class="help-block">Username is required</span>
+                        </div>
+
+                        <div class="form-group" ng-class="{ 'has-error': form.password.$dirty && form.password.$error.required } ">
+                            <!--<label for="password">Password</label>-->
+                            <input type="password" name="password" id="password" class="form-control" ng-model="su.password" required placeholder="Password"/>
+                            <span ng-show="form.password.$dirty && form.password.$error.required" class="help-block">Password is required</span>
+                        </div>
+
+                        <div class="form-group" ng-class="{ 'has-error': form.repassword.$dirty && form.repassword.$error.required && form.repassword.$error.passwordVerify}">
+                            <!--<label for="repassword">Confirm Password</label>-->
+                            <input type="password" name="repassword" id="repassword" class="form-control" ng-model="su.repassword" required data-password-verify="su.password" placeholder="Confirm Password"/>
+                            <span ng-show="form.repassword.$error.passwordVerify"  class="help-block">Fields are not equal!</span>
+                        </div>
+
+
+                        <div class="form-actions">
+                            <input type="submit" ng-disabled="form.$invalid || su.dataLoading" class="" value="Register" />
+                            <img ng-if="su.dataLoading" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </script>
+    <!-- end modal -->
+
+    <a class="nav_button" ng-click="login()">Login</a>
+    <a class="nav_button" ng-click="register()">SignUp</a>
+    <a class="nav_button" ng-click="showContent('#section6')" href="#section6">Contact</a>
+    <a class="nav_button" ng-click="showContent('#section5')" href="#section5">Partners</a>
+    <a class="nav_button" ng-click="showContent('#section4')" href="#section4">Team</a>
+    <a class="nav_button" ng-click="showContent('#section3')" href="#section3">Features</a>
+    <a class="nav_button" ng-click="showContent('#section2')" href="#section2">About</a>
+    <a class="logo" ng-click="showContent('#large-header')" href="#large-header" style="color:#EF4836">Visua<span style="color:#59ABE3">Lynk</span></a>
+</nav>
+

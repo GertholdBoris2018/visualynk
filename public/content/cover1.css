@@ -1,0 +1,151 @@
+@font-face {
+	font-weight: normal;
+	font-style: normal;
+	font-family: 'codropsicons';
+	src:url('../fonts/codropsicons/codropsicons.eot');
+	src:url('../fonts/codropsicons/codropsicons.eot?#iefix') format('embedded-opentype'),
+		url('../fonts/codropsicons/codropsicons.woff') format('woff'),
+		url('../fonts/codropsicons/codropsicons.ttf') format('truetype'),
+		url('../fonts/codropsicons/codropsicons.svg#codropsicons') format('svg');
+}
+@font-face{font-family:"Raleway-Regular";src:url("../fonts/Raleway-Regular.ttf")}
+@font-face{font-family:"Raleway-Thin";src:url("../fonts/Raleway-Thin.ttf")}
+@font-face{font-family:"Raleway-Medium";src:url("../fonts/Raleway-Medium.ttf")}
+@font-face{font-family:"Raleway-Bold";src:url("../fonts/Raleway-Bold.ttf");font-weight:bold}
+@font-face{font-family:"Raleway-BlackItalic";src:url("../fonts/Raleway-BlackItalic.ttf");font-style:italic}
+@font-face{font-family:"Raleway-BoldItalic";src:url("../fonts/Raleway-BoldItalic.ttf");font-weight:bold;font-style:italic}
+@font-face{font-family:"NotoSans";src:url("../fonts/NotoSans-Regular.ttf")}
+
+/* Header */
+.large-header {
+	position: relative;
+	width: 100%;
+	background: #333;
+	overflow: hidden;
+	background-size: cover;
+	background-position: center center;
+	z-index: 1;
+	height: 100vh;
+}
+
+.large-header2 {
+	position: relative;
+	width: 100%;
+	background: #fff;
+	overflow: hidden;
+	background-size: cover;
+	background-position: center center;
+	z-index: 1;
+	height: 100vh;
+}
+
+.large-header3 {
+	position: relative;
+	width: 100%;
+	background: #ffffff;
+	overflow: hidden;
+	background-size: cover;
+	background-position: center center;
+	z-index: 1;
+	height: 100vh;
+}
+
+.large-header4 {
+	position: relative;
+	width: 100%;
+	background: #ffffff;
+	overflow: hidden;
+	background-size: cover;
+	background-position: center center;
+	z-index: 1;
+	height: 100vh;
+}
+
+.large-header5 {
+	position: relative;
+	width: 100%;
+	background: #ffffff;
+	overflow: hidden;
+	background-size: cover;
+	background-position: center center;
+	z-index: 1;
+	height: 100vh;
+}
+
+.large-header6 {
+	position: relative;
+	width: 100%;
+	background: #ffffff;
+	overflow: hidden;
+	background-size: cover;
+	background-position: center center;
+	z-index: 1;
+	height: 100vh;
+}
+
+
+.demo-1 .large-header {
+	background-image: url('images/demo6.jpg');
+}
+
+.main_program_button {
+	background: transparent;
+	z-index:999;
+	font-family: 'Raleway-Thin';
+	color: white;
+	border: 3px solid;
+	padding-bottom: 5px;
+	width: 140px;
+	height: 60px;
+	font-size: 32px;
+}
+
+.site_header {
+	color:#ffffff;
+}
+
+.main-title {
+	position: absolute;
+	margin: 0;
+	padding: 0;
+	color: #f9f1e9;
+	text-align: center;
+	top: 50%;
+	left: 50%;
+	width: 100%;
+	-webkit-transform: translate3d(-50%,-50%,0);
+	transform: translate3d(-50%,-50%,0);
+}
+
+.demo-1 .main-title {
+	text-transform: none;
+	font-size: 4.2em;
+	font-weight: 200;
+	letter-spacing: 0.1em;
+}
+
+.main-title .thin {
+	/*font-weight: 100;*/
+	font-size: 20px;
+	width: 100%;
+}
+
+.blink {
+  color: #19b5fe;
+  font-size: 1em;
+  animation: blink-anim 0.5s ease 0s infinite alternate;
+  font-family: 'Raleway'
+}
+
+
+
+@keyframes blink-anim {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+@media only screen and (max-width : 768px) {
+	.demo-1 .main-title {
+		font-size: 3em;
+	}
+}
