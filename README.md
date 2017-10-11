@@ -28,9 +28,10 @@ if the account need to be changed, update the json file with new account and res
 
 ==========
 Run the Neo4j database
-Download the Neo4j latest version and run.
+Download the Neo4j latest version for community and run.
+https://neo4j.com/download/
 
 ==========
 Bim server
 Run the terminal, and "java -jar bimserverjar-1.5.73.jar"
-You can see it in the bimserver directory
+You can see it in the bimserverjar directory
