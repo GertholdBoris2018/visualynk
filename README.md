@@ -1,6 +1,7 @@
+
 # VisuaLynk-Dev
 
-ANNE Stack - Angular JS, Node, Neo4J and Express stack. Demo application with ANNE stack
+Stack - Angular JS, Node, Neo4J and Express stack.
 
 Clone Repo and run
  
